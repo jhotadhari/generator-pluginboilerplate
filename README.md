@@ -1,5 +1,5 @@
 # generator-pluginboilerplate [![NPM version][npm-image]][npm-url] [![Build Status][travis-image]][travis-url] [![Dependency Status][daviddm-image]][daviddm-url]
-> desc ???
+> Yeoman generator for scaffolding a WordPress Plugin Boilerplate and a Grunt based build system
 
 ## Installation
 
@@ -16,16 +16,9 @@ Then generate your new project:
 yo pluginboilerplate
 ```
 
-## Getting To Know Yeoman
-
- * Yeoman has a heart of gold.
- * Yeoman is a person with feelings and opinions, but is very easy to work with.
- * Yeoman can be too opinionated at times but is easily convinced not to be.
- * Feel free to [learn more about Yeoman](http://yeoman.io/).
-
 ## License
 
-Apache-2.0 © [jhotadhari](http://waterproof-webdesign.info/)
+GNU General Public License v3 [jhotadhari](http://waterproof-webdesign.info/)
 
 
 [npm-image]: https://badge.fury.io/js/generator-pluginboilerplate.svg
