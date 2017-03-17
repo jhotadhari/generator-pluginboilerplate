@@ -1,6 +1,7 @@
-# generator-pluginboilerplate [![NPM version][npm-image]][npm-url] [![Build Status][travis-image]][travis-url] [![Dependency Status][daviddm-image]][daviddm-url]
+# generator-pluginboilerplate [![NPM version][npm-image]][npm-url]
 > Yeoman generator for scaffolding a WordPress Plugin Boilerplate and a Grunt based build system
 
+[![Build Status][travis-image]][travis-url] [![Dependency Status][daviddm-image]][daviddm-url]
 
 
 ## Installation
@@ -183,6 +184,20 @@ Most tasks are just sub tasks and will be used by the following main tasks:
   * Will create the Plugin readme.
   * Will build the plugin into ```./dist/trunk``` and ```./dist/tag/VERSION```
   * Will add all to git and commit it (using the new version as commit message and all entries in ```./readme/commit_msg.json```)
+
+  
+## Example Plugins
+These plugins are based on that generator:
+* https://github.com/jhotadhari/rest-importer
+* https://github.com/jhotadhari/languages-frontend-display
+* https://github.com/jhotadhari/waterproof-wrap-query
+
+
+## Thanks for beautiful ressoucres:
+* This Yeoman generator is generated with the Yeoman generator generator (https://github.com/yeoman/generator-generator)
+* CMB2 (https://github.com/WebDevStudios/CMB2)
+* Integration CMB2-qTranslate (https://github.com/jmarceli/integration-cmb2-qtranslate)
+* CMB2 Taxonomy (https://github.com/jcchavezs/cmb2-taxonomy)
 
 
 ## License
