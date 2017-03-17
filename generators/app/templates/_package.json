@@ -12,6 +12,7 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "<%= pluginAuthor %>",
+  "contributors": "<%= pluginAuthor %>",
   "authorUri": "<%= pluginAuthorUri %>",
   "license": "GNU General Public License v2 or later",
   "licenseUri": "http://www.gnu.org/licenses/gpl-2.0.html",

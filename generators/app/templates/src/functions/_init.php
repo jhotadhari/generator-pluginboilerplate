@@ -3,6 +3,10 @@
 	grunt.concat_in_order.declare('init');
 */
 
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
 
 // load_plugin_textdomain
 function <%= funcPrefix %>_load_textdomain(){
@@ -10,10 +14,10 @@ function <%= funcPrefix %>_load_textdomain(){
 	load_plugin_textdomain(
 		'<%= pluginTextDomain %>',
 		false,
-		dirname( dirname( plugin_basename( __FILE__ ) ) ) . '/languages/'
+		dirname( plugin_basename( __FILE__ ) ) . '/languages'
 	);
 }
-add_action( 'plugins_loaded', '<%= funcPrefix %>_load_textdomain' );
+add_action( 'init', '<%= funcPrefix %>_load_textdomain' );
 
 
 <%if ( styleAdmin ) { %>

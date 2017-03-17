@@ -200,17 +200,16 @@ module.exports = function(grunt){
 				},
 
 			// potomo
-				// ???
-				// potomo_pos: {
-				// 	files: [
-				// 		'<%%= pkg.dirs.src %>/languages/**/*.po',
-				// 		'<%%= pattern.global_exclude %>',
-				// 	],
-				// 	tasks: [
-				// 		'potomo:build',
-				// 		'local_sync:<%%= local_sync.wp_install %>'
-				// 	]
-				// }
+				potomo_pos: {
+					files: [
+						'<%%= pkg.dirs.src %>/languages/**/*.po',
+						'<%%= pattern.global_exclude %>',
+					],
+					tasks: [
+						'potomo:build',
+						'local_sync:<%%= local_sync.wp_install %>'
+					]
+				}
 		},
 		
 		
@@ -532,32 +531,31 @@ module.exports = function(grunt){
 		
 		
 		/*	languages, po to mo */
-		// ???
-		// potomo: {
-		// 	options: {
-		// 		poDel: false
-		// 	},			
-		// 	build: { 
-		// 		files: [{
-		// 			expand: true,
-		// 			cwd: '<%%= pkg.dirs.src %>/languages/',
-		// 			src: ['*.po'],
-		// 			dest: '<%%= test_path %>/languages',
-		// 			ext: '.mo',
-		// 			nonull: true
-		// 		}]				
-		// 	},
-		// 	dist: { 
-		// 		files: [{
-		// 			expand: true,
-		// 			cwd: '<%%= pkg.dirs.src %>/languages/',
-		// 			src: ['*.po'],
-		// 			dest: '<%%= dist_path %>/languages',
-		// 			ext: '.mo',
-		// 			nonull: true
-		// 		}]				
-		// 	}
-		// },
+		potomo: {
+			options: {
+				poDel: false
+			},			
+			build: { 
+				files: [{
+					expand: true,
+					cwd: '<%%= pkg.dirs.src %>/languages/',
+					src: ['*.po'],
+					dest: '<%%= test_path %>/languages',
+					ext: '.mo',
+					nonull: true
+				}]				
+			},
+			dist: { 
+				files: [{
+					expand: true,
+					cwd: '<%%= pkg.dirs.src %>/languages/',
+					src: ['*.po'],
+					dest: '<%%= dist_path %>/languages',
+					ext: '.mo',
+					nonull: true
+				}]				
+			}
+		},
 		
 		
 		/*	git	*/
@@ -662,7 +660,7 @@ module.exports = function(grunt){
 						'concat_in_order:sass_custom_modules_admin',
 						<% } %>
 
-						<%if ( scriptAdmin || styleFrontend) { %>
+						<%if ( styleAdmin || styleFrontend) { %>
 						'sass:build',
 						<% } %>
 
@@ -677,8 +675,8 @@ module.exports = function(grunt){
 
 						
 					// potomo
-						// ???
-						// 'potomo:build',
+						'_pot',
+						'_potomo:build',
 						
 				]);
 			});
@@ -757,12 +755,12 @@ module.exports = function(grunt){
 			if ( version === 'test' ){
 				src = abs_path_pkg + '/' + pkg.dirs.test + '/';
 
-			} else if ( version === 'latest'){
-				src = abs_path_pkg + '/' + pkg.dirs.dist + '/latest/' + pkg.name + '/';
+			} else if ( version === 'trunk'){
+				src = abs_path_pkg + '/' + pkg.dirs.dist + '/' + 'trunk' + '/';
 
 			} else if ( /((\d)\.(\d)\.(\d))/.test(version)){
-				src = abs_path_pkg + '/' + pkg.dirs.dist + '/' + pkg.name + '_v' + version + '/' + pkg.name + '/';
-
+				src = abs_path_pkg + '/' + pkg.dirs.dist + '/tags/' + version + '/';
+				
 				if (! grunt.file.exists(src)){
 					grunt.warn('"' + version + '" is no valid version');
 				}
@@ -889,8 +887,8 @@ module.exports = function(grunt){
 				grunt.log.writeln('dist version: ' + pkg.version);
 				
 				var dist_path = [
-					pkg.dirs.dist + '/' + pkg.name + '_v' + pkg.version + '/' + pkg.name,
-					pkg.dirs.dist + '/' + 'latest/' + pkg.name
+					pkg.dirs.dist + '/tags/' + pkg.version,
+					pkg.dirs.dist + '/' + 'trunk'
 				];
 				
 				// run tasks
@@ -959,7 +957,7 @@ module.exports = function(grunt){
 						'concat_in_order:sass_custom_modules_admin',
 						<% } %>
 
-						<%if ( scriptAdmin || styleFrontend) { %>
+						<%if ( styleAdmin || styleFrontend) { %>
 						'sass:dist',
 						<% } %>
 
@@ -973,14 +971,41 @@ module.exports = function(grunt){
 
 						
 					// potomo
-						// ???
-						// 'potomo:dist',
+						'_pot',
+						'_potomo:dist',
 						
 						
 					
 				]);
 				
 			});
+			
+		// _potomo
+		grunt.registerTask('_potomo', 'sub task', function( _task ) {
+		
+				if ( ! _task) {
+					var _task = 'build';
+				}
+				
+				var dir = grunt.config.get('potomo')[_task].files[0].cwd;
+				var filePattern = grunt.config.get('potomo')[_task].files[0].src[0];
+				
+				if ( grunt.file.expand( dir + '**/' + filePattern ).length ) {
+					grunt.task.run(['potomo:' + _task ]);
+				}
+				
+		});
+		
+		// _pot
+		grunt.registerTask('_pot', 'sub task', function() {
+			var dir = grunt.config.get('potomo').build.files[0].cwd;
+			
+			if( grunt.file.expand( dir ).length === 0 ){
+				grunt.file.mkdir( dir )
+			}	
+			
+			grunt.task.run(['pot']);
+		});
 			
 		// _dist_git_tasks
 			grunt.registerTask('_dist_git_tasks', 'sub task', function() {
