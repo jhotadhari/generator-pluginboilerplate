@@ -573,6 +573,27 @@ module.exports = function(grunt){
 		},
 		
 		
+		/*	git	*/
+		git: {
+			add: {
+				options: {
+					A: true,
+				},
+			},
+			commit: {
+				options: {
+					m: 'v<%%= pkg.version %>\n\n<%= commit_msg %>'
+				}
+			},	
+			tag: {
+				options: {
+					a: ['v<%%= pkg.version %>'],
+					m: ['<%%= commit_msg %>']
+				}
+			},
+		},
+		
+		
 		/*	other tasks, not used in watch/build/dist	*/
 		pot: {	// create pot file, scan all php in src
 			options:{
@@ -1013,6 +1034,7 @@ module.exports = function(grunt){
 				grunt.task.run([
 					'git:add',
 					'git:commit',
+					'git:tag',
 				]);
 
 			});
