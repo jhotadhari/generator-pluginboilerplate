@@ -582,7 +582,7 @@ module.exports = function(grunt){
 			},
 			commit: {
 				options: {
-					m: 'v<%%= pkg.version %>\n\n<%= commit_msg %>'
+					m: 'v<%%= pkg.version %>\n\n<%%= commit_msg %>'
 				}
 			},	
 			tag: {
