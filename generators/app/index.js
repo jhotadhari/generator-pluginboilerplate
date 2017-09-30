@@ -3,6 +3,8 @@ var Generator = require('yeoman-generator');
 var chalk = require('chalk');
 var yosay = require('yosay');
 var childProcess = require('child_process');
+var glob = require('glob');
+var path = require('path');
 
 
 function arrayContains( array, needle ) {
@@ -148,7 +150,47 @@ var composerPkgs = {
 
 		
 module.exports = Generator.extend({
-		
+	
+	// https://gist.github.com/codeitagile/19e7be070b6ef46c21d2
+	_bulkCopyTpl: function( source, destination, data) {
+		var files = glob.sync('**', { dot: true, cwd: source });
+		for (var i = 0; i < files.length; i++) {
+			var f = files[i];
+			var src = path.join(source, f);
+			var dest;
+			if (path.basename(f).indexOf('_') === 0 && path.basename(f).slice(-1) != '~'){
+				dest = path.join(
+					destination,
+					path.dirname(f),
+					path.basename(f).replace(/^_/, '')
+				);
+				this.fs.copyTpl( src, dest, data);
+			}
+		}
+	},
+	_bulkCopy: function( source, destination, rmLowdash) {
+		var files = glob.sync('**', { dot: true, cwd: source });
+		for (var i = 0; i < files.length; i++) {
+			var f = files[i];
+			var src = path.join(source, f);
+			var dest;
+			if (path.basename(f).slice(-1) != '~'){
+				if (rmLowdash === true){
+					dest = path.join(
+						destination,
+						path.dirname(f),
+						path.basename(f).replace(/^_/, '')
+					);
+				} else {
+					dest = path.join(
+						destination,
+						f
+					);
+				}
+				this.fs.copy( src, dest);
+			}
+		}
+	},	
 	
 	prompting: function () {
 		
@@ -396,6 +438,27 @@ module.exports = Generator.extend({
 		
 		config: function () {
 			
+			var gruntFileConditions = {
+				funcPrefix: this.props.funcPrefix,
+				
+				hasFonts: this.props.hasFonts,
+				hasImages: this.props.hasImages,
+				
+				styleFrontend: arrayContains( this.props.styles, 'styleFrontend' ),
+				styleAdmin: arrayContains( this.props.styles, 'styleAdmin' ),
+				styleOptionsPage: arrayContains( this.props.styles, 'styleOptionsPage' ) && arrayContains( this.props.inclCMB2includes, 'cmb2Options' ),
+				scriptFrontend: arrayContains( this.props.scripts, 'scriptFrontend' ),
+				scriptAdmin: arrayContains( this.props.scripts, 'scriptAdmin' ),
+				
+				sass_susy: arrayContains( this.props.inclSassLibs, 'susy' ),
+				sass_breakpoint: arrayContains( this.props.inclSassLibs, 'breakpoint' ),
+				sass_bourbon: arrayContains( this.props.inclSassLibs, 'bourbon' ),
+				
+				hasComposer: this.props.inclCMB2,
+			
+			};
+			var files, destination;
+			
 			// wp_installs
 			this.fs.copy(
 				this.templatePath('wp_installs.json'),
@@ -411,25 +474,18 @@ module.exports = Generator.extend({
 			// Gruntfile
 			this.fs.copyTpl(
 				this.templatePath('_Gruntfile.js'),
-				this.destinationPath('Gruntfile.js'), {
-					funcPrefix: this.props.funcPrefix,
-					
-					hasFonts: this.props.hasFonts,
-					hasImages: this.props.hasImages,
-					
-					styleFrontend: arrayContains( this.props.styles, 'styleFrontend' ),
-					styleAdmin: arrayContains( this.props.styles, 'styleAdmin' ),
-					styleOptionsPage: arrayContains( this.props.styles, 'styleOptionsPage' ) && arrayContains( this.props.inclCMB2includes, 'cmb2Options' ),
-					scriptFrontend: arrayContains( this.props.scripts, 'scriptFrontend' ),
-					scriptAdmin: arrayContains( this.props.scripts, 'scriptAdmin' ),
-					
-					sass_susy: arrayContains( this.props.inclSassLibs, 'susy' ),
-					sass_breakpoint: arrayContains( this.props.inclSassLibs, 'breakpoint' ),
-					sass_bourbon: arrayContains( this.props.inclSassLibs, 'bourbon' ),
-					
-					hasComposer: this.props.inclCMB2,
-				
-				}
+				this.destinationPath('Gruntfile.js'),
+				gruntFileConditions
+			);
+			this._bulkCopyTpl(
+				this.templatePath('grunt/config/'),
+				this.destinationPath('grunt/config/'),
+				gruntFileConditions
+			);
+			this._bulkCopyTpl(
+				this.templatePath('grunt/tasks/'),
+				this.destinationPath('grunt/tasks/'),
+				gruntFileConditions
 			);
 			
 			// package.json

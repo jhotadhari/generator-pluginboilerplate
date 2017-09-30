@@ -1,1 +1,25 @@
 
+rename
+	class-		...not with a capital anymore
+	
+	vendor	-> libs
+	dest/includes -> libs
+	
+	
+split functions.php
+	
+	
+	
+move to subgenerators
+	composer	and libs
+	
+	new option page
+	
+	stylesheets
+	scripts
+	
+	
+	
+	
+	
+split generator index.js

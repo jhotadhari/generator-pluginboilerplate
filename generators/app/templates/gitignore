@@ -14,6 +14,10 @@
 !composer.lock
 !readme.md
 
+# include dir grunt
+!/grunt
+!grunt/**/*
+
 # include dir src
 !/src
 !src/**/*
