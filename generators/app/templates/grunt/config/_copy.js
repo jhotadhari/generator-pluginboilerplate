@@ -12,7 +12,7 @@ module.exports = {
 		expand: true,
 		cwd: 'vendor/',
 		src: ['**/*', '<%%= pattern.global_exclude %>'],
-		dest: '<%%= dest_path %>/includes/'	
+		dest: '<%%= dest_path %>/vendor/'	
 	},
 	<% } %>
 	<%if ( hasImages ) { %>

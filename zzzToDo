@@ -2,9 +2,6 @@
 rename
 	class-		...not with a capital anymore
 	
-	vendor	-> libs
-	dest/includes -> libs
-	
 	
 split functions.php
 	
