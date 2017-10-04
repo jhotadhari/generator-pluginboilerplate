@@ -359,24 +359,6 @@ module.exports = Generator.extend({
 				],	
 			},
 			
-			{
-				type: 'confirm',
-				name: 'hasImages',
-				message: chalk.green('Has Images') + '\nAdd images tasks to Gruntfile.',
-				default: 'y'
-			},		
-			{
-				type: 'confirm',
-				name: 'hasFonts',
-				message: chalk.green('Has Fonts') + '\nAdd fonts tasks to Gruntfile.',
-				default: 'y'
-			},		
-				
-			
-			
-			
-			
-			
 			
 			{
 				type: 'confirm',
@@ -440,22 +422,30 @@ module.exports = Generator.extend({
 			
 			var gruntFileConditions = {
 				funcPrefix: this.props.funcPrefix,
-				
-				hasFonts: this.props.hasFonts,
-				hasImages: this.props.hasImages,
-				
+				cmb2Tax: arrayContains( this.props.inclCMB2includes, 'cmb2Tax' ),
+				cmb2qTrans: arrayContains( this.props.inclCMB2includes, 'cmb2qTrans' ),
+				funcPrefix: this.props.funcPrefix,
 				styleFrontend: arrayContains( this.props.styles, 'styleFrontend' ),
 				styleAdmin: arrayContains( this.props.styles, 'styleAdmin' ),
 				styleOptionsPage: arrayContains( this.props.styles, 'styleOptionsPage' ) && arrayContains( this.props.inclCMB2includes, 'cmb2Options' ),
 				scriptFrontend: arrayContains( this.props.scripts, 'scriptFrontend' ),
 				scriptAdmin: arrayContains( this.props.scripts, 'scriptAdmin' ),
-				
 				sass_susy: arrayContains( this.props.inclSassLibs, 'susy' ),
 				sass_breakpoint: arrayContains( this.props.inclSassLibs, 'breakpoint' ),
 				sass_bourbon: arrayContains( this.props.inclSassLibs, 'bourbon' ),
-				
 				hasComposer: this.props.inclCMB2,
-			
+				pluginSlugUpperCase: this.props.pluginSlugUpperCase,
+				funcPrefixUpperCase: this.props.funcPrefixUpperCase,
+				pluginName: this.props.pluginName,
+				pluginSlug: this.props.pluginSlug,
+				pluginUri: this.props.pluginUri,
+				pluginDesc: this.props.pluginDesc,
+				pluginAuthor: this.props.pluginAuthor,
+				pluginAuthorUri: this.props.pluginAuthorUri,
+				pluginTextDomain: this.props.pluginTextDomain,
+				donationLink: this.props.donationLink,
+				wpRequiresAtLeast: this.props.wpRequiresAtLeast,
+				wpVersionTested: this.props.wpVersionTested,
 			};
 			var files, destination;
 			
@@ -491,19 +481,8 @@ module.exports = Generator.extend({
 			// package.json
 			this.fs.copyTpl(
 				this.templatePath('_package.json'),
-				this.destinationPath('package.json'), {
-					pluginName: this.props.pluginName,
-					pluginSlug: this.props.pluginSlug,
-					funcPrefix: this.props.funcPrefix,
-					pluginUri: this.props.pluginUri,
-					pluginDesc: this.props.pluginDesc,
-					pluginAuthor: this.props.pluginAuthor,
-					pluginAuthorUri: this.props.pluginAuthorUri,
-					pluginTextDomain: this.props.pluginTextDomain,
-					donationLink: this.props.donationLink,
-					wpRequiresAtLeast: this.props.wpRequiresAtLeast,
-					wpVersionTested: this.props.wpVersionTested,
-				}
+				this.destinationPath('package.json'),
+				gruntFileConditions
 			);
 			
 			// composer.json
@@ -522,62 +501,48 @@ module.exports = Generator.extend({
 			
 		},
 		
-		src_functions: function () {
+		src_inc: function () {
 			
-			// init
-			this.fs.copyTpl(
-				this.templatePath('src/functions/_init.php'),
-				this.destinationPath('src/functions/init.php'), {
-					funcPrefix: this.props.funcPrefix,
-					pluginTextDomain: this.props.pluginTextDomain,
-					
-					styleFrontend: arrayContains( this.props.styles, 'styleFrontend' ),
-					styleAdmin: arrayContains( this.props.styles, 'styleAdmin' ),
-					scriptFrontend: arrayContains( this.props.scripts, 'scriptFrontend' ),
-					scriptAdmin: arrayContains( this.props.scripts, 'scriptAdmin' ),
-				}
+			var gruntFileConditions = {
+				funcPrefix: this.props.funcPrefix,
+				cmb2Tax: arrayContains( this.props.inclCMB2includes, 'cmb2Tax' ),
+				cmb2qTrans: arrayContains( this.props.inclCMB2includes, 'cmb2qTrans' ),
+				funcPrefix: this.props.funcPrefix,
+				styleFrontend: arrayContains( this.props.styles, 'styleFrontend' ),
+				styleAdmin: arrayContains( this.props.styles, 'styleAdmin' ),
+				styleOptionsPage: arrayContains( this.props.styles, 'styleOptionsPage' ) && arrayContains( this.props.inclCMB2includes, 'cmb2Options' ),
+				scriptFrontend: arrayContains( this.props.scripts, 'scriptFrontend' ),
+				scriptAdmin: arrayContains( this.props.scripts, 'scriptAdmin' ),
+				sass_susy: arrayContains( this.props.inclSassLibs, 'susy' ),
+				sass_breakpoint: arrayContains( this.props.inclSassLibs, 'breakpoint' ),
+				sass_bourbon: arrayContains( this.props.inclSassLibs, 'bourbon' ),
+				hasComposer: this.props.inclCMB2,
+				pluginSlugUpperCase: this.props.pluginSlugUpperCase,
+				funcPrefixUpperCase: this.props.funcPrefixUpperCase,
+				pluginName: this.props.pluginName,
+				pluginSlug: this.props.pluginSlug,
+				pluginUri: this.props.pluginUri,
+				pluginDesc: this.props.pluginDesc,
+				pluginAuthor: this.props.pluginAuthor,
+				pluginAuthorUri: this.props.pluginAuthorUri,
+				pluginTextDomain: this.props.pluginTextDomain,
+				donationLink: this.props.donationLink,
+				wpRequiresAtLeast: this.props.wpRequiresAtLeast,
+				wpVersionTested: this.props.wpVersionTested,
+			};			
+			
+			this._bulkCopyTpl(
+				this.templatePath('src/inc/dep/autoload/'),
+				this.destinationPath('src/inc/dep/autoload/'),
+				gruntFileConditions
+			);
+			
+			this._bulkCopyTpl(
+				this.templatePath('src/inc/fun/autoload/'),
+				this.destinationPath('src/inc/fun/autoload/'),
+				gruntFileConditions
 			);
 
-			// _defaults
-			this.fs.copyTpl(
-				this.templatePath('src/functions/_defaults.php'),
-				this.destinationPath('src/functions/' + this.props.funcPrefixUpperCase + '_defaults.php'), {
-					funcPrefix: this.props.funcPrefix,
-					pluginSlugUpperCase: this.props.pluginSlugUpperCase,
-					funcPrefixUpperCase: this.props.funcPrefixUpperCase
-				}
-			);
-			
-			// _localize
-			if ( typeof this.props.scripts === 'object'
-				&& this.props.scripts.length > 0 ) 
-			{
-				this.fs.copyTpl(
-					this.templatePath('src/functions/_localize.php'),
-					this.destinationPath('src/functions/' + this.props.funcPrefixUpperCase + '_localize.php'), {
-						funcPrefix: this.props.funcPrefix,
-						pluginSlugUpperCase: this.props.pluginSlugUpperCase,
-						funcPrefixUpperCase: this.props.funcPrefixUpperCase
-					}
-				);
-			}
-				
-			// _options_page
-			if ( arrayContains( this.props.inclCMB2includes, 'cmb2Options' ) ) {
-				this.fs.copyTpl(
-					this.templatePath('src/functions/_options_page.php'),
-					this.destinationPath('src/functions/' + this.props.funcPrefix + '_options_page.php'), {
-						pluginName: this.props.pluginName,
-						funcPrefix: this.props.funcPrefix,
-						pluginTextDomain: this.props.pluginTextDomain,
-						pluginSlugUpperCase: this.props.pluginSlugUpperCase,
-						funcPrefixUpperCase: this.props.funcPrefixUpperCase,
-						styleOptionsPage: arrayContains( this.props.styles, 'styleOptionsPage' ),
-					}
-				);			
-			}
-			
-			
 		},
 		
 		src_js: function () {
@@ -599,28 +564,40 @@ module.exports = Generator.extend({
 		},
 		
 		src_plugin_main_file: function () {
-			// init
-			this.fs.copy(
-				this.templatePath('src/plugin_main_file/init.php'),
-				this.destinationPath('src/plugin_main_file/init.php')
-			);
+
+			var gruntFileConditions = {
+				funcPrefix: this.props.funcPrefix,
+				cmb2Tax: arrayContains( this.props.inclCMB2includes, 'cmb2Tax' ),
+				cmb2qTrans: arrayContains( this.props.inclCMB2includes, 'cmb2qTrans' ),
+				funcPrefix: this.props.funcPrefix,
+				styleFrontend: arrayContains( this.props.styles, 'styleFrontend' ),
+				styleAdmin: arrayContains( this.props.styles, 'styleAdmin' ),
+				styleOptionsPage: arrayContains( this.props.styles, 'styleOptionsPage' ) && arrayContains( this.props.inclCMB2includes, 'cmb2Options' ),
+				scriptFrontend: arrayContains( this.props.scripts, 'scriptFrontend' ),
+				scriptAdmin: arrayContains( this.props.scripts, 'scriptAdmin' ),
+				sass_susy: arrayContains( this.props.inclSassLibs, 'susy' ),
+				sass_breakpoint: arrayContains( this.props.inclSassLibs, 'breakpoint' ),
+				sass_bourbon: arrayContains( this.props.inclSassLibs, 'bourbon' ),
+				hasComposer: this.props.inclCMB2,
+				pluginSlugUpperCase: this.props.pluginSlugUpperCase,
+				funcPrefixUpperCase: this.props.funcPrefixUpperCase,
+				pluginName: this.props.pluginName,
+				pluginSlug: this.props.pluginSlug,
+				pluginUri: this.props.pluginUri,
+				pluginDesc: this.props.pluginDesc,
+				pluginAuthor: this.props.pluginAuthor,
+				pluginAuthorUri: this.props.pluginAuthorUri,
+				pluginTextDomain: this.props.pluginTextDomain,
+				donationLink: this.props.donationLink,
+				wpRequiresAtLeast: this.props.wpRequiresAtLeast,
+				wpVersionTested: this.props.wpVersionTested,
+			};
 			
-			// cmb2_init
 			this.fs.copyTpl(
-				this.templatePath('src/plugin_main_file/_cmb2_init.php'),
-				this.destinationPath('src/plugin_main_file/cmb2_init.php'), {
-					funcPrefix: this.props.funcPrefix,
-					inclCMB2: this.props.inclCMB2,
-					cmb2Tax: arrayContains( this.props.inclCMB2includes, 'cmb2Tax' ),
-					cmb2qTrans: arrayContains( this.props.inclCMB2includes, 'cmb2qTrans' )
-				}
-			);
+				this.templatePath('src/_plugin_main_file.php'),
+				this.destinationPath('src/' + gruntFileConditions.pluginSlug + '.php'), gruntFileConditions
+			);			
 			
-			// load_functions
-			this.fs.copy(
-				this.templatePath('src/plugin_main_file/load_functions.php'),
-				this.destinationPath('src/plugin_main_file/load_functions.php')
-			);
 		},
 		
 		src_readme: function () {

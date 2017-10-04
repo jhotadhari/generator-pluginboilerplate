@@ -1,8 +1,9 @@
 <?php
-/*
-	grunt.concat_in_order.declare('<%= funcPrefixUpperCase %>_localize');
-	grunt.concat_in_order.require('init');
-*/
+
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
 
 class <%= funcPrefixUpperCase %>_localize {
 

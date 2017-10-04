@@ -1,0 +1,16 @@
+{
+   "available":[
+      {
+         "name":"webdevstudios/cmb2",
+         "desc":"cmb2 ... bla"
+      },
+      {
+         "name":"jcchavezs/cmb2-taxonomy",
+         "desc":"cmb2-taxonomy ... bla"
+      },
+      {
+         "name":"jmarceli/integration-cmb2-qtranslate",
+         "desc":"integration-cmb2-qtranslate ... bla"
+      }
+   ]
+}

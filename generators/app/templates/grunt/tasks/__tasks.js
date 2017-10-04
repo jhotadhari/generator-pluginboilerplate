@@ -15,21 +15,10 @@ module.exports = function(grunt){
 			
 			<%if ( hasComposer ) { %>
 			//	composer
-			'composer:update',
+			// 'composer:update',
 			<% } %>
 			
-			// copy
-			'copy:root_files',
-			<%if ( hasComposer ) { %>
-			'copy:vendor',
-			<% } %>
-			<%if ( hasImages ) { %>
-			'copy:images',
-			<% } %>
-			<%if ( hasFonts ) { %>
-			'copy:fonts',
-			<% } %>
-			'copy:readme',
+			'copy',
 				
 			// assets from src to testingDir
 			<%if ( scriptAdmin || scriptFrontend ) { %>
@@ -58,11 +47,9 @@ module.exports = function(grunt){
 			'sass:main',
 			<% } %>
 
-			// concat functions
-			'_create_plugin_info:' + src_path + require('path').sep,
-			'concat_in_order:functions',
-			'concat_in_order:plugin_main_file',
-				
+			// banner plugin_main_file
+			'concat:plugin_main_file',
+			
 			// potomo
 			'_pot',
 			'_potomo',

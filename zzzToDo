@@ -1,9 +1,11 @@
 
+on scaffold	make all dirs
+
+
+
 rename
 	class-		...not with a capital anymore
 	
-	
-split functions.php
 	
 	
 	

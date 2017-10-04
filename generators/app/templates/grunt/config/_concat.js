@@ -16,5 +16,14 @@ module.exports = {
 			'src/readme/dont_touch/_readme_hist.txt'
 		],
 		dest: 'src/readme/dont_touch/_readme.txt'			
+	},
+	plugin_main_file: {
+		options: {
+			banner: '<?php \n/*\nPlugin Name: <%%= pkg.fullName %>\nPlugin URI: <%%= pkg.uri %>\nDescription: <%%= pkg.description %>\nVersion: <%%= pkg.version %>\nAuthor: <%%= pkg.author %>\nAuthor URI: <%%= pkg.authorUri %>\nLicense: <%%= pkg.license %>\nLicense URI: <%%= pkg.licenseUri %>\nText Domain: <%%= pkg.textDomain %>\nDomain Path: <%%= pkg.domainPath %>\nTags: <%%= pkg.tags %>\n*/\n\n?>'
+		},
+		src: [
+			'src/<%%= pkg.name %>.php'
+		],
+		dest: '<%%= dest_path %>/<%%= pkg.name %>.php'
 	}
 };

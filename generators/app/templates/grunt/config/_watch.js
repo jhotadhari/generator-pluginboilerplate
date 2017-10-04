@@ -24,7 +24,6 @@ module.exports = {
 			]
 		},
 		<% } %>
-		<%if ( hasImages ) { %>
 		copy_images: {
 			files: [
 				'<%%= pkg.dirs.src %>/images/**/*',
@@ -35,8 +34,6 @@ module.exports = {
 				'local_sync:<%%= local_sync.wp_install %>'
 			]
 		},
-		<% } %>
-		<%if ( hasFonts ) { %>
 		copy_fonts: {
 			files: [
 				'<%%= pkg.dirs.src %>/fonts/**/*',
@@ -47,7 +44,6 @@ module.exports = {
 				'local_sync:<%%= local_sync.wp_install %>'
 			]
 		},
-		<% } %>		
 		copy_readme: {
 			files: [
 				'<%%= pkg.dirs.src %>/readme/**/*',
@@ -58,7 +54,20 @@ module.exports = {
 				'copy:readme',
 				'local_sync:<%%= local_sync.wp_install %>'
 			]
-		},	
+		},
+		
+		
+		
+		copy_inc: {
+			files: [
+				'<%%= pkg.dirs.src %>/inc/**/*',
+				'<%%= pattern.global_exclude %>',
+			],
+			tasks: [
+				'copy:inc',
+				'local_sync:<%%= local_sync.wp_install %>'
+			]
+		},
 		
 		
 	// assets
@@ -109,26 +118,14 @@ module.exports = {
 	},
 	<% } %>		
 	
-	// concat functions from src to root
-		concat_functions: {
-			files: [
-				'<%%= pkg.dirs.src %>/functions/**/*.php',
-				'<%%= pattern.global_exclude %>',
-			],
-			tasks: [
-				'concat_in_order:functions',
-				'local_sync:<%%= local_sync.wp_install %>'
-			]
-		},
-		
-	// 'concat_in_order:plugin_main_file',
+	// plugin_main_file
 		plugin_main_file: {
 			files: [
-				'<%%= pkg.dirs.src %>/plugin_main_file/**/*.php',
+				'<%%= pkg.dirs.src %>/<%%= pkg.name %>.php',
 				'<%%= pattern.global_exclude %>',
 			],
 			tasks: [
-				'concat_in_order:plugin_main_file',
+				'concat:plugin_main_file',
 				'local_sync:<%%= local_sync.wp_install %>'
 			]
 		},

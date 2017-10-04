@@ -7,22 +7,6 @@ module.exports = {
 			return this.getMatches(/grunt\.concat_in_order\.declare\(['"]([^'"]+)['"]/g, filecontent);
 		}
 	},
-	functions: {
-		files: {
-			'<%%= dest_path %>/functions.php': [
-				'<%%= pkg.dirs.src %>/functions/**/*.php',
-				'<%%= pattern.global_exclude %>',
-			]
-		}
-	},
-	plugin_main_file: {
-		files: {
-			'<%%= dest_path %>/<%%= pkg.name %>.php': [
-				'<%%= pkg.dirs.src %>/plugin_main_file/**/*.php',
-				'<%%= pattern.global_exclude %>',
-			]
-		}
-	},			
 	<%if ( scriptFrontend ) { %>
 	// js
 	js_frontend: {
@@ -33,7 +17,7 @@ module.exports = {
 				'<%%= pattern.global_exclude %>',
 			]
 		}
-	},	
+	},
 	<% } %>
 	<%if ( scriptAdmin ) { %>
 	js_admin: {

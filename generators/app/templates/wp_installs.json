@@ -1,5 +1,5 @@
 {
   "example": {
-  	"local": "/Development/web/projects/example/htdocs/wp-content/plugins/"
+  	"local": "/home/username/Development/web/projects/example/htdocs/wp-content/plugins/"
   }
 }

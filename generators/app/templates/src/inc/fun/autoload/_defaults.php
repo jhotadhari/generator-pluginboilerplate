@@ -1,9 +1,9 @@
 <?php
-/*
-	grunt.concat_in_order.declare('<%= funcPrefixUpperCase %>_defaults');
-	grunt.concat_in_order.require('init');
-*/
 
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
 
 class <%= funcPrefixUpperCase %>_defaults {
 
@@ -25,8 +25,6 @@ class <%= funcPrefixUpperCase %>_defaults {
 
 
 }
-
-
 
 function <%= funcPrefix %>_init_defaults(){
 	global $<%= funcPrefix %>_defaults;

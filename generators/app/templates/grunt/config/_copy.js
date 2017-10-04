@@ -15,7 +15,15 @@ module.exports = {
 		dest: '<%%= dest_path %>/vendor/'	
 	},
 	<% } %>
-	<%if ( hasImages ) { %>
+	
+	inc: {		
+		expand: true,
+		cwd: '<%%= pkg.dirs.src %>/inc/',
+		src: ['**/*', '<%%= pattern.global_exclude %>'],
+		dest: '<%%= dest_path %>/inc/'	
+	},
+	
+	
 	//	images to ...
 	images: {		
 		expand: true,
@@ -23,8 +31,6 @@ module.exports = {
 		src: ['**/*', '<%%= pattern.global_exclude %>'],
 		dest: '<%%= dest_path %>/images/'	
 	},
-	<% } %>
-	<%if ( hasFonts ) { %>			
 	//	fonts to ...
 	fonts: {		
 		expand: true,
@@ -32,7 +38,6 @@ module.exports = {
 		src: ['**/*', '<%%= pattern.global_exclude %>'],
 		dest: '<%%= dest_path %>/fonts/'	
 	},
-	<% } %>
 	//	readme to ...
 	readme: {		
 		src: ['<%%= pkg.dirs.src %>/readme/dont_touch/_readme.txt'],
