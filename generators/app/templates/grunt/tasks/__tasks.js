@@ -13,10 +13,8 @@ module.exports = function(grunt){
 			// clean up dest folder
 			'clean',
 			
-			<%if ( hasComposer ) { %>
 			//	composer
-			// 'composer:update',
-			<% } %>
+			'composer:update',
 			
 			'copy',
 				

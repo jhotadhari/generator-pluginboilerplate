@@ -1,14 +1,5 @@
 {
 	"name": "<%= vendorSlug %>/<%= pluginSlug %>",
 	"description": "???",
-	"repositories":
-		<%- repositories %>
-		,
-	"require":
-		<%- require %>
-	,
-	"extra": {
-		"installer-paths": 
-			<%- installerPaths %>
-	}
+	"require": {}
 }

@@ -1,16 +1,49 @@
 {
-   "available":[
-      {
-         "name":"webdevstudios/cmb2",
-         "desc":"cmb2 ... bla"
-      },
-      {
-         "name":"jcchavezs/cmb2-taxonomy",
-         "desc":"cmb2-taxonomy ... bla"
-      },
-      {
-         "name":"jmarceli/integration-cmb2-qtranslate",
-         "desc":"integration-cmb2-qtranslate ... bla"
-      }
-   ]
+    "available":[
+        {
+            "name":"webdevstudios/cmb2",
+            "desc":"cmb2 ... bla",
+            "website": "https://github.com/CMB2/CMB2",
+            "version":"*",
+            "extra":{
+            	"installer-path":"vendor/{$vendor}/{$name}"
+            }
+        },
+        {
+            "name":"jcchavezs/cmb2-taxonomy",
+            "desc":"cmb2-taxonomy ... bla",
+            "website": "https://github.com/jcchavezs/cmb2-taxonomy",
+            "version":"*",
+            "repository":{
+                "type":"package",
+                "package":{
+                    "name":"jcchavezs/cmb2-taxonomy",
+                    "version":"0.0.0",
+                    "source":{
+                        "url":"https://github.com/jcchavezs/cmb2-taxonomy.git",
+                        "type":"git",
+                        "reference":"master"
+                    }
+                }
+            }
+        },
+        {
+            "name":"jmarceli/integration-cmb2-qtranslate",
+            "desc":"integration-cmb2-qtranslate ... bla",
+            "website": "https://github.com/jmarceli/integration-cmb2-qtranslate",
+            "version":"0.1.1",
+            "repository":{
+                "type":"package",
+                "package":{
+                    "name":"jmarceli/integration-cmb2-qtranslate",
+                    "version":"0.1.1",
+                    "source":{
+                        "url":"https://github.com/jmarceli/integration-cmb2-qtranslate.git",
+                        "type":"git",
+                        "reference":"0.1.1"
+                    }
+                }
+            }
+        }
+    ]
 }

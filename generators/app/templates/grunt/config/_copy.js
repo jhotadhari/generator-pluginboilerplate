@@ -6,7 +6,6 @@ module.exports = {
 		src: ['**/*','<%%= pattern.global_exclude %>'],
 		dest: '<%%= dest_path %>'	
 	},
-	<%if ( hasComposer ) { %>
 	//	vendor to ...
 	vendor: {		
 		expand: true,
@@ -14,7 +13,6 @@ module.exports = {
 		src: ['**/*', '<%%= pattern.global_exclude %>'],
 		dest: '<%%= dest_path %>/vendor/'	
 	},
-	<% } %>
 	
 	inc: {		
 		expand: true,

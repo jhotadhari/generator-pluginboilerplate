@@ -12,7 +12,6 @@ module.exports = {
 				'local_sync:<%%= local_sync.wp_install %>'
 			]
 		},
-		<%if ( hasComposer ) { %>
 		copy_vendor: {
 			files: [
 				'vendor/**/*',
@@ -23,7 +22,6 @@ module.exports = {
 				'local_sync:<%%= local_sync.wp_install %>'
 			]
 		},
-		<% } %>
 		copy_images: {
 			files: [
 				'<%%= pkg.dirs.src %>/images/**/*',

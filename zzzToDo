@@ -10,7 +10,6 @@ rename
 	
 	
 move to subgenerators
-	composer	and libs
 	
 	new option page
 	
@@ -22,3 +21,4 @@ move to subgenerators
 	
 	
 split generator index.js
+
