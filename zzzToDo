@@ -1,24 +1,33 @@
 
-on scaffold	make all dirs
+
+addScripts
+	build: browserify scripts
+	
+	
+plugin init class
+	dependencies
+	
+subgenerators	
+	addMenuPage		_tabbed?
+		class
+		style
+		script
+		
+	updateTaskRunner
+
+app
+	compose with updateTaskRunner
+	
+	
+add plugin dependencies
+	
 
 
+prompts add store
+	http://yeoman.io/authoring/user-interactions.html
 
-rename
-	class-		...not with a capital anymore
-	
-	
-	
-	
-move to subgenerators
-	
-	new option page
-	
-	stylesheets
-	scripts
-	
-	
-	
-	
-	
-split generator index.js
+grunt build --composer-false
 
+
+wp_installs.json
+	promt, ask on generating

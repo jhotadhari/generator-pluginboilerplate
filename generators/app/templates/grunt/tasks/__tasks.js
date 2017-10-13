@@ -5,7 +5,6 @@ module.exports = function(grunt){
 	grunt.registerTask('_tasks', 'sub task', function(dest_path, process) {
 		
 		var pkg = grunt.file.readJSON("package.json");
-		var src_path = pkg.dirs.src;
 		
 		global['dest_path'] = dest_path;
 		
@@ -13,43 +12,26 @@ module.exports = function(grunt){
 			// clean up dest folder
 			'clean',
 			
-			//	composer
-			'composer:update',
+			//	composer	??? !!!
+			// 'composer:update',
+			
+			// readme
+			'concat:readme',
 			
 			'copy',
 				
-			// assets from src to testingDir
-			<%if ( scriptAdmin || scriptFrontend ) { %>
+			// assets
 			'jshint',
-			<% } %>
-
-			<%if ( scriptFrontend ) { %>
-			'concat_in_order:js_frontend',
-			'uglify:js_frontend',
-			<% } %>
-
-			<%if ( scriptAdmin ) { %>
-			'concat_in_order:js_admin',
-			'uglify:js_admin',
-			<% } %>
-
-			<%if ( styleFrontend ) { %>
-			'concat_in_order:sass_custom_modules_frontend',
-			<% } %>
-
-			<%if ( styleAdmin ) { %>
-			'concat_in_order:sass_custom_modules_admin',
-			<% } %>
-
-			<%if ( styleAdmin || styleFrontend) { %>
+			'uglify:main',
+			
+			// style
 			'sass:main',
-			<% } %>
 
 			// banner plugin_main_file
 			'concat:plugin_main_file',
 			
 			// potomo
-			'_pot',
+			'pot',
 			'_potomo',
 			
 		]);

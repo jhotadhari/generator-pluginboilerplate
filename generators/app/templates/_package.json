@@ -38,11 +38,7 @@
     "grunt-rsync": "^2.0.1",
     "grunt-simple-git": "^1.0.1",
     "load-grunt-tasks": "^3.5.2",
-    "node-bourbon": "^4.2.8"
-  },
-  "dirs": {
-    "src": "src",
-    "test": "test",
-    "dist": "dist"
+    "node-bourbon": "^4.2.8",
+    "sort-object": "^3.0.2"
   }
 }

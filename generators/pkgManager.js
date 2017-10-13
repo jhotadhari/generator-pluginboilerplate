@@ -67,7 +67,7 @@ var PkgManager = {
 			if ( this.unInstalled.indexOf(this.available[key].name) != -1 ) {
 				this.availableChoices.push({
 					value: this.available[key].name,
-					name: this.available[key].desc,
+					name: ' ' + chalk.yellow(this.available[key].name) + ': ' + this.available[key].desc + '\n' + chalk.green('website: ') + this.available[key].website + '',
 				});
 			}
 		}

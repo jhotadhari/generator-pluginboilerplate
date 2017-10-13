@@ -29,13 +29,13 @@ module.exports = function(grunt){
 		
 		
 		if ( version === 'test' ){
-			src = require('path').resolve(pkg.dirs.test) + require('path').sep;
+			src = require('path').resolve('test') + require('path').sep;
 
 		} else if ( version === 'trunk'){
-			src = require('path').resolve(pkg.dirs.dist,'trunk') + require('path').sep;
+			src = require('path').resolve('dist','trunk') + require('path').sep;
 
 		} else if ( /((\d)\.(\d)\.(\d))/.test(version)){
-			src = require('path').resolve(pkg.dirs.dist,'tags',version) + require('path').sep;
+			src = require('path').resolve('dist','tags',version) + require('path').sep;
 			
 			if (! grunt.file.exists(src)){
 				grunt.warn('"' + version + '" is no valid version');

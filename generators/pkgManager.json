@@ -2,7 +2,7 @@
     "available":[
         {
             "name":"webdevstudios/cmb2",
-            "desc":"cmb2 ... bla",
+            "desc":"CMB2 is a developer's toolkit for building metaboxes, custom fields, and forms for WordPress that will blow your mind.",
             "website": "https://github.com/CMB2/CMB2",
             "version":"*",
             "extra":{
@@ -11,7 +11,7 @@
         },
         {
             "name":"jcchavezs/cmb2-taxonomy",
-            "desc":"cmb2-taxonomy ... bla",
+            "desc":"CMB2 Taxonomy will create metaboxes and forms with custom fields for your taxonomies using the CMB2 API.",
             "website": "https://github.com/jcchavezs/cmb2-taxonomy",
             "version":"*",
             "repository":{
@@ -29,7 +29,7 @@
         },
         {
             "name":"jmarceli/integration-cmb2-qtranslate",
-            "desc":"integration-cmb2-qtranslate ... bla",
+            "desc":"CMB2-qTranslate is Wordpress plugin for CMB2 and qTranslate X integration. Adds language switch buttons above selected CMB2 fields to make content translatable.",
             "website": "https://github.com/jmarceli/integration-cmb2-qtranslate",
             "version":"0.1.1",
             "repository":{

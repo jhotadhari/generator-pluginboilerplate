@@ -4,8 +4,8 @@ var chalk = require('chalk');
 var yosay = require('yosay');
 var fs = require('fs');
 var path = require('path');
-var glob = require('glob');
 var pkgManager = require('./../pkgManager');
+var childProcess = require('child_process');
 
 module.exports = Generator.extend({
 	
@@ -67,11 +67,14 @@ module.exports = Generator.extend({
 		}
 		
 		// write composerJson
-		pkgManager.writeComposerJson();	
+		pkgManager.writeComposerJson();
+		this.log(chalk.yellow('   updated: ') + pkgManager.composerJsonPath);
 		
 	},
 	
 	_processTemplates: function ( pkg ) {
+		
+		// get data
 		var packageJson = this._readPackageJson();
 		var data = {
 			funcPrefix: packageJson.funcPrefix,
@@ -82,21 +85,21 @@ module.exports = Generator.extend({
 			case 'webdevstudios/cmb2':
 				this.fs.copyTpl(
 					this.templatePath('src/inc/dep/autoload/_cmb2_init.php'),
-					this.destinationPath('src/inc/dep/autoload/cmb2_init.php'),
+					this.destinationPath('src/inc/dep/autoload/' + data.funcPrefix +'_cmb2_init.php'),
 					data
 				);
 				break;
 			case 'jcchavezs/cmb2-taxonomy':
 				this.fs.copyTpl(
 					this.templatePath('src/inc/dep/autoload/_cmb2_taxonomy_init.php'),
-					this.destinationPath('src/inc/dep/autoload/cmb2_taxonomy_init.php'),
+					this.destinationPath('src/inc/dep/autoload/' + data.funcPrefix +'_cmb2_taxonomy_init.php'),
 					data
 				);
 				break;
 			case 'jmarceli/integration-cmb2-qtranslate':
 				this.fs.copyTpl(
 					this.templatePath('src/inc/dep/autoload/_integration_cmb2_qtranslate_init.php'),
-					this.destinationPath('src/inc/dep/autoload/integration_cmb2_qtranslate_init.php'),
+					this.destinationPath('src/inc/dep/autoload/' + data.funcPrefix +'_integration_cmb2_qtranslate_init.php'),
 					data
 				);
 				break;
@@ -117,14 +120,7 @@ module.exports = Generator.extend({
 			'Welcome to the ' + chalk.yellow('pluginboilerplate') + ' ' + chalk.green('addPkg') + ' subgenerator!'
 		));
 		
-		var prompts = [
-			// {
-			// 	type: 'confirm',
-			// 	name: 'someAnswer',
-			// 	message: 'Would you like to enable this option?',
-			// 	default: true
-			// },
-		];
+		var prompts = [];
 		
 		var availableChoices = pkgManager.getAvailableChoices();
 		
@@ -162,23 +158,22 @@ module.exports = Generator.extend({
 				// process templates to inc dep autoload
 				this._processTemplates(pkg);
 				
-
-				
-		
 			}
 		}
-		
-
-
 		
 	},
 	
 	install: function () {
-		// this.installDependencies({
-		// 	bower: false,
-		// 	npm: false,
-		// 	callback: function () {}
-		// });
+		
+		if ( ( 'pkgs' in this.props ) && this.props.pkgs.length > 0 ){
+			
+			// composer update
+			var cmd = 'composer update';
+			console.log('');
+			console.log(chalk.green('running ') + chalk.yellow(cmd));
+			console.log('');
+			childProcess.execSync( cmd, { stdio:'inherit' } );
+		}		
 		
 		this.log('alright, I\'m done');
 	}

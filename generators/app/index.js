@@ -5,87 +5,80 @@ var yosay = require('yosay');
 var childProcess = require('child_process');
 var glob = require('glob');
 var path = require('path');
-
-function arrayContains( array, needle ) {
-	var i;
-	for (i in array) {
-		if (array[i] == needle) return true;
-	}
-	return false;
-}
+var slug = require('slug');
+var fs = require('fs');
+var dirTree = require('directory-tree');
+var iterator = require('object-recursive-iterator');
 
 
-var slug = {
-	slugify: function( str ){
-		return str.toString().toLowerCase()
-			.replace(/\s+/g, '-')           // Replace spaces with -
-			.replace(/[^\w\-]+/g, '')       // Remove all non-word chars
-			.replace(/\-\-+/g, '-')         // Replace multiple - with single -
-			.replace(/^-+/, '')             // Trim - from start of str
-			.replace(/-+$/, '');            // Trim - from end of str	
-	},
-	isSlugified: function( str ){
-		if (
-			/[A-Z]/.exec(str)
-			|| /\s+/.exec(str)
-			|| /[^\w\-]+/.exec(str)
-			|| /\-\-+/.exec(str)
-			|| /^-+/.exec(str)
-			|| /-+$/.exec(str)
-			) {
-			return false;
-		}
-		return true;		
-	},
-	validateIsSlugified: function( str ){
-		if (! slug.isSlugified( str )) {
-			return chalk.yellow('You need to provide a slugified string!');
-		}
-		return true;
-	}
-}
-		
 module.exports = Generator.extend({
 	// https://gist.github.com/codeitagile/19e7be070b6ef46c21d2
-	_bulkCopyTpl: function( source, destination, data) {
+	_bulkCopyTpl: function( source, destination, data, options ) {
+		
+		// parse options
+		var defaults = {
+			prependFunctionPrefix: true,
+		};
+		options = Object.assign( defaults, ( options === undefined ? {} : options ) );
+
+		// find files
 		var files = glob.sync('**', { dot: true, cwd: source });
+		
+		// loop files
 		for (var i = 0; i < files.length; i++) {
 			var f = files[i];
 			var src = path.join(source, f);
-			var dest;
-			if (path.basename(f).indexOf('_') === 0 && path.basename(f).slice(-1) != '~'){
+			var fileName, dest;
+			if ( path.basename(f).indexOf('_') === 0 && path.basename(f).slice(-1) != '~' ){
+				
+				// define fileName
+				fileName = path.basename(f);
+				if ( options.prependFunctionPrefix === true ){
+					if ( fileName.startsWith('_class-') ) {
+						fileName = fileName.replace(/^_class-/, 'class-' + this.props.funcPrefix + '_');
+					} else {
+						fileName = fileName.replace(/^_/, this.props.funcPrefix + '_');
+					}
+				} else {
+					fileName = fileName.replace(/^_/, '');
+				}
+				
+				// define destination
 				dest = path.join(
 					destination,
 					path.dirname(f),
-					path.basename(f).replace(/^_/, '')
+					fileName
 				);
+				
+				// copy template
 				this.fs.copyTpl( src, dest, data);
 			}
 		}
 	},
-	_bulkCopy: function( source, destination, rmLowdash) {
-		var files = glob.sync('**', { dot: true, cwd: source });
-		for (var i = 0; i < files.length; i++) {
-			var f = files[i];
-			var src = path.join(source, f);
-			var dest;
-			if (path.basename(f).slice(-1) != '~'){
-				if (rmLowdash === true){
-					dest = path.join(
-						destination,
-						path.dirname(f),
-						path.basename(f).replace(/^_/, '')
-					);
-				} else {
-					dest = path.join(
-						destination,
-						f
-					);
-				}
-				this.fs.copy( src, dest);
+	
+	_mkdirRec: function () {
+	
+		var tree = [];
+		iterator.forAll(dirTree(this.templatePath(), {type:'directory'}), function (path, key, obj) {
+			if ( obj.type === 'directory' && tree.indexOf(obj.path) === -1 ){
+				tree.push(obj.path);
 			}
-		}
+		});
+		for (var i = 0; i < tree.length; i++) {
+			var dir = tree[i].replace(this.templatePath(), this.destinationPath());
+			try {
+				// dir exists
+				fs.statSync(dir).isDirectory();
+			}
+			catch (err) {
+				// dir does not exist
+				console.log(chalk.yellow('   create dir: ') + dir);
+				fs.mkdirSync(dir);
+			}			
+		}	
 	},
+	
+
 	
 	prompting: function () {
 		
@@ -93,28 +86,30 @@ module.exports = Generator.extend({
 			'Welcome to the ' + chalk.yellow('pluginboilerplate') + ' generator!'
 		));
 		
-		var dirName = this.options.env.cwd.split("/").pop();
+		
+		// slug defaults to lower case
+		slug.defaults.modes.pretty.lower = true;
 		
 		var prompts = [
 			{
 				type: 'input',
 				name: 'pluginName',
 				message: chalk.green('Name') + '\nThe name/title of your plugin, which will be displayed in the Plugins list in the WordPress Admin',
-				default: dirName
+				default: path.basename(this.destinationPath())
 			},
 			{
 				type: 'input',
 				name: 'pluginSlug',
 				message: chalk.green('Slug') + '\nYour Plugin slug, used for the main plugin file (hopefully same as the plugin directory)',
-				default: slug.slugify(dirName),
-				validate: slug.validateIsSlugified
+				default: slug(path.basename(this.destinationPath())),
+				validate: function(str) { return slug(str) === str ? true : chalk.yellow('You need to provide a slugified string!');}
 			},
 			{
 				type: 'input',
 				name: 'funcPrefix',
 				message: chalk.green('Function Prefix') + '\na slugified string',
 				default: function (response) { return response.pluginSlug; },
-				validate: slug.validateIsSlugified
+				validate: function(str) { return slug(str) === str ? true : chalk.yellow('You need to provide a slugified string!');}
 			},
 			{
 				type: 'input',
@@ -133,13 +128,13 @@ module.exports = Generator.extend({
 				name: 'vendorSlug',
 				message: chalk.green('Vendor Slug') + '\nYour Vendor Slug (used for composer config)',
 				default: 'waterproof',
-				validate: slug.validateIsSlugified
+				validate: function(str) { return slug(str) === str ? true : chalk.yellow('You need to provide a slugified string!');}
 			},				
 			{
 				type: 'input',
 				name: 'pluginUri',
 				message: chalk.green('Plugin Uri') + '\nThe home page of the plugin, which might be on WordPress.org or on your own website. This must be unique to your plugin.',
-				default: 'http://waterproof-webdesign.info/' + slug.slugify(dirName)
+				default: 'http://waterproof-webdesign.info/' + slug(path.basename(this.destinationPath()))
 			},			
 			{
 				type: 'input',
@@ -181,110 +176,6 @@ module.exports = Generator.extend({
 				default: ''
 			},		
 			
-			
-
-			
-			{
-				name: 'styles',
-				message: chalk.green('Styles') + '\nBuild styles from scss and enqueue.',
-				type: 'checkbox',
-				choices: [
-					{
-						value: 'styleFrontend',
-						name: 'Build and enqueue a single concatinated and compressed frontend stylesheet.',
-						checked: true
-					},
-					{
-						value: 'styleAdmin',
-						name: 'Build and enqueue a single concatinated and compressed admin stylesheet.',
-						checked: true
-					},
-					{
-						value: 'styleOptionsPage',
-						name: 'Build and enqueue compressed stylesheet for the ... if optionspage',
-						checked: true
-					},
-				],	
-			},
-			
-			{
-				when: function(response){
-					return response.styles.length > 0;
-				},
-				name: 'inclSassLibs',
-				message: chalk.green('Sass libraries') + '\nInclude some sass libraries?',
-				type: 'checkbox',
-				choices: [
-					{
-						value: 'susy',
-						name: 'Susy http://susy.oddbird.net/',
-						checked: true
-					},
-					{
-						value: 'breakpoint',
-						name: 'breakpoint http://breakpoint-sass.com/',
-						checked: true
-					},
-					{
-						value: 'bourbon',
-						name: 'bourbon http://bourbon.io/',
-						checked: true
-					},
-				],	
-			},
-			
-			
-			{
-				name: 'scripts',
-				message: chalk.green('Scripts') + '\nBuild scripts and register, localize and print them.\nAdds localize class to store values during pageload for localisation in footer.',
-				type: 'checkbox',
-				choices: [
-					{
-						value: 'scriptFrontend',
-						name: 'Build and enqueue a single concatinated linted and compressed frontend script.',
-						checked: true
-					},
-					{
-						value: 'scriptAdmin',
-						name: 'Build and enqueue a single concatinated linted and compressed admin script.',
-						checked: true
-					},
-				],	
-			},
-			
-			/*
-			{
-				type: 'confirm',
-				name: 'inclCMB2',
-				message: chalk.green('include CMB2') + '\ninclude CMB2 library https://github.com/WebDevStudios/CMB2',
-				default: 'y'
-			},
-			{
-				when: function(response){
-					return response.inclCMB2;
-				},
-				name: 'inclCMB2includes',
-				message: chalk.green('OK, so what else to include?') + '\nAll that fancy stuff depends on CMB2',
-				type: 'checkbox',
-				choices: [
-					{
-						value: 'cmb2Tax',
-						name: 'CMB2 Taxonomy https://github.com/jcchavezs/cmb2-taxonomy',
-						checked: true
-					},
-					{
-						value: 'cmb2qTrans',
-						name: 'Integration CMB2-qTranslate https://github.com/jmarceli/integration-cmb2-qtranslate',
-						checked: true
-					},
-					{
-						value: 'cmb2Options',
-						name: 'Options Page',
-						checked: true
-					},
-				],	
-			}
-			*/
 		];
 
 		return this.prompt(prompts).then(function (props) {
@@ -294,19 +185,20 @@ module.exports = Generator.extend({
 			this.props.pluginSlugUpperCase = this.props.pluginSlug[0].toUpperCase() + this.props.pluginSlug.substring(1);
 			this.props.funcPrefixUpperCase = this.props.funcPrefix[0].toUpperCase() + this.props.funcPrefix.substring(1);
 			
-			/*
-			// define composerReps ... the required composer pkgs
-			this.props.composerReps = ['composerInstallers'];
-			if (this.props.inclCMB2) {
-				this.props.composerReps.push('cmb2');
+			// get generator version
+			try {
+				// file exists
+				var generatorPkgPath = path.join(this.sourceRoot(), '../../..', 'package.json' );
+				fs.statSync( generatorPkgPath ).isFile();
+				this.props.generatorVersion = require(generatorPkgPath).version;
 			}
-			if (arrayContains( props.inclCMB2includes, 'cmb2Tax' )){
-				this.props.composerReps.push('cmb2Tax');
-			}
-			if (arrayContains( props.inclCMB2includes, 'cmb2qTrans' )){
-				this.props.composerReps.push('cmb2qTrans');
-			}
-			*/
+			catch (err) {
+				// file does not exist
+				console.log('Some error reading generator package.json: ', err);
+				this.props.generatorVersion = '';
+			}			
+						
+			
 			
 		}.bind(this));
 	},
@@ -314,99 +206,78 @@ module.exports = Generator.extend({
 
 	writing: {
 		
-		define_gruntFileConditions: function () {
-				
-			this.gruntFileConditions = {
-				funcPrefix: this.props.funcPrefix,
-				// cmb2Tax: arrayContains( this.props.inclCMB2includes, 'cmb2Tax' ),
-				// cmb2qTrans: arrayContains( this.props.inclCMB2includes, 'cmb2qTrans' ),
-				funcPrefix: this.props.funcPrefix,
-				styleFrontend: arrayContains( this.props.styles, 'styleFrontend' ),
-				styleAdmin: arrayContains( this.props.styles, 'styleAdmin' ),
-				styleOptionsPage: arrayContains( this.props.styles, 'styleOptionsPage' ) && arrayContains( this.props.inclCMB2includes, 'cmb2Options' ),
-				scriptFrontend: arrayContains( this.props.scripts, 'scriptFrontend' ),
-				scriptAdmin: arrayContains( this.props.scripts, 'scriptAdmin' ),
-				sass_susy: arrayContains( this.props.inclSassLibs, 'susy' ),
-				sass_breakpoint: arrayContains( this.props.inclSassLibs, 'breakpoint' ),
-				sass_bourbon: arrayContains( this.props.inclSassLibs, 'bourbon' ),
-				// hasComposer: this.props.inclCMB2,
-				pluginSlugUpperCase: this.props.pluginSlugUpperCase,
-				funcPrefixUpperCase: this.props.funcPrefixUpperCase,
-				pluginName: this.props.pluginName,
-				pluginSlug: this.props.pluginSlug,
-				pluginUri: this.props.pluginUri,
-				pluginDesc: this.props.pluginDesc,
-				pluginAuthor: this.props.pluginAuthor,
-				pluginAuthorUri: this.props.pluginAuthorUri,
-				pluginTextDomain: this.props.pluginTextDomain,
-				donationLink: this.props.donationLink,
-				wpRequiresAtLeast: this.props.wpRequiresAtLeast,
-				wpVersionTested: this.props.wpVersionTested,
-			};
-			
-		},
-		
-		
-		
 		config: function () {
 			
 			var files, destination;
 			
-			// wp_installs
-			this.fs.copy(
-				this.templatePath('wp_installs.json'),
-				this.destinationPath('wp_installs.json')
-			);
+			// copy directory structure
+			this._mkdirRec();
 			
-			// gitignore
-			this.fs.copy(
-				this.templatePath('gitignore'),
-				this.destinationPath('.gitignore')
-			);
+
 
 			// Gruntfile
 			this.fs.copyTpl(
 				this.templatePath('_Gruntfile.js'),
 				this.destinationPath('Gruntfile.js'),
-				this.gruntFileConditions
+				this.props
 			);
 			this._bulkCopyTpl(
 				this.templatePath('grunt/config/'),
 				this.destinationPath('grunt/config/'),
-				this.gruntFileConditions
+				this.props, {
+					prependFunctionPrefix: false
+				}
 			);
 			this._bulkCopyTpl(
 				this.templatePath('grunt/tasks/'),
 				this.destinationPath('grunt/tasks/'),
-				this.gruntFileConditions
+				this.props, {
+					prependFunctionPrefix: false
+				}
 			);
 			
 			// package.json
 			this.fs.copyTpl(
 				this.templatePath('_package.json'),
 				this.destinationPath('package.json'),
-				this.gruntFileConditions
+				this.props
 			);
+			
+			// wp_installs		???
+			this.fs.copyTpl(
+				this.templatePath('_wp_installs.json'),
+				this.destinationPath('wp_installs.json'),
+				this.props
+			);
+			
+			// changelog.json
+			this.fs.copyTpl(
+				this.templatePath('_changelog.json'),
+				this.destinationPath('changelog.json'),
+				this.props
+			);				
+			
+			// gitignore
+			this.fs.copy(
+				this.templatePath('gitignore'),
+				this.destinationPath('.gitignore')
+			);			
 			
 			// composer.json
 			this.fs.copyTpl(
-				this.templatePath('_composer.json'),
-				this.destinationPath('composer.json'), {
-					pluginSlug: this.props.pluginSlug,
-					vendorSlug: this.props.vendorSlug,
-					
-					// repositories: composerPkgs.getRepositories(this.props.composerReps),
-					// require: composerPkgs.getRequire(this.props.composerReps),
-					// installerPaths: composerPkgs.getInstallerPaths(this.props.composerReps)
-					
-				}
-			);			
+				this.templatePath('composer.json'),
+				this.destinationPath('composer.json'),
+				this.props
+			);
+			
+		
 		},
 		
 		src_plugin_main_file: function () {
 			this.fs.copyTpl(
-				this.templatePath('src/_plugin_main_file.php'),
-				this.destinationPath('src/' + this.gruntFileConditions.pluginSlug + '.php'), this.gruntFileConditions
+				this.templatePath('src/root_files/_plugin_main_file.php'),
+				this.destinationPath('src/root_files/' + this.props.pluginSlug + '.php'),
+				this.props
 			);			
 		},
 		
@@ -414,82 +285,32 @@ module.exports = Generator.extend({
 			this._bulkCopyTpl(
 				this.templatePath('src/inc/dep/autoload/'),
 				this.destinationPath('src/inc/dep/autoload/'),
-				this.gruntFileConditions
+				this.props
 			);
 			this._bulkCopyTpl(
 				this.templatePath('src/inc/fun/autoload/'),
 				this.destinationPath('src/inc/fun/autoload/'),
-				this.gruntFileConditions
+				this.props
 			);
 		},
 		
-		src_js: function () {
-			// admin/init
-			if ( arrayContains( this.props.scripts, 'scriptAdmin' ) ) {
-				this.fs.copy(
-					this.templatePath('src/js/admin/init.js'),
-					this.destinationPath('src/js/admin/init.js')
-				);
-			}
-			// frontend/init
-			if ( arrayContains( this.props.scripts, 'scriptFrontend' ) ) {
-				this.fs.copy(
-					this.templatePath('src/js/frontend/init.js'),
-					this.destinationPath('src/js/frontend/init.js')
-				);
-			}
-		},
 		
 		src_readme: function () {
 			// commit_msg
-			this.fs.copy(
-				this.templatePath('src/readme/commit_msg.json'),
-				this.destinationPath('src/readme/commit_msg.json')
+			this.fs.copyTpl(
+				this.templatePath('src/readme/readme.txt'),
+				this.destinationPath('src/readme/readme.txt'),
+				this.props
 			);
 		},
 		
 		src_sass: function () {
-			// style_admin
-			if ( arrayContains( this.props.styles, 'styleAdmin' ) ) {
-				this.fs.copy(
-					this.templatePath('src/sass/style_admin.scss'),
-					this.destinationPath('src/sass/style_admin.scss')
-				);
-			}
-			// style_frontend
-			if ( arrayContains( this.props.styles, 'styleFrontend' ) ) {
-				this.fs.copy(
-					this.templatePath('src/sass/style_frontend.scss'),
-					this.destinationPath('src/sass/style_frontend.scss')
-				);
-			}
-			
-			// custom_modules/admin/init.scss
-			if ( arrayContains( this.props.styles, 'styleAdmin' ) ) {
-				this.fs.copy(
-					this.templatePath('src/sass/custom_modules/admin/init.scss'),
-					this.destinationPath('src/sass/custom_modules/admin/init.scss')
-				);
-			}
-			// custom_modules/frontend/init.scss
-			if ( arrayContains( this.props.styles, 'styleFrontend' ) ) {
-				this.fs.copy(
-					this.templatePath('src/sass/custom_modules/frontend/init.scss'),
-					this.destinationPath('src/sass/custom_modules/frontend/init.scss')
-				);
-			}
-			
-			// _options_page.scss
-			if ( arrayContains( this.props.styles, 'styleOptionsPage') 
-				&& arrayContains( this.props.inclCMB2includes, 'cmb2Options' )
-			) {
-				this.fs.copy(
-					this.templatePath('src/sass/custom_modules/frontend/init.scss'),
-					this.destinationPath('src/sass/' + this.props.funcPrefix + '_options_page.scss')
-				);
-			}
+			this._bulkCopyTpl(
+				this.templatePath('src/sass/'),
+				this.destinationPath('src/sass/'),
+				this.props
+			);
 		},
-		
 			
 	},
 	
@@ -520,7 +341,7 @@ module.exports = Generator.extend({
 				console.log('');
 				childProcess.execSync( cmd, { stdio:'inherit' } );	
 				
-				var cmd = 'git commit -m "initial commit"';
+				var cmd = 'git commit -m "Hurray, just generated a new plugin!"';
 				console.log('');
 				console.log(chalk.green('running ') + chalk.yellow(cmd));
 				console.log('');

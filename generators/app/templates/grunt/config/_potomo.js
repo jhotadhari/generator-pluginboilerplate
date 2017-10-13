@@ -5,7 +5,7 @@ module.exports = {
 	main: { 
 		files: [{
 			expand: true,
-			cwd: '<%%= pkg.dirs.src %>/languages/',
+			cwd: 'src/languages/',
 			src: ['*.po'],
 			dest: '<%%= dest_path %>/languages',
 			ext: '.mo',

@@ -14,12 +14,12 @@ module.exports = function(grunt){
 
 		if ( process == 'build' ) {
 			dest_path = [
-				pkg.dirs.test
+				'test'
 			];
 		} else if ( process == 'dist' ) {
 			dest_path = [
-				pkg.dirs.dist + '/tags/' + pkg.version,
-				pkg.dirs.dist + require('path').sep + 'trunk'
+				'dist' + '/tags/' + pkg.version,
+				'dist' + require('path').sep + 'trunk'
 			];
 		}
 		
@@ -28,13 +28,5 @@ module.exports = function(grunt){
 			grunt.task.run('_tasks:' + dest_path[i] + ':' + process);
 		}
 		
-		if ( process == 'dist' ) {
-			grunt.task.run([
-				'_dist_git_tasks',
-				'_reset_commit_msg_json',
-			]);
-		}
-		
-
 	});
 };

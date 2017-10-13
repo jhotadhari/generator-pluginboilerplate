@@ -73,11 +73,15 @@ class <%= funcPrefixUpperCase %>_admin_options {
 		add_action( 'admin_init', array( $this, 'init' ) );
 		add_action( 'admin_menu', array( $this, 'add_options_page' ) );
 		add_action( 'cmb2_admin_init', array( $this, 'add_options_page_metabox' ) );
-		<%if ( styleOptionsPage ) { %>
-		add_action( 'cmb2_after_options-page_form_' . $this->metabox_id, array( $this, 'enqueue_style'), 10, 2 );
+		
+		// enqueue_style ???
+		// add_action( 'cmb2_after_options-page_form_' . $this->metabox_id, array( $this, 'enqueue_style'), 10, 2 );
 
-		<% } %>
 	}
+	
+	// public function enqueue_style( $post_id, $cmb ) {
+	// 	wp_enqueue_style( '<%= funcPrefix %>_options_page', WP_PLUGIN_URL . '<%= pluginSlug %>' . 'css/<%= funcPrefix %>_options_page.css', false );
+	// }	
 
 
 	/**
@@ -152,11 +156,7 @@ class <%= funcPrefixUpperCase %>_admin_options {
 
 	}
 	
-	<%if ( styleOptionsPage ) { %>
-	public function enqueue_style( $post_id, $cmb ) {
-		wp_enqueue_style( '<%= funcPrefix %>_options_page', WP_PLUGIN_URL . '<%= pluginSlug %>' . 'css/<%= funcPrefix %>_options_page.css', false );
-	}
-	<% } %>
+
 
 	/**
 	 * Register settings notices for display
