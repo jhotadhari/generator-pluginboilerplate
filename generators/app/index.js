@@ -265,11 +265,10 @@ module.exports = Generator.extend({
 			
 			// composer.json
 			this.fs.copyTpl(
-				this.templatePath('composer.json'),
+				this.templatePath('_composer.json'),
 				this.destinationPath('composer.json'),
 				this.props
 			);
-			
 		
 		},
 		

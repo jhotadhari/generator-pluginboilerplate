@@ -88,8 +88,6 @@ module.exports = Generator.extend({
 			data.actionHookEnqueue = this.props.frontendAdmin === 'frontend' ? 'wp_enqueue_scripts' : 'admin_enqueue_scripts';
 			data.actionHookPrint = this.props.frontendAdmin === 'frontend' ? 'wp_print_footer_scripts' : 'admin_print_footer_scripts';		
 				
-			console.log(data);
-			
 			this.fs.copyTpl(
 				this.templatePath('src/js/_script.js'),
 				this.destinationPath('src/js/' + data.funcPrefix + '_' + this.props.scriptName + '.js'),
