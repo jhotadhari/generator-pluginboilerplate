@@ -7,7 +7,7 @@ if ( ! defined( 'WPINC' ) ) {
 	die;
 }
 
-class <%= funcPrefixUpperCase %><%= pluginSlug %> {
+class <%= funcPrefixUpperCase %>_<%= pluginSlug %> {
 	
 	const VERSION = 'taskRunner_setVersion';
 	const DB_VERSION = 0;			// int	increase the number if the database needs an update
@@ -188,7 +188,7 @@ class <%= funcPrefixUpperCase %><%= pluginSlug %> {
 }
 
 global $<%= funcPrefix %>_<%= pluginSlug %>;
-$<%= funcPrefix %>_<%= pluginSlug %> = new <%= funcPrefixUpperCase %><%= pluginSlug %>();
+$<%= funcPrefix %>_<%= pluginSlug %> = new <%= funcPrefixUpperCase %>_<%= pluginSlug %>();
 
 
 

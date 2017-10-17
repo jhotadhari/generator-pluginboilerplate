@@ -86,7 +86,6 @@ module.exports = Generator.extend({
 			'Welcome to the ' + chalk.yellow('pluginboilerplate') + ' generator!'
 		));
 		
-		
 		// slug defaults to lower case
 		slug.defaults.modes.pretty.lower = true;
 		

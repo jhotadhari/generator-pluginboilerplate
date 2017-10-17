@@ -1,10 +1,6 @@
-subgenerators	
-	addMenuPage		_tabbed?
-		class
-		style
-		script
+readme
 
-____
+_____
 
 addScripts
 	build: browserify scripts
@@ -20,8 +16,10 @@ app
 	compose with updateTaskRunner
 	
 
-
-
+add cmb2-conditionals
+	in addPkg
+	in addOptionsPage
+	
 	
 grunt build --composer-false
 
@@ -31,5 +29,4 @@ wp_installs.json
 	
 	
 jsDoc	phpDoc
-generator readme
 tutorial
