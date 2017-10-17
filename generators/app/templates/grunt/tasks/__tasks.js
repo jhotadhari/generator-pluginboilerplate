@@ -12,23 +12,23 @@ module.exports = function(grunt){
 			// clean up dest folder
 			'clean',
 			
-			//	composer	??? !!!
-			// 'composer:update',
+			//	composer
+			'composer:update',
 			
 			// readme
 			'concat:readme',
 			
+			'string-replace:plugin_main_file',	// copies plugin_main_file to destination
+			'concat:plugin_main_file',		// add banner plugin_main_file
+			'string-replace:inc_to_dest',	// copies inc to destination
 			'copy',
 				
-			// assets
+			// js
 			'jshint',
 			'uglify:main',
 			
 			// style
 			'sass:main',
-
-			// banner plugin_main_file
-			'concat:plugin_main_file',
 			
 			// potomo
 			'pot',

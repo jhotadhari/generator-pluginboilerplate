@@ -1,28 +1,29 @@
-
-
-find and replace	version <%= upcoming_version %>
-
-addScripts
-	build: browserify scripts
-	
 subgenerators	
 	addMenuPage		_tabbed?
 		class
 		style
 		script
+
+prompts add store
+	http://yeoman.io/authoring/user-interactions.html
+
+____
+
+addScripts
+	build: browserify scripts
+	
+subgenerators	
 		
 	updateTaskRunner
 	
 	register_taxonomy					https://codex.wordpress.org/Function_Reference/register_taxonomy
 	register_taxonomy_for_object_type	https://codex.wordpress.org/Function_Reference/register_taxonomy_for_object_type
-	
 
 app
 	compose with updateTaskRunner
 	
-	
-prompts add store
-	http://yeoman.io/authoring/user-interactions.html
+
+
 
 	
 grunt build --composer-false
@@ -32,7 +33,6 @@ wp_installs.json
 	promt, ask on generating
 	
 	
-	
-	
+jsDoc	phpDoc
 generator readme
 tutorial

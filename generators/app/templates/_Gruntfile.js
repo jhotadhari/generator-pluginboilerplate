@@ -2,6 +2,7 @@
 
 module.exports = function(grunt){
 	// load plugins
+	require('time-grunt')(grunt);
 	require('load-grunt-tasks')(grunt);
 	// load tasks
 	grunt.loadTasks('grunt/tasks');

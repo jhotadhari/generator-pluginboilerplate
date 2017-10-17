@@ -16,7 +16,7 @@ module.exports = {
 			banner: '<?php \n/*\nPlugin Name: <%%= global["pkg"].fullName %>\nPlugin URI: <%%= global["pkg"].uri %>\nDescription: <%%= global["pkg"].description %>\nVersion: <%%= global["pkg"].version %>\nAuthor: <%%= global["pkg"].author %>\nAuthor URI: <%%= global["pkg"].authorUri %>\nLicense: <%%= global["pkg"].license %>\nLicense URI: <%%= global["pkg"].licenseUri %>\nText Domain: <%%= global["pkg"].textDomain %>\nDomain Path: <%%= global["pkg"].domainPath %>\nTags: <%%= global["pkg"].tags %>\n*/\n\n?>'
 		},
 		src: [
-			'src/root_files/<%%= global["pkg"].name %>.php'
+			'<%%= dest_path %>/<%%= global["pkg"].name %>.php'
 		],
 		dest: '<%%= dest_path %>/<%%= global["pkg"].name %>.php'
 	}

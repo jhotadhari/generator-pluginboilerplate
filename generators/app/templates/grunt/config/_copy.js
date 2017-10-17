@@ -1,10 +1,4 @@
 module.exports = {
-	root_files: {
-		expand: true,
-		cwd: 'src/root_files/',
-		src: ['**/*','<%%= pattern.global_exclude %>'],
-		dest: '<%%= dest_path %>'	
-	},
 	
 	vendor: {		
 		expand: true,
@@ -12,14 +6,6 @@ module.exports = {
 		src: ['**/*', '<%%= pattern.global_exclude %>'],
 		dest: '<%%= dest_path %>/vendor/'	
 	},
-	
-	inc: {		
-		expand: true,
-		cwd: 'src/inc/',
-		src: ['**/*', '<%%= pattern.global_exclude %>'],
-		dest: '<%%= dest_path %>/inc/'	
-	},
-	
 	
 	images: {		
 		expand: true,

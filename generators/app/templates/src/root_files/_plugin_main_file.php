@@ -9,7 +9,7 @@ if ( ! defined( 'WPINC' ) ) {
 
 class <%= funcPrefixUpperCase %><%= pluginSlug %> {
 	
-	const VERSION = '0.0.1';		// ??? update/replace version on grunt bump
+	const VERSION = 'taskRunner_setVersion';
 	const DB_VERSION = 0;			// int	increase the number if the database needs an update
 	const PLUGIN_SLUG = '<%= pluginSlug %>';
 	const PLUGIN_NAME = '<%= pluginName %>';

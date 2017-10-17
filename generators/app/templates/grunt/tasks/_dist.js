@@ -10,7 +10,7 @@ module.exports = function(grunt){
 				'bump-only:' + vInc,
 			// run other dist tasks ... needs to be seperated for bumb versioning
 				'_updateChangelog:dist',
-				// 'concat:readme',	// '_create_readme',
+				'string-replace:inc_update_src',	// will replace string and update file in source
 				'_setPaths:dist',
 				'_dist_git_tasks'
 		]);

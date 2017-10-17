@@ -12,13 +12,15 @@ module.exports = {
 			'local_sync:<%%= local_sync.wp_install %>'
 		]
 	},
+	
 	plugin_main_file: {
 		files: [
 			'src/root_files/<%%= global["pkg"].name %>.php',
 			'<%%= pattern.global_exclude %>',
 		],
 		tasks: [
-			'concat:plugin_main_file',
+			'string-replace:plugin_main_file',	// copies plugin_main_file to destination
+			'concat:plugin_main_file',		// add banner plugin_main_file
 			'local_sync:<%%= local_sync.wp_install %>'
 		]
 	},	
@@ -80,7 +82,7 @@ module.exports = {
 			'<%%= pattern.global_exclude %>',
 		],
 		tasks: [
-			'copy:inc',
+			'string-replace:inc_to_dest',
 			'local_sync:<%%= local_sync.wp_install %>'
 		]
 	},
