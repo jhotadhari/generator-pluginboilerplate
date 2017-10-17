@@ -34,7 +34,7 @@ module.exports = Generator.extend({
 				name: 'scriptName',
 				message: chalk.green('Name') + ' of the scipt (will be prefixed automatically)',
 				default: 'scipt'
-			},				
+			},
 			
 			{
 				name: 'frontendAdmin',

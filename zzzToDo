@@ -1,17 +1,9 @@
 
 
-check if
-	registering post types
-	
-	capabilities
-
+find and replace	version <%= upcoming_version %>
 
 addScripts
 	build: browserify scripts
-	
-	
-plugin init class
-	dependencies
 	
 subgenerators	
 	addMenuPage		_tabbed?
@@ -20,20 +12,27 @@ subgenerators
 		script
 		
 	updateTaskRunner
+	
+	register_taxonomy					https://codex.wordpress.org/Function_Reference/register_taxonomy
+	register_taxonomy_for_object_type	https://codex.wordpress.org/Function_Reference/register_taxonomy_for_object_type
+	
 
 app
 	compose with updateTaskRunner
 	
 	
-add plugin dependencies
-	
-
-
 prompts add store
 	http://yeoman.io/authoring/user-interactions.html
 
+	
 grunt build --composer-false
 
 
 wp_installs.json
 	promt, ask on generating
+	
+	
+	
+	
+generator readme
+tutorial
