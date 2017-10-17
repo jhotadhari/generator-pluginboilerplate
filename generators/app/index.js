@@ -117,24 +117,21 @@ module.exports = Generator.extend({
 				message: chalk.green('Text Domain') + '\nThe gettext text domain of the plugin.',
 				default: function (response) { return response.pluginSlug; },
 			},
-			{
-				type: 'input',
-				name: 'vendorName',
-				message: chalk.green('Vendor Name') + '\nYour Vendor name (used for composer config)',
-				default: 'Waterproof-Webdesign'
-			},			
+			
+			
 			{
 				type: 'input',
 				name: 'vendorSlug',
 				message: chalk.green('Vendor Slug') + '\nYour Vendor Slug (used for composer config)',
-				default: 'waterproof',
+				default: 'example',
+				store: true,
 				validate: function(str) { return slug(str) === str ? true : chalk.yellow('You need to provide a slugified string!');}
 			},				
 			{
 				type: 'input',
 				name: 'pluginUri',
 				message: chalk.green('Plugin Uri') + '\nThe home page of the plugin, which might be on WordPress.org or on your own website. This must be unique to your plugin.',
-				default: 'http://waterproof-webdesign.info/' + slug(path.basename(this.destinationPath()))
+				default: 'http://example.com/' + slug(path.basename(this.destinationPath()))
 			},			
 			{
 				type: 'input',
@@ -146,19 +143,22 @@ module.exports = Generator.extend({
 				type: 'input',
 				name: 'pluginAuthor',
 				message: chalk.green('Author') + '\nThe name of the plugin author',
-				default: 'jhotadhari'
+				store: true,
+				default: 'authorname'
 			},	
 			{
 				type: 'input',
 				name: 'pluginAuthorUri',
 				message: chalk.green('Author Uri') + '\nThe author’s website or profile on another website, such as WordPress.org.',
-				default: 'http://waterproof-webdesign.info/'
+				store: true,
+				default: 'http://example.com/'
 			},
 			{
 				type: 'input',
 				name: 'donationLink',
 				message: chalk.green('Donation Link') + '\nLink to Plugins donation page.',
-				default: 'http://waterproof-webdesign.info/donate'
+				store: true,
+				default: 'http://example.com/donate'
 			},
 			
 			

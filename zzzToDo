@@ -4,9 +4,6 @@ subgenerators
 		style
 		script
 
-prompts add store
-	http://yeoman.io/authoring/user-interactions.html
-
 ____
 
 addScripts
