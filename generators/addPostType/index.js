@@ -153,7 +153,7 @@ module.exports = Generator.extend({
 			{
 				type: 'list',
 				name: 'capability_type',
-				message: chalk.green('can_export') + ': Can this post_type be exported?',
+				message: chalk.green('capability_type') + ': The string to use to build the read, edit, and delete capabilities?',
 				choices: [
 					{
 						value: 'post',
@@ -236,7 +236,7 @@ module.exports = Generator.extend({
 			data.show_in_nav_menus = false;
 			data.publicly_queryable = false;
 			data.exclude_from_search = true;
-			data.show_in_admin_bar = false;
+			data.show_in_menu = false;
 			data.show_in_admin_bar = false;
 		}
 		data.supportsPhpArr = 'array(\'' + data.supports.join('\',\'') + '\')';		
