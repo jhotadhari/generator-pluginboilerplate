@@ -319,7 +319,7 @@ class <%= funcPrefixUpperCase %>_options_page_<%= key %> {
  * @since  taskRunner_setVersion
  * @return <%= funcPrefixUpperCase %>_options_page_<%= key %> object
  */
-function <%= funcPrefix %>_<%= key %>_options() {
+function <%= funcPrefix %>_options_page_<%= key %>() {
 	return <%= funcPrefixUpperCase %>_options_page_<%= key %>::get_instance();
 }
 
@@ -333,11 +333,11 @@ function <%= funcPrefix %>_<%= key %>_options() {
 function <%= funcPrefix %>_<%= key %>_get_option( $key = '', $default = null ) {
 	if ( function_exists( 'cmb2_get_option' ) ) {
 		// Use cmb2_get_option as it passes through some key filters.
-		return cmb2_get_option( <%= funcPrefix %>_<%= key %>_options()->key, $key, $default );
+		return cmb2_get_option( <%= funcPrefix %>_options_page_<%= key %>()->key, $key, $default );
 	}
 
 	// Fallback to get_option if CMB2 is not loaded yet.
-	$opts = get_option( <%= funcPrefix %>_<%= key %>_options()->key, $key, $default );
+	$opts = get_option( <%= funcPrefix %>_options_page_<%= key %>()->key, $key, $default );
 
 	$val = $default;
 
@@ -353,7 +353,7 @@ function <%= funcPrefix %>_<%= key %>_get_option( $key = '', $default = null ) {
 }
 
 // Get it started
-<%= funcPrefix %>_<%= key %>_options();
+<%= funcPrefix %>_options_page_<%= key %>();
 
 
 ?>
