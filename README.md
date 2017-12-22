@@ -14,27 +14,13 @@ npm install -g generator-pluginboilerplate
 ```
 
 Requires:
-* Ubuntu  (grunt will set the paths relative to home)
-* node
-* npm
+* It's only tested on Ubuntu and might not work on other OS
+* node & npm
 * yeoman
-* grunt-cli
+* grunt
 * composer
 * git
-* sass
-* ... sorry something missing here. coming soon.
-
-It Works well with this configuration (sorry, never tested somewhere else):
-* Ubuntu 16.04
-* node 4.2.6
-* npm 3.5.2
-* yeoman 1.8.5
-* grunt-cli 1.2.0
-* XAMPP 5.6.21-0
-* composer 1.2.2
-* git 2.7.4
-* sass 3.4.22
-
+* sass (as well as susy and breakpoint)
 
 ## Introduction
 
@@ -58,114 +44,102 @@ will output a project like this:
 
 ```
 .
+├── changelog.json
+├── composer.json
 ├── dist
+│   ├── assets
+│   ├── branches
 │   ├── tags
 │   └── trunk
+├── .git
+│   └── ...
+├── .gitignore
+├── grunt
+│   └── ...
+├── Gruntfile.js
 ├── node_modules
 │   └── ...
+├── package.json
 ├── src
-│   ├── functions
-│   │   ├── init.php
-│   │   ├── Tstg_defaults.php
-│   │   ├── Tstg_localize.php
-│   │   └── tstg_options_page.php
+│   ├── fonts
+│   ├── images
+│   ├── inc
+│   │   ├── dep
+│   │   │   └── autoload
+│   │   ├── fun
+│   │   │   └── autoload
+│   │   │       └── class-tstg_defaults.php
+│   │   ├── post_types_taxs
+│   │   │   └── autoload
+│   │   └── roles_capabilities
+│   │       └── autoload
 │   ├── js
-│   │   ├── admin
-│   │   │   └── init.js
-│   │   └── frontend
-│   │       └── init.js
+│   │   └── noLint
 │   ├── languages
-│   │   └── testing-text.pot
-│   ├── plugin_main_file
-│   │   ├── cmb2_init.php
-│   │   ├── init.php
-│   │   └── load_functions.php
+│   │   └── testing-plugin.pot
 │   ├── readme
-│   │   ├── readme.txt
-│   │   └── commit_msg.json
+│   │   └── readme.txt
+│   ├── root_files
+│   │   └── testing-plugin.php
 │   └── sass
-│       ├── custom_modules
-│       │   ├── admin
-│       │   │   └── init.scss
-│       │   └── frontend
-│       │       └── init.scss
-│       ├── style_admin.scss
-│       ├── style_frontend.scss
-│       └── tstg_options_page.scss
 ├── test
 │   └── ...
 ├── vendor
 │   └── ...
-├── composer.json
-├── composer.lock
-├── Gruntfile.js
-├── package.json
-├── wp_installs.json
-└── .gitignore
+└── wp_installs.json
 ```
 
 
-All files of some folders need a special header (its not really an header. Its after the ```<?php```, and after phpDoc stuff and after ... but should be somewhere close to the begining).
-It looks like some js object, but is a string and grunt will just search that string. So it can/should be a comment.
-If you need your files concatenated in a specific order (eg for scss), duplicate the "require" row as often as needed and change it accordingly.
-So that's the header:
-```
-/*
-	grunt.concat_in_order.declare('any_kind_of_unique_name');
-	grunt.concat_in_order.require('init');
-*/
-```
+* ```./wp_installs.json``` This File contains the paths to your local WP installations.
 
+* ```./package.json``` This File contains project information. Some of this will be used to generate the readme and the header in plugin main file. Don't change the version by yourself. Grunt tasks will do that!
 
-* ```./wp_installs.json``` This File contains the paths to your local WP installations (relative to your home path on ubuntu).
-
-* ```./package.json``` This File contains project information. Some of this will be used to generate the readme and the header in plugin main file. Don't change the version by yourself. The Grunt dist task will do that!
-
+* ```./changelog.json``` This File contains the changelog.
+  * Only edit the 'next' array, don't edit other parts of the file 
+  * On Grunt dist task the plugin version will be increased, and the 'next' will be used for git commit message as well.
+  
 * ```./vendor``` This Folder contains remote ressouces added by composer. You shouldn't do anything inside this. Composer will do it.
 
 * ```./test``` Contains the plugin in development state.
   * This Folder will be used as destination for all build and watch tasks.
   * It may be synchronized with local wp installation (depends on grunt task).
 
-* ```./dist``` Contains the Plugin releases.
-  * This folder will be generated on dist task. It has the same structure as the WP plugin repository.
+* ```./dist``` Folder contains the Plugin releases.
+  * It has the same structure as the WP plugin svn repository.
   * Don't make changes in ```tags``` or ```trunk``` folder.
+  
+* ```./grunt``` Folder contains the Grunt tasks and config
 
 * ```./src``` This Folder contains the source code.
   * That's the folder where all/most of the development is done!
-
-  * ```./src/plugin_main_file``` It will be the Plugin main File. In case of this example, it will be ```./test/testing-plugin.php```
-    * Everything inside that folder will be concatenated in an specific order. All files need that header!
-    * It will init the Plugin and load ```./test/functions.php```
-    * Don't forget the ```<?php``` tag as first characters and the ```?>``` at the very last end of each file!
-
-  * ```./src/functions``` Use this folder for all the plugin php code. It will be ```./test/functions.php```
-    * Everything inside that folder will be concatenated in an specific order. All files need that header!
-    * Don't forget the ```<?php``` tag as first characters and the ```?>``` at the very last end of each file!
-    * Depending on generating process, this folder already contains some files:
-      *  _defaults.php: A class to manage all default values (documentation coming sometime).
-      *  _localize.php A class to manage all that stuff that will be accessible for the js (documentation coming sometime).
-      *  _options_page.php An Options page, based on cmb2 (documentation coming sometime).
-
-  * ```./js``` Contains all the JavaScript source.
-    * ```./js/frontend``` Will be a single js file enqueued in wp_footer on frontend and has access to all that stuff managed by functions/localize class.
-    * Everything inside that folder will be concatenated in an specific order. All files need that header!
-
-  * ```./readme/readme.txt``` Contains the readme body. The header and changelog will be added automatically.
-
-  * ```./readme/commit_msg.json``` Will be used as git commit message and added to the change log.
-    * Required for dist task.
-    * Put as many entries as you want, but any other key then "test".
-    * Will be reseted when dist task finished.
-
-  * ```./sass/tstg_options_page.scss``` Style for options page.
-
-  * ```./sass/custom_modules/admin``` and ```./sass/custom_modules/frontend``` Will be the stylesheet, enqueued on frontend or admin.
-    * Everything inside that folder will be concatenated in an specific order. All files need that header!
-
-* ```./../dont_touch``` Contains some temporary stuff (and readme change log). Just don't touch it.
-
-
+  
+  * ```./src/inc```
+  	* Folder for files to be included.
+  	* all ```./../autolaod/../*.php``` will be included automatically by the plugin main file.
+  	* ```./dep/``` contains some files to load dependencies
+  	* ```./fun/``` contains all the fun, like classes and functions.
+  	* ```./post_types_taxs/``` contains files to register post types. You can add PostTypes withe the ```pluginboilerplate:addPostType``` command
+  	* ```./roles_capabilities/``` contains files to register roles and capabilities.
+  	
+  * ```./src/js```
+  	* Contains all the JavaScript source.
+  	* The will be linted and mangled by Grunt
+  	
+  * ```./src/languages```
+  	* The pot file gets updated by Grunt tasks
+  	* po files will be processed to mo files by Grunt
+  	
+  * ```./src/readme/readme.txt```
+  	* Contains the readme body. The header and changelog will be added automatically.
+  	
+  * ```./src/root_files```
+  	* Contains all the files in your Plugins root folder. E.g. the plugin main file.
+  	* The string 'taskRunner_setVersion' will be replaced by Grunt tasks
+  	* The Plugin main file will init the Plugin if no required dependencies is missing and will include other plugin files. The ```$deps``` property contains an array with all dependencies. Usually no other changes to that file have to be done.
+  	
+  * ```./src/sass```
+  	* Contains all scss files. They will be compiled and minified by grunt
+  
 
 ## Grunt tasks:
 Most tasks are just sub tasks and will be used by the following main tasks:
@@ -183,14 +157,20 @@ Most tasks are just sub tasks and will be used by the following main tasks:
   * will update the version (in package.json, in readme ... ).
   * Will create the Plugin readme.
   * Will build the plugin into ```./dist/trunk``` and ```./dist/tag/VERSION```
-  * Will add all to git and commit it (using the new version as commit message and all entries in ```./readme/commit_msg.json```)
+  * Will add all to git and commit it (using the new version as commit message and all entries in ```./changelog.json 'next' ```)
+
+  
+## Subgenerators:
+  * ```pluginboilerplate:addPkg``` Helps to add some often used packages to the plugin. E.g.: CMB2
+  * ```pluginboilerplate:addOptionsPage``` Adds a boilerplate Options/Settings Page. Requires the CMB2 package. You can make changes to the Settings Page in the generated file.
+  * ```pluginboilerplate:addPostType``` Adds a Custom Post Type
+  * ```pluginboilerplate:addScript``` Will add a new script to the js folder and a file to enqueue the script. Will add a localize class to send data to the script.
+  * ```pluginboilerplate:addStyle``` Adds a new scss file and a file to enqueue the style
 
   
 ## Example Plugins
 These plugins are based on that generator:
-* https://github.com/jhotadhari/rest-importer
-* https://github.com/jhotadhari/languages-frontend-display
-* https://github.com/jhotadhari/waterproof-wrap-query
+* https://github.com/jhotadhari/export2word
 
 
 ## Thanks for beautiful ressoucres:

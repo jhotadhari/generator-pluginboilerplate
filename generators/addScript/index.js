@@ -32,8 +32,8 @@ module.exports = Generator.extend({
 			{
 				type: 'input',
 				name: 'scriptName',
-				message: chalk.green('Name') + ' of the scipt (will be prefixed automatically)',
-				default: 'scipt'
+				message: chalk.green('Name') + ' of the script (will be prefixed automatically)',
+				default: 'script'
 			},
 			
 			{
