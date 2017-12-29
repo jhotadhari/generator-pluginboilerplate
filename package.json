@@ -50,6 +50,11 @@
     }
   },
   "repository": "/generator-pluginboilerplate",
+  
+  "repository" : {
+	  "type" : "git",
+	  "url" : "https://github.com/jhotadhari/generator-pluginboilerplate.git"
+  },
   "scripts": {
     "prepublish": "gulp prepublish",
     "test": "gulp"
