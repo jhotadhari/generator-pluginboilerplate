@@ -10,7 +10,7 @@ if ( ! defined( 'WPINC' ) ) {
  * @version  taskRunner_setVersion
  * @see      https://github.com/CMB2/CMB2-Snippet-Library/blob/59166b81693f4ab8651868e70cb29702576bd055/options-and-settings-pages/theme-options-cmb.php
  */
-class <%= funcPrefixUpperCase %>_options_page_<%= key %> {
+class <%= funcPrefixUpperCase %>_Options_Page_<%= keyUpperCase %> {
 
 	/**
  	 * Option key, and option page slug
@@ -39,14 +39,14 @@ class <%= funcPrefixUpperCase %>_options_page_<%= key %> {
 	/**
 	 * Holds an instance of the object
 	 *
-	 * @var <%= funcPrefixUpperCase %>_options_page_<%= key %>
+	 * @var <%= funcPrefixUpperCase %>_Options_Page_<%= keyUpperCase %>
 	 */
 	protected static $instance = null;
 
 	/**
 	 * Returns the running object
 	 *
-	 * @return <%= funcPrefixUpperCase %>_options_page_<%= key %>
+	 * @return <%= funcPrefixUpperCase %>_Options_Page_<%= keyUpperCase %>
 	 */
 	public static function get_instance() {
 		if ( null === self::$instance ) {
@@ -82,8 +82,8 @@ class <%= funcPrefixUpperCase %>_options_page_<%= key %> {
 	 * @since taskRunner_setVersion
 	 */	
 	public function enqueue_style_script( $post_id, $cmb ) {
-		wp_enqueue_style( '<%= funcPrefix %>_options_page_<%= key %>', WP_PLUGIN_URL . '/<%= pluginSlug %>/css/<%= funcPrefix %>_options_page_<%= key %>.min.css', false );
-		wp_enqueue_script('<%= funcPrefix %>_options_page_<%= key %>', WP_PLUGIN_URL . '/<%= pluginSlug %>/js/<%= funcPrefix %>_options_page_<%= key %>.min.js', array( 'jquery' ));
+		wp_enqueue_style( '<%= funcPrefix %>_options_page_<%= key %>', <%= funcPrefixUpperCase %>_<%= pluginSlugUpperCase %>::plugin_dir_url() . '/css/<%= funcPrefix %>_options_page_<%= key %>.min.css', false );
+		wp_enqueue_script('<%= funcPrefix %>_options_page_<%= key %>', <%= funcPrefixUpperCase %>_<%= pluginSlugUpperCase %>::plugin_dir_url() . '/js/<%= funcPrefix %>_options_page_<%= key %>.min.js', array( 'jquery' ));
 	}	
 
 	/**
@@ -107,7 +107,7 @@ class <%= funcPrefixUpperCase %>_options_page_<%= key %> {
 			$this->key, 
 			array( $this, 'admin_page_display' ),
 			''	// string $icon_url 
-		)<% } %>
+		);<% } %>
 		<%if ( menuLevel === 'subMenuItem' ) { %>$this->options_page = add_submenu_page( 
 			'<%= parentMenuSlug %>', 
 			$this->title, 
@@ -210,12 +210,12 @@ class <%= funcPrefixUpperCase %>_options_page_<%= key %> {
 }
 
 /**
- * Helper function to get/return the <%= funcPrefixUpperCase %>_options_page_<%= key %> object
+ * Helper function to get/return the <%= funcPrefixUpperCase %>_Options_Page_<%= keyUpperCase %> object
  * @since  taskRunner_setVersion
- * @return <%= funcPrefixUpperCase %>_options_page_<%= key %> object
+ * @return <%= funcPrefixUpperCase %>_Options_Page_<%= keyUpperCase %> object
  */
 function <%= funcPrefix %>_options_page_<%= key %>() {
-	return <%= funcPrefixUpperCase %>_options_page_<%= key %>::get_instance();
+	return <%= funcPrefixUpperCase %>_Options_Page_<%= keyUpperCase %>::get_instance();
 }
 
 /**

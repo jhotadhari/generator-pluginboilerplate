@@ -78,7 +78,9 @@ module.exports = Generator.extend({
 		var packageJson = this._readPackageJson();
 		var data = {
 			funcPrefix: packageJson.funcPrefix,
-			pluginSlug: packageJson.name
+			pluginSlug: packageJson.name,
+			pluginSlugUpperCase: packageJson.name[0].toUpperCase() + packageJson.name.substring(1),
+			funcPrefixUpperCase: packageJson.funcPrefix[0].toUpperCase() + packageJson.funcPrefix.substring(1)
 		};
 		
 		switch( pkg.name ) {

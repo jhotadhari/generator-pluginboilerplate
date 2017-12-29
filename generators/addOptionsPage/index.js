@@ -4,7 +4,7 @@ var chalk = require('chalk');
 var yosay = require('yosay');
 var path = require('path');
 var fs = require('fs');
-var slug = require('slug');
+var slugg = require('slugg');
 
 module.exports = Generator.extend({
 		
@@ -23,15 +23,12 @@ module.exports = Generator.extend({
 	},
 	
 	prompting: function () {
-			
+		
 		var packageJson = this._readPackageJson();
 			
 		this.log(yosay(
 			'Welcome to the ' + chalk.yellow('pluginboilerplate') + ' ' + chalk.green('addOptionsPage') + ' subgenerator!'
 		));
-		
-		// slug defaults to lower case
-		slug.defaults.modes.pretty.lower = true;
 		
 		var prompts = [
 			
@@ -46,7 +43,7 @@ module.exports = Generator.extend({
 				message: 'What is the ' + chalk.green('key') + ' of the options page?',
 				type: 'input',
 				default: packageJson.name,
-				validate: function(str) { return slug(str) === str ? true : chalk.yellow('You need to provide a slugified string!') }			
+				validate: function(str) { return slugg( str.trim(), '_' ) === str ? true : chalk.yellow('You need to provide a slugified string!') }			
 			},
 			{
 				name: 'menuLevel',
@@ -132,6 +129,9 @@ module.exports = Generator.extend({
 		data.pluginSlug = packageJson.name;
 		data.textDomain = packageJson.textDomain;
 		data.funcPrefixUpperCase = data.funcPrefix[0].toUpperCase() + data.funcPrefix.substring(1);
+		data.pluginSlugUpperCase = packageJson.name[0].toUpperCase() + packageJson.name.substring(1);
+		data.keyUpperCase = data.key[0].toUpperCase() + data.key.substring(1);
+		
 		if ( data.menuLevel === 'subMenuItem' ) {
 			switch( data.parentMenu ) {
 				case 'settings':
@@ -157,12 +157,17 @@ module.exports = Generator.extend({
 			data.tabs = {};
 			var tabNamesArr = data.tabNames.split(';');
 			for ( var i = 0; i < tabNamesArr.length; i++ ){
-				this.log(tabNamesArr[i]);
-				data.tabs[slug(tabNamesArr[i])] = {
-					slug: slug(tabNamesArr[i]),
-					title: tabNamesArr[i],
+				data.tabs[slugg( tabNamesArr[i].trim(), '_' )] = {
+					slug: slugg( tabNamesArr[i].trim(), '_' ),
+					title: tabNamesArr[i].trim(),
 				};
 			}
+			
+			this.log();
+			this.log( 'tabs:');
+			this.log( data.tabs);
+			this.log();
+			
 			// copy template
 			this.fs.copyTpl(
 				this.templatePath('src/inc/fun/autoload/_options_page_tabbed_.php'),

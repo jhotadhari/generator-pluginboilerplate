@@ -2,7 +2,7 @@
 var Generator = require('yeoman-generator');
 var chalk = require('chalk');
 var yosay = require('yosay');
-var slug = require('slug');
+var slugg = require('slugg');
 var path = require('path');
 var fs = require('fs');
 
@@ -41,9 +41,6 @@ module.exports = Generator.extend({
 			'Welcome to the ' + chalk.yellow('pluginboilerplate') + ' ' + chalk.green('addPostType') + ' subgenerator!'
 		));
 		
-		// slug defaults to lower case
-		slug.defaults.modes.pretty.lower = true;		
-		
 		var prompts = [
 			{
 				type: 'input',
@@ -51,8 +48,8 @@ module.exports = Generator.extend({
 				message: 'What is the ' + chalk.green('singular name') + ' of your new post type?',
 				default: '',
 				validate: function(str) {
-					if ( slug(str).length <= 0 ) return chalk.yellow('That\'s to short!');
-					if ( slug(str).length >= 20 ) return chalk.yellow('That\'s to long!');
+					if ( slugg( str.trim(), '_' ).length <= 0 ) return chalk.yellow('That\'s to short!');
+					if ( slugg( str.trim(), '_' ).length >= 20 ) return chalk.yellow('That\'s to long!');
 					return true;
 				}
 				
@@ -223,7 +220,7 @@ module.exports = Generator.extend({
 		var packageJson = this._readPackageJson();
 		data.funcPrefix = packageJson.funcPrefix;
 		data.textDomain = packageJson.textDomain;
-		data.key = slug(data.singular_name);
+		data.key = slugg( data.singular_name.trim(), '_' );
 		if ( data.public ) {
 			data.show_ui = true;
 			data.show_in_nav_menus = true;

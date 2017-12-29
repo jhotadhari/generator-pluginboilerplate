@@ -5,7 +5,7 @@ if ( ! defined( 'WPINC' ) ) {
 	die;
 }
 
-class <%= funcPrefixUpperCase %>_localize {
+class <%= funcPrefixUpperCase %>_Localize {
 
 	protected $datas = array();
 
@@ -30,7 +30,7 @@ class <%= funcPrefixUpperCase %>_localize {
 
 function <%= funcPrefix %>_init_localize(){
 	global $<%= funcPrefix %>_localize;
-	$<%= funcPrefix %>_localize = new <%= funcPrefixUpperCase %>_localize();
+	$<%= funcPrefix %>_localize = new <%= funcPrefixUpperCase %>_Localize();
 }
 add_action( 'init', '<%= funcPrefix %>_init_localize' , 3);
 

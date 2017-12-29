@@ -5,10 +5,10 @@ if ( ! defined( 'WPINC' ) ) {
 	die;
 }
 
-// Enqueue style <%= styleName %>
-function <%= funcPrefix %>_style_init_<%= styleName %>() {
-	wp_enqueue_style( '<%= funcPrefix %>_<%= styleName %>', WP_PLUGIN_URL . '/<%= pluginSlug %>/css/<%= funcPrefix %>_<%= styleName %>.min.css' );
+// Enqueue style <%= styleSlug %>
+function <%= funcPrefix %>_style_init_<%= styleSlug %>() {
+	wp_enqueue_style( '<%= funcPrefix %>_<%= styleSlug %>',  <%= funcPrefixUpperCase %>_<%= pluginSlugUpperCase %>::plugin_dir_url() . '/css/<%= funcPrefix %>_<%= styleSlug %>.min.css' );
 }
-add_action( '<%= actionHook %>', '<%= funcPrefix %>_style_init_<%= styleName %>' );
+add_action( '<%= actionHook %>', '<%= funcPrefix %>_style_init_<%= styleSlug %>' );
 
 ?>

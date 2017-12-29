@@ -4,6 +4,7 @@ var chalk = require('chalk');
 var yosay = require('yosay');
 var fs = require('fs');
 var path = require('path');
+var slugg = require('slugg');
 
 module.exports = Generator.extend({
 		
@@ -69,17 +70,19 @@ module.exports = Generator.extend({
 		data.funcPrefix = packageJson.funcPrefix;
 		data.pluginSlug = packageJson.name;
 		data.funcPrefixUpperCase = data.funcPrefix[0].toUpperCase() + data.funcPrefix.substring(1);
-		data.actionHook = this.props.frontendAdmin === 'frontend' ? 'wp_enqueue_scripts' : 'admin_enqueue_scripts';
+		data.actionHook = data.frontendAdmin === 'frontend' ? 'wp_enqueue_scripts' : 'admin_enqueue_scripts';
+		data.pluginSlugUpperCase = packageJson.name[0].toUpperCase() + packageJson.name.substring(1);
+		data.styleSlug =  slugg( data.styleName.trim(), '_' );
 		
 		this.fs.copyTpl(
 			this.templatePath('src/sass/_style.scss'),
-			this.destinationPath('src/sass/' + data.funcPrefix + '_' + this.props.styleName + '.scss'),
+			this.destinationPath('src/sass/' + data.funcPrefix + '_' + data.styleSlug + '.scss'),
 			data
 		);
 		
 		this.fs.copyTpl(
 			this.templatePath('src/inc/fun/autoload/_style_init.php'),
-			this.destinationPath('src/inc/fun/autoload/' + data.funcPrefix + '_style_init_' + this.props.styleName + '.php'),
+			this.destinationPath('src/inc/fun/autoload/' + data.funcPrefix + '_style_init_' + data.styleSlug + '.php'),
 			data
 		);
 

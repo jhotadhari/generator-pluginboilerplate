@@ -5,7 +5,7 @@ var yosay = require('yosay');
 var childProcess = require('child_process');
 var glob = require('glob');
 var path = require('path');
-var slug = require('slug');
+var slugg = require('slugg');
 var fs = require('fs');
 var dirTree = require('directory-tree');
 var iterator = require('object-recursive-iterator');
@@ -86,9 +86,6 @@ module.exports = Generator.extend({
 			'Welcome to the ' + chalk.yellow('pluginboilerplate') + ' generator!'
 		));
 		
-		// slug defaults to lower case
-		slug.defaults.modes.pretty.lower = true;
-		
 		var prompts = [
 			{
 				type: 'input',
@@ -100,15 +97,15 @@ module.exports = Generator.extend({
 				type: 'input',
 				name: 'pluginSlug',
 				message: chalk.green('Slug') + '\nYour Plugin slug, used for the main plugin file (hopefully same as the plugin directory)',
-				default: slug(path.basename(this.destinationPath())),
-				validate: function(str) { return slug(str) === str ? true : chalk.yellow('You need to provide a slugified string!');}
+				default: slugg(path.basename(this.destinationPath()).trim()),
+				validate: function(str) { return slugg(str.trim()) === str ? true : chalk.yellow('You need to provide a slugified string!');}
 			},
 			{
 				type: 'input',
 				name: 'funcPrefix',
 				message: chalk.green('Function Prefix') + '\na slugified string',
 				default: function (response) { return response.pluginSlug; },
-				validate: function(str) { return slug(str) === str ? true : chalk.yellow('You need to provide a slugified string!');}
+				validate: function(str) { return slugg( str.trim(), '_' ) === str ? true : chalk.yellow('You need to provide a slugified string!');}
 			},
 			{
 				type: 'input',
@@ -124,13 +121,13 @@ module.exports = Generator.extend({
 				message: chalk.green('Vendor Slug') + '\nYour Vendor Slug (used for composer config)',
 				default: 'example',
 				store: true,
-				validate: function(str) { return slug(str) === str ? true : chalk.yellow('You need to provide a slugified string!');}
+				validate: function(str) { return slugg(str.trim()) === str ? true : chalk.yellow('You need to provide a slugified string!');}
 			},				
 			{
 				type: 'input',
 				name: 'pluginUri',
 				message: chalk.green('Plugin Uri') + '\nThe home page of the plugin, which might be on WordPress.org or on your own website. This must be unique to your plugin.',
-				default: 'http://example.com/' + slug(path.basename(this.destinationPath()))
+				default: 'http://example.com/' + slugg(path.basename(this.destinationPath()).trim())
 			},			
 			{
 				type: 'input',

@@ -4,6 +4,7 @@ var chalk = require('chalk');
 var yosay = require('yosay');
 var fs = require('fs');
 var path = require('path');
+var slugg = require('slugg');
 
 module.exports = Generator.extend({
 		
@@ -72,8 +73,9 @@ module.exports = Generator.extend({
 		var data = this.props;
 		data.funcPrefix = packageJson.funcPrefix;
 		data.pluginSlug = packageJson.name;
-		data.funcPrefixUpperCase = data.funcPrefix[0].toUpperCase() + data.funcPrefix.substring(1);
-
+		data.funcPrefixUpperCase = packageJson.funcPrefix[0].toUpperCase() + packageJson.funcPrefix.substring(1);
+		data.pluginSlugUpperCase = packageJson.name[0].toUpperCase() + packageJson.name.substring(1);
+		data.scriptSlug = slugg( data.scriptName.trim(), '_' );
 		
 		// localizeClass
 		this.fs.copyTpl(
@@ -82,21 +84,20 @@ module.exports = Generator.extend({
 			data
 		);
 		
+		if ( data.frontendAdmin != 'none' ) {
 		
-		if ( this.props.frontendAdmin != 'none' ) {
-		
-			data.actionHookEnqueue = this.props.frontendAdmin === 'frontend' ? 'wp_enqueue_scripts' : 'admin_enqueue_scripts';
-			data.actionHookPrint = this.props.frontendAdmin === 'frontend' ? 'wp_print_footer_scripts' : 'admin_print_footer_scripts';		
+			data.actionHookEnqueue = data.frontendAdmin === 'frontend' ? 'wp_enqueue_scripts' : 'admin_enqueue_scripts';
+			data.actionHookPrint = data.frontendAdmin === 'frontend' ? 'wp_print_footer_scripts' : 'admin_print_footer_scripts';		
 				
 			this.fs.copyTpl(
 				this.templatePath('src/js/_script.js'),
-				this.destinationPath('src/js/' + data.funcPrefix + '_' + this.props.scriptName + '.js'),
+				this.destinationPath('src/js/' + data.funcPrefix + '_' + data.scriptSlug + '.js'),
 				data
 			);
 			
 			this.fs.copyTpl(
 				this.templatePath('src/inc/fun/autoload/_script_init.php'),
-				this.destinationPath('src/inc/fun/autoload/' + data.funcPrefix + '_script_init_' + this.props.scriptName + '.php'),
+				this.destinationPath('src/inc/fun/autoload/' + data.funcPrefix + '_script_init_' + data.scriptSlug + '.php'),
 				data
 			);
 		

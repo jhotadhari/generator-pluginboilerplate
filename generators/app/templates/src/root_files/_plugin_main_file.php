@@ -7,7 +7,7 @@ if ( ! defined( 'WPINC' ) ) {
 	die;
 }
 
-class <%= funcPrefixUpperCase %>_<%= pluginSlug %> {
+class <%= funcPrefixUpperCase %>_<%= pluginSlugUpperCase %> {
 	
 	const VERSION = 'taskRunner_setVersion';
 	const DB_VERSION = 0;			// int	increase the number if the database needs an update
@@ -43,11 +43,22 @@ class <%= funcPrefixUpperCase %>_<%= pluginSlug %> {
 	public function __construct() {
 		register_activation_hook( __FILE__, array( $this, 'on_activate' ) );
 		register_deactivation_hook( __FILE__, array( $this, 'on_deactivate' ) );
-		register_uninstall_hook( __FILE__, array( $this, 'on_uninstall' ) );
-		
+		register_uninstall_hook( __FILE__, array( __CLASS__, 'on_uninstall' ) );
 		add_action( 'plugins_loaded', array( $this, 'start_plugin' ), 9 );
-		
 	}
+	
+	public static function plugin_dir_url(){
+		return plugins_url( '', __FILE__ );		// no trailing slash
+	}
+	
+	public static function plugin_dir_path(){
+		return plugin_dir_path( __FILE__ );		// trailing slash
+	}
+	
+	public static function plugin_dir_basename(){
+		return basename( dirname( __FILE__ ) );	// no trailing slash
+	}
+	
     
 	public function start_plugin() {
 		if ( $this->check_dependencies() ){
@@ -88,7 +99,7 @@ class <%= funcPrefixUpperCase %>_<%= pluginSlug %> {
 		do_action('<%= funcPrefix %>_plugin_deactivated');
 	}
 	
-	public function on_uninstall() {
+	public static function on_uninstall() {
 		do_action('<%= funcPrefix %>_plugin_uninstalled');	
 	}
 	
@@ -165,19 +176,20 @@ class <%= funcPrefixUpperCase %>_<%= pluginSlug %> {
 	
 	// include files to register post types and taxonomies
 	protected function register_post_types_and_taxs() {
-		$this->include_dir( WP_PLUGIN_DIR . '/<%= pluginSlug %>/' . 'inc/post_types_taxs/autoload/' );
+		self::include_dir( self::plugin_dir_path() . 'inc/post_types_taxs/autoload/' );
 	}
 	
 	// include files to add user roles and capabilities
 	protected function add_roles_and_capabilities() {
-		$this->include_dir( WP_PLUGIN_DIR . '/<%= pluginSlug %>/' . 'inc/roles_capabilities/autoload/' );
+		self::include_dir( self::plugin_dir_path() . 'inc/roles_capabilities/autoload/' );
 	}	
 	
 	// check DB_VERSION and require the update class if necessary
 	protected function maybe_update() {
 		if ( get_option( '<%= funcPrefix %>_db_version' ) < self::DB_VERSION ) {
-			require_once( WP_PLUGIN_DIR . '/<%= pluginSlug %>/' . 'inc/dep/class-<%= funcPrefix %>-update.php' );
-			new Testing_update();
+			// require_once( self::plugin_dir_path() . 'inc/dep/class-<%= funcPrefix %>-update.php' );
+			// new <%= funcPrefixUpperCase %>_Update();
+			// class <%= funcPrefixUpperCase %>_Update()  is missing ??? !!!
 		}
 	}
 	
@@ -185,17 +197,17 @@ class <%= funcPrefixUpperCase %>_<%= pluginSlug %> {
 		load_plugin_textdomain(
 			'<%= pluginTextDomain %>',
 			false,
-			dirname( WP_PLUGIN_DIR . '/<%= pluginSlug %>/' . 'languages' )
+			self::plugin_dir_basename() . '/languages' 
 		);
 	}
 	
 	public function include_inc_dep_autoload() {
-		$this->include_dir(  WP_PLUGIN_DIR . '/<%= pluginSlug %>/' . 'inc/dep/autoload/' );
+		self::include_dir(  self::plugin_dir_path() . 'inc/dep/autoload/' );
 	}
 	
 	public function include_inc_fun_autoload() {
-		self::include_dir(  WP_PLUGIN_DIR . '/<%= pluginSlug %>/' . 'inc/fun/autoload/' );
-	}	
+		self::include_dir(  self::plugin_dir_path() . 'inc/fun/autoload/' );
+	}
 	
 	public static function rglob( $pattern, $flags = 0) {
 		$files = glob( $pattern, $flags ); 
@@ -205,7 +217,7 @@ class <%= funcPrefixUpperCase %>_<%= pluginSlug %> {
 		return $files;
 	}	
 	
-	protected static function include_dir( $directory ){
+	public static function include_dir( $directory ){
 		$files =  self::rglob( $directory . '*.php');
 		if ( count($files) > 0 ){
 			foreach ( $files as $file) {
@@ -218,7 +230,7 @@ class <%= funcPrefixUpperCase %>_<%= pluginSlug %> {
 }
 
 global $<%= funcPrefix %>_<%= pluginSlug %>;
-$<%= funcPrefix %>_<%= pluginSlug %> = new <%= funcPrefixUpperCase %>_<%= pluginSlug %>();
+$<%= funcPrefix %>_<%= pluginSlug %> = new <%= funcPrefixUpperCase %>_<%= pluginSlugUpperCase %>();
 
 
 
