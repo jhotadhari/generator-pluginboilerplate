@@ -170,6 +170,12 @@ module.exports = Generator.extend({
 				name: 'wpVersionTested',
 				message: chalk.green('Tested up to WP Version ...?'),
 				default: ''
+			},
+			{
+				type: 'input',
+				name: 'phpRequiresAtLeast',
+				message: chalk.green('Requires at least php version ...?'),
+				default: '5.6'
 			},		
 			
 		];
