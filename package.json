@@ -1,6 +1,6 @@
 {
   "name": "generator-pluginboilerplate",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Yeoman generator for scaffolding a WordPress Plugin Boilerplate and a Grunt based build system",
   "homepage": "http://waterproof-webdesign.info/",
   "author": {
@@ -49,11 +49,9 @@
       "mocha": true
     }
   },
-  "repository": "/generator-pluginboilerplate",
-  
-  "repository" : {
-	  "type" : "git",
-	  "url" : "https://github.com/jhotadhari/generator-pluginboilerplate.git"
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jhotadhari/generator-pluginboilerplate.git"
   },
   "scripts": {
     "prepublish": "gulp prepublish",
