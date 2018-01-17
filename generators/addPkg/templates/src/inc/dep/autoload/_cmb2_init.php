@@ -7,7 +7,7 @@ if ( ! defined( 'WPINC' ) ) {
 
 // cmb2 init
 function <%= funcPrefix %>_cmb2_init() {
-	include_once( <%= funcPrefixUpperCase %>_<%= pluginSlugUpperCase %>::plugin_dir_path() . 'vendor/webdevstudios/cmb2/init.php' );
+	include_once( <%= pluginClass %>::plugin_dir_path() . 'vendor/webdevstudios/cmb2/init.php' );
 }
 add_action('admin_init', '<%= funcPrefix %>_cmb2_init', 3);
 add_action('init', '<%= funcPrefix %>_cmb2_init', 3);

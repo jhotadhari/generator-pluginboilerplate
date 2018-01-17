@@ -69,9 +69,12 @@ module.exports = Generator.extend({
 		var data = this.props;
 		data.funcPrefix = packageJson.funcPrefix;
 		data.pluginSlug = packageJson.name;
+		data.pluginSlugLoDash = data.pluginSlug.replace('-', '_');
 		data.funcPrefixUpperCase = data.funcPrefix[0].toUpperCase() + data.funcPrefix.substring(1);
 		data.actionHook = data.frontendAdmin === 'frontend' ? 'wp_enqueue_scripts' : 'admin_enqueue_scripts';
 		data.pluginSlugUpperCase = packageJson.name[0].toUpperCase() + packageJson.name.substring(1);
+		data.pluginSlugUpperCaseLoDash = data.pluginSlugUpperCase.replace('-', '_');
+		data.pluginClass = data.funcPrefixUpperCase + '_' + data.pluginSlugUpperCaseLoDash;		
 		data.styleSlug =  slugg( data.styleName.trim(), '_' );
 		
 		this.fs.copyTpl(

@@ -1,5 +1,10 @@
 <?php
 
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
+
 function <%= funcPrefix %>_add_<%= key %>_caps_to_roles() {
     $roles = <%- addCapToRolePhpArr %>;
     

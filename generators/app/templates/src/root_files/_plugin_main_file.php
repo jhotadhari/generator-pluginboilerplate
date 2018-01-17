@@ -7,12 +7,13 @@ if ( ! defined( 'WPINC' ) ) {
 	die;
 }
 
-class <%= funcPrefixUpperCase %>_<%= pluginSlugUpperCase %> {
+class <%= pluginClass %> {
 	
-	const VERSION = 'taskRunner_setVersion';
+	const VERSION = 'taskRunner_set_version';
 	const DB_VERSION = 0;			// int	increase the number if the database needs an update
-	const PLUGIN_SLUG = '<%= pluginSlug %>';
-	const PLUGIN_NAME = '<%= pluginName %>';
+	const PLUGIN_SLUG = 'taskRunner_set_name';
+	const PLUGIN_NAME = 'taskRunner_set_fullName';
+	const PLUGIN_PREFIX = 'taskRunner_set_funcPrefix';
 	protected $deactivate_notice = '';
 	protected $deps = array(
 		'plugins' => array(
@@ -27,8 +28,8 @@ class <%= funcPrefixUpperCase %>_<%= pluginSlugUpperCase %> {
 			),
 			*/
 		),
-		'php_version' => '5.6',						// required php version
-		'wp_version' => '4.8',						// required wp version
+		'php_version' => 'taskRunner_set_phpRequiresAtLeast',		// required php version
+		'wp_version' => 'taskRunner_set_wpRequiresAtLeast',			// required wp version
 		'php_ext' => array(
 			/*
 			'xml' => array(
@@ -58,6 +59,10 @@ class <%= funcPrefixUpperCase %>_<%= pluginSlugUpperCase %> {
 	public static function plugin_dir_basename(){
 		return basename( dirname( __FILE__ ) );	// no trailing slash
 	}
+	
+	public static function plugin_file(){
+		return __FILE__;						// plugin file abs path 
+	}	
 	
     
 	public function start_plugin() {
@@ -229,8 +234,8 @@ class <%= funcPrefixUpperCase %>_<%= pluginSlugUpperCase %> {
  
 }
 
-global $<%= funcPrefix %>_<%= pluginSlug %>;
-$<%= funcPrefix %>_<%= pluginSlug %> = new <%= funcPrefixUpperCase %>_<%= pluginSlugUpperCase %>();
+global $<%= funcPrefix %>_<%= pluginSlugLoDash %>;
+$<%= funcPrefix %>_<%= pluginSlugLoDash %> = new <%= pluginClass %>();
 
 
 

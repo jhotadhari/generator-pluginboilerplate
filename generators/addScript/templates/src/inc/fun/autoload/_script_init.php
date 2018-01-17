@@ -5,13 +5,13 @@ if ( ! defined( 'WPINC' ) ) {
 	die;
 }
 
-// Register frontend script
+// Register <%= frontendAdmin %> script
 function <%= funcPrefix %>_script_init_<%= scriptSlug %>_register() {
-	wp_register_script('<%= funcPrefix %>_<%= scriptSlug %>', <%= funcPrefixUpperCase %>_<%= pluginSlugUpperCase %>::plugin_dir_url() . '/js/<%= funcPrefix %>_<%= scriptSlug %>.min.js', apply_filters('<%= funcPrefix %>_<%= scriptSlug %>_deps', array('jquery') ));
+	wp_register_script('<%= funcPrefix %>_<%= scriptSlug %>', <%= pluginClass %>::plugin_dir_url() . '/js/<%= funcPrefix %>_<%= scriptSlug %>.min.js', apply_filters('<%= funcPrefix %>_<%= scriptSlug %>_deps', array('jquery') ));
 }
 add_action( '<%= actionHookEnqueue %>', '<%= funcPrefix %>_script_init_<%= scriptSlug %>_register' );
 
-// Enqueue admin scripts
+// Enqueue <%= frontendAdmin %> script
 function <%= funcPrefix %>_script_init_<%= scriptSlug %>_print() {
 	global $<%= funcPrefix %>_localize;
 	

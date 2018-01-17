@@ -184,8 +184,11 @@ module.exports = Generator.extend({
 			this.props = props;
 			
 			// define uppercase slugs
+			this.props.pluginSlugLoDash = this.props.pluginSlug.replace('-', '_');
 			this.props.pluginSlugUpperCase = this.props.pluginSlug[0].toUpperCase() + this.props.pluginSlug.substring(1);
+			this.props.pluginSlugUpperCaseLoDash = this.props.pluginSlugUpperCase.replace('-', '_');
 			this.props.funcPrefixUpperCase = this.props.funcPrefix[0].toUpperCase() + this.props.funcPrefix.substring(1);
+			this.props.pluginClass = this.props.funcPrefixUpperCase + '_' + this.props.pluginSlugUpperCaseLoDash;
 			
 			// get generator version
 			try {

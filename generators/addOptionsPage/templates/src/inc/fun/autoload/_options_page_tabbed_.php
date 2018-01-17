@@ -105,8 +105,8 @@ class <%= funcPrefixUpperCase %>_Options_Page_<%= keyUpperCase %> {
 	 * @since taskRunner_setVersion
 	 */	
 	public function enqueue_style_script( $post_id, $cmb ) {
-		wp_enqueue_style( '<%= funcPrefix %>_options_page_<%= key %>', <%= funcPrefixUpperCase %>_<%= pluginSlugUpperCase %>::plugin_dir_url() . '/css/<%= funcPrefix %>_options_page_<%= key %>.min.css', false );
-		wp_enqueue_script('<%= funcPrefix %>_options_page_<%= key %>', <%= funcPrefixUpperCase %>_<%= pluginSlugUpperCase %>::plugin_dir_url() . '/js/<%= funcPrefix %>_options_page_<%= key %>.min.js', array( 'jquery' ));
+		wp_enqueue_style( '<%= funcPrefix %>_options_page_<%= key %>', <%= pluginClass %>::plugin_dir_url() . '/css/<%= funcPrefix %>_options_page_<%= key %>.min.css', false );
+		wp_enqueue_script('<%= funcPrefix %>_options_page_<%= key %>', <%= pluginClass %>::plugin_dir_url() . '/js/<%= funcPrefix %>_options_page_<%= key %>.min.js', array( 'jquery' ));
 	}	
 
 	/**

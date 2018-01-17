@@ -82,6 +82,10 @@ module.exports = Generator.extend({
 			pluginSlugUpperCase: packageJson.name[0].toUpperCase() + packageJson.name.substring(1),
 			funcPrefixUpperCase: packageJson.funcPrefix[0].toUpperCase() + packageJson.funcPrefix.substring(1)
 		};
+		data.pluginSlugLoDash = data.pluginSlug.replace('-', '_');
+		data.pluginSlugUpperCaseLoDash = data.pluginSlugUpperCase.replace('-', '_');
+		data.pluginClass = data.funcPrefixUpperCase + '_' + data.pluginSlugUpperCaseLoDash;
+		
 		
 		switch( pkg.name ) {
 			case 'webdevstudios/cmb2':

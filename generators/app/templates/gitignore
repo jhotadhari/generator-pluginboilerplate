@@ -12,6 +12,7 @@
 !.bowerrc
 !composer.json
 !composer.lock
+!changelog.json
 !readme.md
 
 # include dir grunt
@@ -27,6 +28,8 @@
 /dist/*
 !dist/trunk
 !dist/trunk/**/*
+!dist/assets
+!dist/assets/**/*
 
 # ignore certain file patterns
 _test*
