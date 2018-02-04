@@ -17,7 +17,7 @@ class <%= funcPrefixUpperCase %>_Options_Page_<%= keyUpperCase %> {
  	 * @var string
  	 */
 	private $key = '<%= key %>';
-	
+
 	private $tabs = array(
 		<% for ( var tabKey in tabs ) { %>
 		'<%= tabs[tabKey].slug %>' => array(
@@ -27,7 +27,7 @@ class <%= funcPrefixUpperCase %>_Options_Page_<%= keyUpperCase %> {
 			//)
 		),
 		<% } %>
-	);	
+	);
 
 	/**
  	 * Options page metabox ids
@@ -75,13 +75,13 @@ class <%= funcPrefixUpperCase %>_Options_Page_<%= keyUpperCase %> {
 	protected function __construct() {
 		// Set our title
 		$this->title = __( '<%= title %>', '<%= textDomain %>' );
-		
+
 		foreach( $this->tabs as $key => $val ) {
 			$this->metabox_ids[$key] = array( 'metabox_id'	=>	$this->key . '_' . $key );
 			foreach( $val as $k => $v ) {
 				$this->metabox_ids[$key][$k] = $v;
 			}
-		}		
+		}
 	}
 
 	/**
@@ -91,23 +91,23 @@ class <%= funcPrefixUpperCase %>_Options_Page_<%= keyUpperCase %> {
 	public function hooks() {
 		add_action( 'admin_init', array( $this, 'init' ) );
 		add_action( 'admin_menu', array( $this, 'add_options_page' ) );
-		
+
 		foreach( $this->metabox_ids as $key => $val ) {
 			add_action( 'cmb2_admin_init', array( $this, 'add_options_page_metabox' . '__' . $key ) );
 			add_action( 'cmb2_after_options-page_form_' . $val['metabox_id'], array( $this, 'enqueue_style_script'), 10, 2 );
-		}		
-		
+		}
+
 		add_action( 'cmb2_after_init', array( $this, 'handle_submission') );
 	}
-	
+
 	/**
 	 * Enqueue styles and scripts
 	 * @since taskRunner_setVersion
-	 */	
+	 */
 	public function enqueue_style_script( $post_id, $cmb ) {
 		wp_enqueue_style( '<%= funcPrefix %>_options_page_<%= key %>', <%= pluginClass %>::plugin_dir_url() . '/css/<%= funcPrefix %>_options_page_<%= key %>.min.css', false );
 		wp_enqueue_script('<%= funcPrefix %>_options_page_<%= key %>', <%= pluginClass %>::plugin_dir_url() . '/js/<%= funcPrefix %>_options_page_<%= key %>.min.js', array( 'jquery' ));
-	}	
+	}
 
 	/**
 	 * Register our setting to WP
@@ -122,24 +122,24 @@ class <%= funcPrefixUpperCase %>_Options_Page_<%= keyUpperCase %> {
 	 * @since taskRunner_setVersion
 	 */
 	public function add_options_page() {
-		
+
 		<%if ( menuLevel === 'menuItem' ) { %>$this->options_page = add_menu_page(
-			$this->title, 
-			$this->title, 
-			'manage_options', 
-			$this->key, 
+			$this->title,
+			$this->title,
+			'manage_options',
+			$this->key,
 			array( $this, 'admin_page_display' ),
-			''	// string $icon_url 
+			''	// string $icon_url
 		);<% } %>
-		<%if ( menuLevel === 'subMenuItem' ) { %>$this->options_page = add_submenu_page( 
-			'<%= parentMenuSlug %>', 
-			$this->title, 
-			$this->title, 
-			'manage_options', 
-			$this->key, 
+		<%if ( menuLevel === 'subMenuItem' ) { %>$this->options_page = add_submenu_page(
+			'<%= parentMenuSlug %>',
+			$this->title,
+			$this->title,
+			'manage_options',
+			$this->key,
 			array( $this, 'admin_page_display' )
 		);<% } %>
-		
+
 		// Include CMB CSS in the head to avoid FOUC
 		add_action( "admin_print_styles-{$this->options_page}", array( 'CMB2_hookup', 'enqueue_cmb_css' ) );
 	}
@@ -149,13 +149,13 @@ class <%= funcPrefixUpperCase %>_Options_Page_<%= keyUpperCase %> {
 	 * @since  taskRunner_setVersion
 	 */
 	public function admin_page_display() {
-		
+
 		// get active tab
 		$active_tab = isset( $_GET[ 'tab' ] ) ? $_GET[ 'tab' ] : array_keys( $this->metabox_ids )[0];
-		
+
 		echo '<div class="wrap cmb2-options-page ' . $this->key . '">';
 			echo '<h2>' . esc_html( get_admin_page_title() ) . '</h2>';
-			
+
 			// navigation tabs
 			echo '<h2 class="nav-tab-wrapper">';
 				foreach( $this->metabox_ids as $key => $val) {
@@ -169,16 +169,16 @@ class <%= funcPrefixUpperCase %>_Options_Page_<%= keyUpperCase %> {
 				$this->key,
 				isset( $this->metabox_ids[$active_tab]['metabox_form_args'] ) ? $this->metabox_ids[$active_tab]['metabox_form_args'] : array()
 			);
-			
+
 		echo '</div>';
 	}
-	
+
 	<% for ( var tabKey in tabs ) { %>
 	public function add_options_page_metabox__<%= tabs[tabKey].slug %>() {
 		$tab = '<%= tabs[tabKey].slug %>';
-		
+
 		$metabox_id = $this->key . '_' . $tab;
-		
+
 		// hook in our save notices
 		add_action( "cmb2_save_options-page_fields_{$metabox_id}", array( $this, 'settings_notices' ), 10, 2 );
 
@@ -192,12 +192,12 @@ class <%= funcPrefixUpperCase %>_Options_Page_<%= keyUpperCase %> {
 				'value' => array( $this->key, )
 			),
 		) );
-		
+
 		// Set our CMB2 fields
 		$cmb->add_field( array(
 			'name' => __( 'Test Text', '<%= textDomain %>' ),
 			'desc' => __( 'field description (optional)', '<%= textDomain %>' ),
-			'id'   => '<%= tabs[tabKey].slug %>_test_text',
+			'id'   => $tab . '_' . 'test_text',
 			'type' => 'text',
 			'default' => 'Default Text',
 		) );
@@ -205,57 +205,57 @@ class <%= funcPrefixUpperCase %>_Options_Page_<%= keyUpperCase %> {
 		$cmb->add_field( array(
 			'name'    => __( 'Test Color Picker', '<%= textDomain %>' ),
 			'desc'    => __( 'field description (optional)', '<%= textDomain %>' ),
-			'id'      => '<%= tabs[tabKey].slug %>_test_colorpicker',
+			'id'   => $tab . '_' . '_test_colorpicker',
 			'type'    => 'colorpicker',
 			'default' => '#bada55',
 		) );
-	
+
 	}
-	
+
 	<% } %>
-	
-	
+
+
 	protected function get_metabox_by_nonce( $nonce, $return = 'metabox' ) {
 		if (! $nonce || ! strpos($nonce, 'nonce_CMB2php') === 0 )
 			return false;
-		
+
 		$metabox_id = str_replace( 'nonce_CMB2php', '', $nonce );
-		
+
 		switch ( $return ){
 			case 'metabox':
 				return cmb2_get_metabox( $metabox_id, $this->key );
 				break;
 			case 'metabox_id':
 				return $metabox_id;
-				break;				
+				break;
 			case 'tab_name':
 				return str_replace( $this->key . '_', '', $metabox_id );
 				break;
 			default:
 				// silence ...
 		}
-		
+
 	}
-	
+
 	public function handle_submission() {
-		
+
 		// is form submission?
 		if ( empty( $_POST ) || ! isset( $_POST['submit-cmb'], $_POST['object_id'] ) ) return false;
 		// is <%= key %> form submission?
 		if ( ! $_POST['object_id'] == $this->key ) return false;
-		
+
 		// get nonce, metabox, tab_name
 		$nonce = array_keys( $this->preg_grep_keys('/nonce_CMB2php\w+/', $_POST ) )[0];
 		$tab_name = $this->get_metabox_by_nonce( $nonce, 'tab_name');
 		$cmb = $this->get_metabox_by_nonce( $nonce );
 		if (! $cmb ) return false;
-		
+
 		// Check security nonce
 		if ( ! isset( $_POST[ $cmb->nonce() ] ) || ! wp_verify_nonce( $_POST[ $cmb->nonce() ], $cmb->nonce() ) ) {
-			new Remp_Admin_Notice( array('Something went wrong.','Nonce verification failed.'), true );
+			// error, Something went wrong, Nonce verification failed
 			return;
 		}
-		
+
 		// Fetch sanitized values
 		$sanitized_values = $cmb->get_sanitized_values( $_POST );
 
@@ -267,9 +267,9 @@ class <%= funcPrefixUpperCase %>_Options_Page_<%= keyUpperCase %> {
 			default:
 				// silence ...
 		}
-		
+
 	}
-	
+
 	public function preg_grep_keys( $pattern, $input, $flags = 0 ){
 		$keys = preg_grep( $pattern, array_keys( $input ), $flags );
 		$vals = array();
@@ -277,7 +277,7 @@ class <%= funcPrefixUpperCase %>_Options_Page_<%= keyUpperCase %> {
 			$vals[$key] = $input[$key];
 		}
 		return $vals;
-	}	
+	}
 
 
 	/**
