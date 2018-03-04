@@ -1,10 +1,10 @@
 module.exports = {
 	options: {
-		require: [
-			'susy',
-			'breakpoint'
-		],
-		loadPath: require('node-bourbon').includePaths,
+		// require: [
+		// 	'susy',
+		// 	'breakpoint'
+		// ],
+		// loadPath: require('node-bourbon').includePaths,
 	},
 	main: {
 		options: {
@@ -16,7 +16,7 @@ module.exports = {
 			cwd: 'src/sass',
 			src: ['*.scss'],
 			dest: '<%%= dest_path %>/css',
-			ext: '.min.css'	
+			ext: '.min.css'
 		}]
 	}
 };

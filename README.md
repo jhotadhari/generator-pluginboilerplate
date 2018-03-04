@@ -20,7 +20,7 @@ Requires:
 * grunt
 * composer
 * git
-* sass (as well as susy and breakpoint)
+* sass
 
 ## Introduction
 
@@ -95,9 +95,9 @@ will output a project like this:
 * ```./package.json``` This File contains project information. Some of this will be used to generate the readme and the header in plugin main file. Don't change the version by yourself. Grunt tasks will do that!
 
 * ```./changelog.json``` This File contains the changelog.
-  * Only edit the 'next' array, don't edit other parts of the file 
+  * Only edit the 'next' array, don't edit other parts of the file
   * On Grunt dist task the plugin version will be increased, and the 'next' will be used for git commit message as well.
-  
+
 * ```./vendor``` This Folder contains remote ressouces added by composer. You shouldn't do anything inside this. Composer will do it.
 
 * ```./test``` Contains the plugin in development state.
@@ -107,12 +107,12 @@ will output a project like this:
 * ```./dist``` Folder contains the Plugin releases.
   * It has the same structure as the WP plugin svn repository.
   * Don't make changes in ```tags``` or ```trunk``` folder.
-  
+
 * ```./grunt``` Folder contains the Grunt tasks and config
 
 * ```./src``` This Folder contains the source code.
   * That's the folder where all/most of the development is done!
-  
+
   * ```./src/inc```
   	* Folder for files to be included.
   	* all ```./../autolaod/../*.php``` will be included automatically by the plugin main file.
@@ -120,26 +120,26 @@ will output a project like this:
   	* ```./fun/``` contains all the fun, like classes and functions.
   	* ```./post_types_taxs/``` contains files to register post types. You can add PostTypes withe the ```pluginboilerplate:addPostType``` command
   	* ```./roles_capabilities/``` contains files to register roles and capabilities.
-  	
+
   * ```./src/js```
   	* Contains all the JavaScript source.
   	* The will be linted and mangled by Grunt
-  	
+
   * ```./src/languages```
   	* The pot file gets updated by Grunt tasks
   	* po files will be processed to mo files by Grunt
-  	
+
   * ```./src/readme/readme.txt```
   	* Contains the readme body. The header and changelog will be added automatically.
-  	
+
   * ```./src/root_files```
   	* Contains all the files in your Plugins root folder. E.g. the plugin main file.
   	* The string 'taskRunner_setVersion' will be replaced by Grunt tasks
   	* The Plugin main file will init the Plugin if no required dependencies is missing and will include other plugin files. The ```$deps``` property contains an array with all dependencies. Usually no other changes to that file have to be done.
-  	
+
   * ```./src/sass```
   	* Contains all scss files. They will be compiled and minified by grunt
-  
+
 
 ## Grunt tasks:
 Most tasks are just sub tasks and will be used by the following main tasks:
@@ -159,7 +159,7 @@ Most tasks are just sub tasks and will be used by the following main tasks:
   * Will build the plugin into ```./dist/trunk``` and ```./dist/tag/VERSION```
   * Will add all to git and commit it (using the new version as commit message and all entries in ```./changelog.json 'next' ```)
 
-  
+
 ## Subgenerators:
   * ```pluginboilerplate:addPkg``` Helps to add some often used packages to the plugin. E.g.: CMB2
   * ```pluginboilerplate:addOptionsPage``` Adds a boilerplate Options/Settings Page. Requires the CMB2 package. You can make changes to the Settings Page in the generated file.
@@ -167,7 +167,7 @@ Most tasks are just sub tasks and will be used by the following main tasks:
   * ```pluginboilerplate:addScript``` Will add a new script to the js folder and a file to enqueue the script. Will add a localize class to send data to the script.
   * ```pluginboilerplate:addStyle``` Adds a new scss file and a file to enqueue the style
 
-  
+
 ## Example Plugins
 These plugins are based on that generator:
 * https://github.com/jhotadhari/export2word

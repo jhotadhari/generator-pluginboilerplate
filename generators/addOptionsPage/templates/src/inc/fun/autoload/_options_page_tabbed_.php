@@ -7,7 +7,7 @@ if ( ! defined( 'WPINC' ) ) {
 
 /**
  * CMB2 Plugin Options
- * @version  taskRunner_setVersion
+ * @version  taskRunner_set_version
  * @see      https://github.com/CMB2/CMB2-Snippet-Library/blob/59166b81693f4ab8651868e70cb29702576bd055/options-and-settings-pages/theme-options-cmb.php
  */
 class <%= funcPrefixUpperCase %>_Options_Page_<%= keyUpperCase %> {
@@ -70,7 +70,7 @@ class <%= funcPrefixUpperCase %>_Options_Page_<%= keyUpperCase %> {
 
 	/**
 	 * Constructor
-	 * @since taskRunner_setVersion
+	 * @since taskRunner_set_version
 	 */
 	protected function __construct() {
 		// Set our title
@@ -86,7 +86,7 @@ class <%= funcPrefixUpperCase %>_Options_Page_<%= keyUpperCase %> {
 
 	/**
 	 * Initiate our hooks
-	 * @since taskRunner_setVersion
+	 * @since taskRunner_set_version
 	 */
 	public function hooks() {
 		add_action( 'admin_init', array( $this, 'init' ) );
@@ -102,7 +102,7 @@ class <%= funcPrefixUpperCase %>_Options_Page_<%= keyUpperCase %> {
 
 	/**
 	 * Enqueue styles and scripts
-	 * @since taskRunner_setVersion
+	 * @since taskRunner_set_version
 	 */
 	public function enqueue_style_script( $post_id, $cmb ) {
 		wp_enqueue_style( '<%= funcPrefix %>_options_page_<%= key %>', <%= pluginClass %>::plugin_dir_url() . '/css/<%= funcPrefix %>_options_page_<%= key %>.min.css', false );
@@ -111,7 +111,7 @@ class <%= funcPrefixUpperCase %>_Options_Page_<%= keyUpperCase %> {
 
 	/**
 	 * Register our setting to WP
-	 * @since  taskRunner_setVersion
+	 * @since  taskRunner_set_version
 	 */
 	public function init() {
 		register_setting( $this->key, $this->key );
@@ -119,7 +119,7 @@ class <%= funcPrefixUpperCase %>_Options_Page_<%= keyUpperCase %> {
 
 	/**
 	 * Add menu options page
-	 * @since taskRunner_setVersion
+	 * @since taskRunner_set_version
 	 */
 	public function add_options_page() {
 
@@ -146,7 +146,7 @@ class <%= funcPrefixUpperCase %>_Options_Page_<%= keyUpperCase %> {
 
 	/**
 	 * Admin page markup. Mostly handled by CMB2
-	 * @since  taskRunner_setVersion
+	 * @since  taskRunner_set_version
 	 */
 	public function admin_page_display() {
 
@@ -283,7 +283,7 @@ class <%= funcPrefixUpperCase %>_Options_Page_<%= keyUpperCase %> {
 	/**
 	 * Register settings notices for display
 	 *
-	 * @since  taskRunner_setVersion
+	 * @since  taskRunner_set_version
 	 * @param  int   $object_id Option key
 	 * @param  array $updated   Array of updated fields
 	 * @return void
@@ -299,7 +299,7 @@ class <%= funcPrefixUpperCase %>_Options_Page_<%= keyUpperCase %> {
 
 	/**
 	 * Public getter method for retrieving protected/private variables
-	 * @since  taskRunner_setVersion
+	 * @since  taskRunner_set_version
 	 * @param  string  $field Field to retrieve
 	 * @return mixed          Field value or exception is thrown
 	 */
@@ -316,7 +316,7 @@ class <%= funcPrefixUpperCase %>_Options_Page_<%= keyUpperCase %> {
 
 /**
  * Helper function to get/return the <%= funcPrefixUpperCase %>_Options_Page_<%= keyUpperCase %> object
- * @since  taskRunner_setVersion
+ * @since  taskRunner_set_version
  * @return <%= funcPrefixUpperCase %>_Options_Page_<%= keyUpperCase %> object
  */
 function <%= funcPrefix %>_options_page_<%= key %>() {
@@ -325,7 +325,7 @@ function <%= funcPrefix %>_options_page_<%= key %>() {
 
 /**
  * Wrapper function around cmb2_get_option
- * @since  taskRunner_setVersion
+ * @since  taskRunner_set_version
  * @param  string $key     Options array key
  * @param  mixed  $default Optional default value
  * @return mixed           Option value

@@ -7,7 +7,7 @@ if ( ! defined( 'WPINC' ) ) {
 
 /**
  * CMB2 Plugin Options
- * @version  taskRunner_setVersion
+ * @version  taskRunner_set_version
  * @see      https://github.com/CMB2/CMB2-Snippet-Library/blob/59166b81693f4ab8651868e70cb29702576bd055/options-and-settings-pages/theme-options-cmb.php
  */
 class <%= funcPrefixUpperCase %>_Options_Page_<%= keyUpperCase %> {
@@ -59,7 +59,7 @@ class <%= funcPrefixUpperCase %>_Options_Page_<%= keyUpperCase %> {
 
 	/**
 	 * Constructor
-	 * @since taskRunner_setVersion
+	 * @since taskRunner_set_version
 	 */
 	protected function __construct() {
 		// Set our title
@@ -68,7 +68,7 @@ class <%= funcPrefixUpperCase %>_Options_Page_<%= keyUpperCase %> {
 
 	/**
 	 * Initiate our hooks
-	 * @since taskRunner_setVersion
+	 * @since taskRunner_set_version
 	 */
 	public function hooks() {
 		add_action( 'admin_init', array( $this, 'init' ) );
@@ -76,19 +76,19 @@ class <%= funcPrefixUpperCase %>_Options_Page_<%= keyUpperCase %> {
 		add_action( 'cmb2_admin_init', array( $this, 'add_options_page_metabox' ) );
 		add_action( 'cmb2_after_options-page_form_' . $this->metabox_id, array( $this, 'enqueue_style_script'), 10, 2 );
 	}
-	
+
 	/**
 	 * Enqueue styles and scripts
-	 * @since taskRunner_setVersion
-	 */	
+	 * @since taskRunner_set_version
+	 */
 	public function enqueue_style_script( $post_id, $cmb ) {
 		wp_enqueue_style( '<%= funcPrefix %>_options_page_<%= key %>', <%= pluginClass %>::plugin_dir_url() . '/css/<%= funcPrefix %>_options_page_<%= key %>.min.css', false );
 		wp_enqueue_script('<%= funcPrefix %>_options_page_<%= key %>', <%= pluginClass %>::plugin_dir_url() . '/js/<%= funcPrefix %>_options_page_<%= key %>.min.js', array( 'jquery' ));
-	}	
+	}
 
 	/**
 	 * Register our setting to WP
-	 * @since  taskRunner_setVersion
+	 * @since  taskRunner_set_version
 	 */
 	public function init() {
 		register_setting( $this->key, $this->key );
@@ -96,34 +96,34 @@ class <%= funcPrefixUpperCase %>_Options_Page_<%= keyUpperCase %> {
 
 	/**
 	 * Add menu options page
-	 * @since taskRunner_setVersion
+	 * @since taskRunner_set_version
 	 */
 	public function add_options_page() {
-		
+
 		<%if ( menuLevel === 'menuItem' ) { %>$this->options_page = add_menu_page(
-			$this->title, 
-			$this->title, 
-			'manage_options', 
-			$this->key, 
+			$this->title,
+			$this->title,
+			'manage_options',
+			$this->key,
 			array( $this, 'admin_page_display' ),
-			''	// string $icon_url 
+			''	// string $icon_url
 		);<% } %>
-		<%if ( menuLevel === 'subMenuItem' ) { %>$this->options_page = add_submenu_page( 
-			'<%= parentMenuSlug %>', 
-			$this->title, 
-			$this->title, 
-			'manage_options', 
-			$this->key, 
+		<%if ( menuLevel === 'subMenuItem' ) { %>$this->options_page = add_submenu_page(
+			'<%= parentMenuSlug %>',
+			$this->title,
+			$this->title,
+			'manage_options',
+			$this->key,
 			array( $this, 'admin_page_display' )
 		);<% } %>
-		
+
 		// Include CMB CSS in the head to avoid FOUC
 		add_action( "admin_print_styles-{$this->options_page}", array( 'CMB2_hookup', 'enqueue_cmb_css' ) );
 	}
 
 	/**
 	 * Admin page markup. Mostly handled by CMB2
-	 * @since  taskRunner_setVersion
+	 * @since  taskRunner_set_version
 	 */
 	public function admin_page_display() {
 		?>
@@ -136,7 +136,7 @@ class <%= funcPrefixUpperCase %>_Options_Page_<%= keyUpperCase %> {
 
 	/**
 	 * Add the options metabox to the array of metaboxes
-	 * @since  taskRunner_setVersion
+	 * @since  taskRunner_set_version
 	 */
 	function add_options_page_metabox() {
 
@@ -172,13 +172,13 @@ class <%= funcPrefixUpperCase %>_Options_Page_<%= keyUpperCase %> {
 		) );
 
 	}
-	
+
 
 
 	/**
 	 * Register settings notices for display
 	 *
-	 * @since  taskRunner_setVersion
+	 * @since  taskRunner_set_version
 	 * @param  int   $object_id Option key
 	 * @param  array $updated   Array of updated fields
 	 * @return void
@@ -194,7 +194,7 @@ class <%= funcPrefixUpperCase %>_Options_Page_<%= keyUpperCase %> {
 
 	/**
 	 * Public getter method for retrieving protected/private variables
-	 * @since  taskRunner_setVersion
+	 * @since  taskRunner_set_version
 	 * @param  string  $field Field to retrieve
 	 * @return mixed          Field value or exception is thrown
 	 */
@@ -211,7 +211,7 @@ class <%= funcPrefixUpperCase %>_Options_Page_<%= keyUpperCase %> {
 
 /**
  * Helper function to get/return the <%= funcPrefixUpperCase %>_Options_Page_<%= keyUpperCase %> object
- * @since  taskRunner_setVersion
+ * @since  taskRunner_set_version
  * @return <%= funcPrefixUpperCase %>_Options_Page_<%= keyUpperCase %> object
  */
 function <%= funcPrefix %>_options_page_<%= key %>() {
@@ -220,7 +220,7 @@ function <%= funcPrefix %>_options_page_<%= key %>() {
 
 /**
  * Wrapper function around cmb2_get_option
- * @since  taskRunner_setVersion
+ * @since  taskRunner_set_version
  * @param  string $key     Options array key
  * @param  mixed  $default Optional default value
  * @return mixed           Option value
