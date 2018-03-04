@@ -1,6 +1,6 @@
 module.exports = {
 	// watch task does the same like build...
-	
+
 	root_files: {
 		files: [
 			'src/root_files/**/*',
@@ -12,7 +12,7 @@ module.exports = {
 			'local_sync:<%%= local_sync.wp_install %>'
 		]
 	},
-	
+
 	plugin_main_file: {
 		files: [
 			'src/root_files/<%%= global["pkg"].name %>.php',
@@ -23,12 +23,12 @@ module.exports = {
 			'concat:plugin_main_file',		// add banner plugin_main_file
 			'local_sync:<%%= local_sync.wp_install %>'
 		]
-	},	
-	
-	
-	
-	
-	
+	},
+
+
+
+
+
 	vendor: {
 		files: [
 			'vendor/**/*',
@@ -39,7 +39,7 @@ module.exports = {
 			'local_sync:<%%= local_sync.wp_install %>'
 		]
 	},
-	
+
 	images: {
 		files: [
 			'src/images/**/*',
@@ -50,7 +50,7 @@ module.exports = {
 			'local_sync:<%%= local_sync.wp_install %>'
 		]
 	},
-	
+
 	fonts: {
 		files: [
 			'src/fonts/**/*',
@@ -61,7 +61,7 @@ module.exports = {
 			'local_sync:<%%= local_sync.wp_install %>'
 		]
 	},
-	
+
 	readme: {
 		files: [
 			'src/readme/**/*',
@@ -73,9 +73,9 @@ module.exports = {
 			'local_sync:<%%= local_sync.wp_install %>'
 		]
 	},
-	
-	
-	
+
+
+
 	inc: {
 		files: [
 			'src/inc/**/*',
@@ -86,22 +86,34 @@ module.exports = {
 			'local_sync:<%%= local_sync.wp_install %>'
 		]
 	},
-	
-		
+
+
 	// assets
 	js: {
 		files: [
-				'src/js/**/*.js',
-				'<%%= pattern.global_exclude %>',
+			'src/js/**/*.js',
+			'<%%= pattern.global_exclude %>',
 		],
 		tasks: [
-			'jshint',
-			'uglify:ugyly',
-			'uglify:beauty',
+			'jshint:js',
+			'uglify:ugly',
+			// 'uglify:beauty',
 			'local_sync:<%%= local_sync.wp_install %>:<%%= local_sync.version %>'
 		]
 	},
-	
+	commonJS: {
+		files: [
+			'src/commonJS/**/*.js',
+			'src/commonJS/**/*.jst',
+			'<%%= pattern.global_exclude %>',
+		],
+		tasks: [
+			'jshint:commonJS',
+			'browserify:all',
+			'local_sync:<%%= local_sync.wp_install %>:<%%= local_sync.version %>'
+		]
+	},
+
 	styles: {
 		files: [
 			'src/sass/**/*.scss',
@@ -112,9 +124,9 @@ module.exports = {
 			'local_sync:<%%= local_sync.wp_install %>'
 		]
 	},
-	
 
-	
+
+
 	potomo_pos: {
 		files: [
 			'src/languages/**/*.po',

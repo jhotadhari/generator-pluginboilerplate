@@ -301,6 +301,13 @@ module.exports = Generator.extend({
 			);
 		},
 
+		src_commonJS: function () {
+			this.fs.copy(
+				this.templatePath('src/commonJS/vendor/vendor.js'),
+				this.destinationPath('src/commonJS/vendor/vendor.js')
+			);
+		},
+
 
 		src_readme: function () {
 			// commit_msg

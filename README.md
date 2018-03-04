@@ -61,6 +61,9 @@ will output a project like this:
 │   └── ...
 ├── package.json
 ├── src
+│   ├── commonJS
+│   │   ├── vendor
+│   │       └── vendor.js
 │   ├── fonts
 │   ├── images
 │   ├── inc
@@ -123,7 +126,14 @@ will output a project like this:
 
   * ```./src/js```
   	* Contains all the JavaScript source.
-  	* The will be linted and mangled by Grunt
+  	* They will be linted and mangled by Grunt
+
+  * ```./src/commonJS```
+  	* Contains all the commonJS and e6 source.
+  	* Scripts will be linted by Grunt
+  	* Scripts (not including subfolders) will be browserifyed, using some transforms. See ./grunt/config/_browserify.js
+  	* Use a single js file as an entry point to your app and require/import files in subfolders
+  	* configure  ```./src/commonJS/vendor/vendor.js``` and the "browserify-shim" property in your ```./package.json```
 
   * ```./src/languages```
   	* The pot file gets updated by Grunt tasks

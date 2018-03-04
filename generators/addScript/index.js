@@ -36,10 +36,29 @@ module.exports = Generator.extend({
 				message: chalk.green('Name') + ' of the script (will be prefixed automatically)',
 				default: 'script'
 			},
-
 			{
+				name: 'scriptType',
+				message: chalk.green('Type') + ' of script?',
+				default: 'js',
+				type: 'list',
+				choices: [
+					{
+						value: 'js',
+						name: 'JavaScript and some libraries like jQuery'
+					},
+					{
+						value: 'commonJS',
+						name: 'commonJS, ES2015'
+					},
+				],
+			},
+			{
+				when: function( answers ){
+					return answers.scriptType === 'js';
+				},
+				type: 'list',
 				name: 'frontendAdmin',
-				message: chalk.green('Where') + ' to enqueue the style?',
+				message: chalk.green('Where') + ' to enqueue the script?',
 				type: 'list',
 				choices: [
 					{
@@ -55,9 +74,27 @@ module.exports = Generator.extend({
 						name: 'ooouu I don\'t want any scripts, but give me the localize class, please',
 						checked: false
 					}
-				],
+				]
 			},
-
+			{
+				when: function( answers ){
+					return answers.scriptType === 'commonJS';
+				},
+				type: 'list',
+				name: 'frontendAdmin',
+				message: chalk.green('Where') + ' to enqueue the script?',
+				type: 'list',
+				choices: [
+					{
+						value: 'frontend',
+						name: 'Frontend'
+					},
+					{
+						value: 'admin',
+						name: 'Admin'
+					}
+				]
+			},
 		];
 
 		return this.prompt(prompts).then(function (props) {
@@ -79,31 +116,57 @@ module.exports = Generator.extend({
 		data.pluginSlugUpperCaseLoDash = data.pluginSlugUpperCase.replace(/-/g, '_');
 		data.pluginClass = data.funcPrefixUpperCase + '_' + data.pluginSlugUpperCaseLoDash;
 		data.scriptSlug = slugg( data.scriptName.trim(), '_' );
+		data.scriptSlugUpperCase = data.scriptSlug[0].toUpperCase() + data.scriptSlug.substring(1);
 
-		// localizeClass
-		this.fs.copyTpl(
-			this.templatePath('src/inc/fun/autoload/_class-localize.php'),
-			this.destinationPath('src/inc/fun/autoload/class-' + data.funcPrefix + '_localize.php'),
-			data
-		);
-
-		if ( data.frontendAdmin != 'none' ) {
-
-			data.actionHookEnqueue = data.frontendAdmin === 'frontend' ? 'wp_enqueue_scripts' : 'admin_enqueue_scripts';
-			data.actionHookPrint = data.frontendAdmin === 'frontend' ? 'wp_print_footer_scripts' : 'admin_print_footer_scripts';
-
+		if ( data.scriptType === 'js' ) {
+			// localizeClass
 			this.fs.copyTpl(
-				this.templatePath('src/js/_script.js'),
-				this.destinationPath('src/js/' + data.funcPrefix + '_' + data.scriptSlug + '.js'),
+				this.templatePath('src/inc/fun/autoload/_class-localize.php'),
+				this.destinationPath('src/inc/fun/autoload/class-' + data.funcPrefix + '_localize.php'),
 				data
 			);
 
-			this.fs.copyTpl(
-				this.templatePath('src/inc/fun/autoload/_script_init.php'),
-				this.destinationPath('src/inc/fun/autoload/' + data.funcPrefix + '_script_init_' + data.scriptSlug + '.php'),
-				data
-			);
+			if ( data.frontendAdmin != 'none' ) {
 
+				data.actionHookEnqueue = data.frontendAdmin === 'frontend' ? 'wp_enqueue_scripts' : 'admin_enqueue_scripts';
+				data.actionHookPrint = data.frontendAdmin === 'frontend' ? 'wp_print_footer_scripts' : 'admin_print_footer_scripts';
+
+				this.fs.copyTpl(
+					this.templatePath('src/js/_script.js'),
+					this.destinationPath('src/js/' + data.funcPrefix + '_' + data.scriptSlug + '.js'),
+					data
+				);
+
+				this.fs.copyTpl(
+					this.templatePath('src/inc/fun/autoload/_script_init.php'),
+					this.destinationPath('src/inc/fun/autoload/' + data.funcPrefix + '_script_init_' + data.scriptSlug + '.php'),
+					data
+				);
+
+			}
+		}
+
+		if ( data.scriptType === 'commonJS' ) {
+
+			if ( data.frontendAdmin != 'none' ) {
+
+				data.actionHookEnqueue = data.frontendAdmin === 'frontend' ? 'wp_enqueue_scripts' : 'admin_enqueue_scripts';
+				data.actionHookPrint = data.frontendAdmin === 'frontend' ? 'wp_print_footer_scripts' : 'admin_print_footer_scripts';
+				data.actionHookFooter = data.frontendAdmin === 'frontend' ? 'get_footer' : 'in_admin_footer';
+
+				this.fs.copyTpl(
+					this.templatePath('src/commonJS/_script.js'),
+					this.destinationPath('src/commonJS/' + data.funcPrefix + '_' + data.scriptSlug + '.js'),
+					data
+				);
+
+				this.fs.copyTpl(
+					this.templatePath('src/inc/fun/autoload/_class-script.php'),
+					this.destinationPath('src/inc/fun/autoload/class-' + data.funcPrefix + '_script_' + data.scriptSlug + '.php'),
+					data
+				);
+
+			}
 		}
 
 	},
