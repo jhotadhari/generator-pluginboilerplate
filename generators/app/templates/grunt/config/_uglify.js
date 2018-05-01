@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = {
-	ugly: {
+	dist: {
 		options: {
 			mangle: true,
 			compress: true,
@@ -19,7 +19,7 @@ module.exports = {
 			}
 		}]
 	},
-	beauty: {
+	debug: {
 		options: {
 			mangle: false,
 			compress: false,

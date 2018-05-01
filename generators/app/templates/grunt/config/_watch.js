@@ -96,8 +96,7 @@ module.exports = {
 		],
 		tasks: [
 			'jshint:js',
-			'uglify:ugly',
-			// 'uglify:beauty',
+			'uglify:debug',
 			'local_sync:<%%= local_sync.wp_install %>:<%%= local_sync.version %>'
 		]
 	},
@@ -109,7 +108,7 @@ module.exports = {
 		],
 		tasks: [
 			'jshint:commonJS',
-			'browserify:all',
+			'browserify:debug',
 			'local_sync:<%%= local_sync.wp_install %>:<%%= local_sync.version %>'
 		]
 	},
@@ -120,7 +119,7 @@ module.exports = {
 			'<%%= pattern.global_exclude %>',
 		],
 		tasks: [
-			'sass:main',
+			'sass:debug',
 			'local_sync:<%%= local_sync.wp_install %>'
 		]
 	},

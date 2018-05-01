@@ -6,7 +6,8 @@ module.exports = {
 		// ],
 		// loadPath: require('node-bourbon').includePaths,
 	},
-	main: {
+
+	dist: {
 		options: {
 			sourcemap: 'none',
 			style: 'compressed'
@@ -18,5 +19,21 @@ module.exports = {
 			dest: '<%%= dest_path %>/css',
 			ext: '.min.css'
 		}]
+	},
+
+	debug: {
+		options: {
+			sourcemap: 'auto',
+			style: 'expanded',
+			lineNumbers: true,
+		},
+		files: [{
+			expand: true,
+			cwd: 'src/sass',
+			src: ['*.scss'],
+			dest: '<%%= dest_path %>/css',
+			ext: '.min.css'
+		}]
 	}
+
 };
