@@ -1,14 +1,14 @@
 'use strict';
-var Generator = require('yeoman-generator');
-var chalk = require('chalk');
-var yosay = require('yosay');
-var path = require('path');
-var fs = require('fs');
-var slugg = require('slugg');
+const Generator = require('yeoman-generator');
+const chalk = require('chalk');
+const yosay = require('yosay');
+const path = require('path');
+const fs = require('fs');
+const slugg = require('slugg');
 
-module.exports = Generator.extend({
+module.exports = class extends Generator {
 
-	_readPackageJson: function() {
+	_readPackageJson() {
 		var packageJsonPath = path.join(this.destinationRoot(),'package.json');
 		try {
 			// file exists
@@ -20,10 +20,9 @@ module.exports = Generator.extend({
 			this.log('Some error reading package.json: ', err);
 			return err;
 		}
-	},
+	}
 
-	prompting: function () {
-
+	prompting() {
 		var packageJson = this._readPackageJson();
 
 		this.log(yosay(
@@ -31,7 +30,6 @@ module.exports = Generator.extend({
 		));
 
 		var prompts = [
-
 			{
 				name: 'title',
 				message: 'What is the ' + chalk.green('title') + ' of the options page?',
@@ -110,18 +108,15 @@ module.exports = Generator.extend({
 					return str.length > 0 ? true : 'Come on, just give me a name!';
 				}
 			}
-
 		];
 
 		return this.prompt(prompts).then(function (props) {
 			// To access props later use this.props.someAnswer;
 			this.props = props;
 		}.bind(this));
-	},
+	}
 
-	writing: function () {
-
-
+	writing() {
 		// prepare data
 		var packageJson = this._readPackageJson();
 		var data = this.props;
@@ -192,9 +187,10 @@ module.exports = Generator.extend({
 		data
 		);
 
-	},
+	}
 
-	install: function () {
+	install() {
 		this.log('alright, I\'m done');
 	}
-});
+
+};

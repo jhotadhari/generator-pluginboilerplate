@@ -1,20 +1,19 @@
 'use strict';
-var Generator = require('yeoman-generator');
-var chalk = require('chalk');
-var yosay = require('yosay');
-var childProcess = require('child_process');
-var glob = require('glob');
-var path = require('path');
-var slugg = require('slugg');
-var fs = require('fs');
-var dirTree = require('directory-tree');
-var iterator = require('object-recursive-iterator');
+const Generator = require('yeoman-generator');
+const chalk = require('chalk');
+const yosay = require('yosay');
+const childProcess = require('child_process');
+const glob = require('glob');
+const path = require('path');
+const slugg = require('slugg');
+const fs = require('fs');
+const dirTree = require('directory-tree');
+const iterator = require('object-recursive-iterator');
 
+module.exports = class extends Generator {
 
-module.exports = Generator.extend({
 	// https://gist.github.com/codeitagile/19e7be070b6ef46c21d2
-	_bulkCopyTpl: function( source, destination, data, options ) {
-
+	_bulkCopyTpl( source, destination, data, options ) {
 		// parse options
 		var defaults = {
 			prependFunctionPrefix: true,
@@ -54,9 +53,9 @@ module.exports = Generator.extend({
 				this.fs.copyTpl( src, dest, data);
 			}
 		}
-	},
+	}
 
-	_mkdirRec: function () {
+	_mkdirRec() {
 
 		var tree = [];
 		iterator.forAll(dirTree(this.templatePath(), {type:'directory'}), function (path, key, obj) {
@@ -76,17 +75,15 @@ module.exports = Generator.extend({
 				fs.mkdirSync(dir);
 			}
 		}
-	},
+	}
 
-
-
-	prompting: function () {
+	prompting() {
 
 		this.log(yosay(
 			'Welcome to the ' + chalk.yellow('pluginboilerplate') + ' generator!'
 		));
 
-		var prompts = [
+		const prompts = [
 			{
 				type: 'input',
 				name: 'pluginName',
@@ -113,8 +110,6 @@ module.exports = Generator.extend({
 				message: chalk.green('Text Domain') + '\nThe gettext text domain of the plugin.',
 				default: function (response) { return response.pluginSlug; },
 			},
-
-
 			{
 				type: 'input',
 				name: 'vendorSlug',
@@ -145,7 +140,7 @@ module.exports = Generator.extend({
 			{
 				type: 'input',
 				name: 'pluginAuthorUri',
-				message: chalk.green('Author Uri') + '\nThe author’s website or profile on another website, such as WordPress.org.',
+				message: chalk.green('Author Uri') + '\nThe authorâ€™s website or profile on another website, such as WordPress.org.',
 				store: true,
 				default: 'http://example.com/'
 			},
@@ -156,9 +151,6 @@ module.exports = Generator.extend({
 				store: true,
 				default: 'http://example.com/donate'
 			},
-
-
-
 			{
 				type: 'input',
 				name: 'wpRequiresAtLeast',
@@ -180,7 +172,6 @@ module.exports = Generator.extend({
 				store: true,
 				default: '5.6'
 			},
-
 		];
 
 		return this.prompt(prompts).then(function (props) {
@@ -206,170 +197,147 @@ module.exports = Generator.extend({
 				this.props.generatorVersion = '';
 			}
 
-
-
 		}.bind(this));
-	},
+	}
 
 
-	writing: {
+	writing() {
+		let files, destination;
 
-		config: function () {
+		/*
+			setup, config, grunt ...
+		*/
+		// copy directory structure
+		this._mkdirRec();
+		// Grunt
+		this.fs.copyTpl(
+			this.templatePath('_Gruntfile.js'),
+			this.destinationPath('Gruntfile.js'),
+			this.props
+		);
+		this._bulkCopyTpl(
+			this.templatePath('grunt/config/'),
+			this.destinationPath('grunt/config/'),
+			this.props, {
+				prependFunctionPrefix: false
+			}
+		);
+		this._bulkCopyTpl(
+			this.templatePath('grunt/tasks/'),
+			this.destinationPath('grunt/tasks/'),
+			this.props, {
+				prependFunctionPrefix: false
+			}
+		);
+		// package.json
+		this.fs.copyTpl(
+			this.templatePath('_package.json'),
+			this.destinationPath('package.json'),
+			this.props
+		);
+		// wp_installs
+		this.fs.copyTpl(
+			this.templatePath('_wp_installs.json'),
+			this.destinationPath('wp_installs.json'),
+			this.props
+		);
+		// changelog.json
+		this.fs.copyTpl(
+			this.templatePath('_changelog.json'),
+			this.destinationPath('changelog.json'),
+			this.props
+		);
+		// gitignore
+		this.fs.copy(
+			this.templatePath('gitignore'),
+			this.destinationPath('.gitignore')
+		);
+		// composer.json
+		this.fs.copyTpl(
+			this.templatePath('_composer.json'),
+			this.destinationPath('composer.json'),
+			this.props
+		);
 
-			var files, destination;
+		/*
+			source ./src
+		*/
+		// src_plugin_main_file
+		this.fs.copyTpl(
+			this.templatePath('src/root_files/_plugin_main_file.php'),
+			this.destinationPath('src/root_files/' + this.props.pluginSlug + '.php'),
+			this.props
+		);
+		// src_inc
+		this._bulkCopyTpl(
+			this.templatePath('src/inc/dep/autoload/'),
+			this.destinationPath('src/inc/dep/autoload/'),
+			this.props
+		);
+		this._bulkCopyTpl(
+			this.templatePath('src/inc/fun/autoload/'),
+			this.destinationPath('src/inc/fun/autoload/'),
+			this.props
+		);
+		// src_commonJS
+		this.fs.copy(
+			this.templatePath('src/commonJS/vendor/vendor.js'),
+			this.destinationPath('src/commonJS/vendor/vendor.js')
+		);
+		// src_readme
+		this.fs.copyTpl(
+			this.templatePath('src/readme/readme.txt'),
+			this.destinationPath('src/readme/readme.txt'),
+			this.props
+		);
 
-			// copy directory structure
-			this._mkdirRec();
+		// src_sass
+		this._bulkCopyTpl(
+			this.templatePath('src/sass/'),
+			this.destinationPath('src/sass/'),
+			this.props
+		);
 
+	}
 
-
-			// Gruntfile
-			this.fs.copyTpl(
-				this.templatePath('_Gruntfile.js'),
-				this.destinationPath('Gruntfile.js'),
-				this.props
-			);
-			this._bulkCopyTpl(
-				this.templatePath('grunt/config/'),
-				this.destinationPath('grunt/config/'),
-				this.props, {
-					prependFunctionPrefix: false
-				}
-			);
-			this._bulkCopyTpl(
-				this.templatePath('grunt/tasks/'),
-				this.destinationPath('grunt/tasks/'),
-				this.props, {
-					prependFunctionPrefix: false
-				}
-			);
-
-			// package.json
-			this.fs.copyTpl(
-				this.templatePath('_package.json'),
-				this.destinationPath('package.json'),
-				this.props
-			);
-
-			// wp_installs		???
-			this.fs.copyTpl(
-				this.templatePath('_wp_installs.json'),
-				this.destinationPath('wp_installs.json'),
-				this.props
-			);
-
-			// changelog.json
-			this.fs.copyTpl(
-				this.templatePath('_changelog.json'),
-				this.destinationPath('changelog.json'),
-				this.props
-			);
-
-			// gitignore
-			this.fs.copy(
-				this.templatePath('gitignore'),
-				this.destinationPath('.gitignore')
-			);
-
-			// composer.json
-			this.fs.copyTpl(
-				this.templatePath('_composer.json'),
-				this.destinationPath('composer.json'),
-				this.props
-			);
-
-		},
-
-		src_plugin_main_file: function () {
-			this.fs.copyTpl(
-				this.templatePath('src/root_files/_plugin_main_file.php'),
-				this.destinationPath('src/root_files/' + this.props.pluginSlug + '.php'),
-				this.props
-			);
-		},
-
-		src_inc: function () {
-			this._bulkCopyTpl(
-				this.templatePath('src/inc/dep/autoload/'),
-				this.destinationPath('src/inc/dep/autoload/'),
-				this.props
-			);
-			this._bulkCopyTpl(
-				this.templatePath('src/inc/fun/autoload/'),
-				this.destinationPath('src/inc/fun/autoload/'),
-				this.props
-			);
-		},
-
-		src_commonJS: function () {
-			this.fs.copy(
-				this.templatePath('src/commonJS/vendor/vendor.js'),
-				this.destinationPath('src/commonJS/vendor/vendor.js')
-			);
-		},
-
-
-		src_readme: function () {
-			// commit_msg
-			this.fs.copyTpl(
-				this.templatePath('src/readme/readme.txt'),
-				this.destinationPath('src/readme/readme.txt'),
-				this.props
-			);
-		},
-
-		src_sass: function () {
-			this._bulkCopyTpl(
-				this.templatePath('src/sass/'),
-				this.destinationPath('src/sass/'),
-				this.props
-			);
-		},
-
-	},
-
-
-
-	install: function () {
+	install() {
 
 		this.installDependencies({
 			bower: false,
 			npm: true,
-			callback: function () {
-				var cmd = '';
+		}).then( () => {
+			let cmd = '';
 
-				cmd = 'grunt build';
-				// cmd = 'grunt build --composer=false';
-				console.log('');
-				console.log(chalk.green('running ') + chalk.yellow(cmd));
-				console.log('');
-				childProcess.execSync( cmd, { stdio:'inherit' } );
+			cmd = 'grunt build';
+			// cmd = 'grunt build --composer=false';
+			console.log('');
+			console.log(chalk.green('running ') + chalk.yellow(cmd));
+			console.log('');
+			childProcess.execSync( cmd, { stdio:'inherit' } );
 
-				cmd = 'git init';
-				console.log('');
-				console.log(chalk.green('running ') + chalk.yellow(cmd));
-				console.log('');
-				childProcess.execSync( cmd, { stdio:'inherit' } );
+			cmd = 'git init';
+			console.log('');
+			console.log(chalk.green('running ') + chalk.yellow(cmd));
+			console.log('');
+			childProcess.execSync( cmd, { stdio:'inherit' } );
 
-				cmd = 'git add .';
-				console.log('');
-				console.log(chalk.green('running ') + chalk.yellow(cmd));
-				console.log('');
-				childProcess.execSync( cmd, { stdio:'inherit' } );
+			cmd = 'git add .';
+			console.log('');
+			console.log(chalk.green('running ') + chalk.yellow(cmd));
+			console.log('');
+			childProcess.execSync( cmd, { stdio:'inherit' } );
 
-				cmd = 'git commit -m "Hurray, just generated a new plugin!"';
-				console.log('');
-				console.log(chalk.green('running ') + chalk.yellow(cmd));
-				console.log('');
-				childProcess.execSync( cmd, { stdio:'inherit' } );
+			cmd = 'git commit -m "Hurray, just generated a new plugin!"';
+			console.log('');
+			console.log(chalk.green('running ') + chalk.yellow(cmd));
+			console.log('');
+			childProcess.execSync( cmd, { stdio:'inherit' } );
 
-				console.log('');
-				console.log('Everything is ready!');
-				console.log('');
-
-			}
+			console.log('');
+			console.log('Everything is ready!');
+			console.log('');
 		});
 
-	},
+	}
 
-});
+};

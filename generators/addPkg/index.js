@@ -1,15 +1,15 @@
 'use strict';
-var Generator = require('yeoman-generator');
-var chalk = require('chalk');
-var yosay = require('yosay');
-var fs = require('fs');
-var path = require('path');
-var pkgManager = require('./../pkgManager');
-var childProcess = require('child_process');
+const Generator = require('yeoman-generator');
+const chalk = require('chalk');
+const yosay = require('yosay');
+const fs = require('fs');
+const path = require('path');
+const pkgManager = require('./../pkgManager');
+const childProcess = require('child_process');
 
-module.exports = Generator.extend({
+module.exports = class extends Generator {
 
-	_readPackageJson: function() {
+	_readPackageJson() {
 		var packageJsonPath = path.join(this.destinationRoot(),'package.json');
 		try {
 			// file exists
@@ -21,9 +21,9 @@ module.exports = Generator.extend({
 			this.log('Some error reading package.json: ', err);
 			return err;
 		}
-	},
+	}
 
-	_addToComposerJson: function ( pkg ) {
+	_addToComposerJson( pkg ) {
 
 		// add 'require' property
 		if ( 'name' in pkg ) {
@@ -70,9 +70,9 @@ module.exports = Generator.extend({
 		pkgManager.writeComposerJson();
 		this.log(chalk.yellow('   updated: ') + pkgManager.composerJsonPath);
 
-	},
+	}
 
-	_processTemplates: function ( pkg ) {
+	_processTemplates( pkg ) {
 
 		// get data
 		var packageJson = this._readPackageJson();
@@ -113,9 +113,9 @@ module.exports = Generator.extend({
 				// ... silence
 		}
 
-	},
+	}
 
-	prompting: function () {
+	prompting() {
 
 		pkgManager.init(
 			this.sourceRoot(),
@@ -126,7 +126,7 @@ module.exports = Generator.extend({
 			'Welcome to the ' + chalk.yellow('pluginboilerplate') + ' ' + chalk.green('addPkg') + ' subgenerator!'
 		));
 
-		var prompts = [];
+		const prompts = [];
 
 		var availableChoices = pkgManager.getAvailableChoices();
 
@@ -145,9 +145,9 @@ module.exports = Generator.extend({
 			// To access props later use this.props.someAnswer;
 			this.props = props;
 		}.bind(this));
-	},
+	}
 
-	writing: function () {
+	writing() {
 
 		if ( !( 'pkgs' in this.props ) || this.props.pkgs.length === 0 ){
 			this.log();
@@ -167,9 +167,9 @@ module.exports = Generator.extend({
 			}
 		}
 
-	},
+	}
 
-	install: function () {
+	install() {
 
 		if ( ( 'pkgs' in this.props ) && this.props.pkgs.length > 0 ){
 
@@ -183,4 +183,5 @@ module.exports = Generator.extend({
 
 		this.log('alright, I\'m done');
 	}
-});
+
+};

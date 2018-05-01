@@ -1,14 +1,14 @@
 'use strict';
-var Generator = require('yeoman-generator');
-var chalk = require('chalk');
-var yosay = require('yosay');
-var fs = require('fs');
-var path = require('path');
-var slugg = require('slugg');
+const Generator = require('yeoman-generator');
+const chalk = require('chalk');
+const yosay = require('yosay');
+const fs = require('fs');
+const path = require('path');
+const slugg = require('slugg');
 
-module.exports = Generator.extend({
+module.exports = class extends Generator {
 
-	_readPackageJson: function() {
+	_readPackageJson() {
 		var packageJsonPath = path.join(this.destinationRoot(),'package.json');
 		try {
 			// file exists
@@ -20,23 +20,21 @@ module.exports = Generator.extend({
 			this.log('Some error reading package.json: ', err);
 			return err;
 		}
-	},
+	}
 
-	prompting: function () {
+	prompting() {
 
 		this.log(yosay(
 			'Welcome to the ' + chalk.yellow('pluginboilerplate') + ' ' + chalk.green('addStyle') + ' subgenerator!'
 		));
 
 		var prompts = [
-
 			{
 				type: 'input',
 				name: 'styleName',
 				message: chalk.green('Name') + ' of the stylesheet (will be prefixed automatically)',
 				default: 'style'
 			},
-
 			{
 				name: 'frontendAdmin',
 				message: chalk.green('Where') + ' to enqueue the style?',
@@ -52,16 +50,15 @@ module.exports = Generator.extend({
 					}
 				],
 			}
-
 		];
 
 		return this.prompt(prompts).then(function (props) {
 			// To access props later use this.props.someAnswer;
 			this.props = props;
 		}.bind(this));
-	},
+	}
 
-	writing: function () {
+	writing() {
 
 		// get data
 		var packageJson = this._readPackageJson();
@@ -89,9 +86,9 @@ module.exports = Generator.extend({
 			data
 		);
 
-	},
-
-	install: function () {
-		// this.installDependencies();
 	}
-});
+
+	install() {
+		this.log('alright, I\'m done');
+	}
+};

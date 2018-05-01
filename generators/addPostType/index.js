@@ -1,14 +1,14 @@
 'use strict';
-var Generator = require('yeoman-generator');
-var chalk = require('chalk');
-var yosay = require('yosay');
-var slugg = require('slugg');
-var path = require('path');
-var fs = require('fs');
+const Generator = require('yeoman-generator');
+const chalk = require('chalk');
+const yosay = require('yosay');
+const slugg = require('slugg');
+const path = require('path');
+const fs = require('fs');
 
-module.exports = Generator.extend({
-		
-	_readPackageJson: function() {
+module.exports = class extends Generator {
+
+	_readPackageJson() {
 		var packageJsonPath = path.join(this.destinationRoot(),'package.json');
 		try {
 			// file exists
@@ -20,9 +20,9 @@ module.exports = Generator.extend({
 			this.log('Some error reading package.json: ', err);
 			return err;
 		}
-	},
-	
-	_promptsChoicesBool: function () {
+	}
+
+	_promptsChoicesBool() {
 		return [
 			{
 				value: true,
@@ -33,14 +33,14 @@ module.exports = Generator.extend({
 				name: 'no'
 			}
 		];
-	},
-	
-	prompting: function () {
-		
+	}
+
+	prompting() {
+
 		this.log(yosay(
 			'Welcome to the ' + chalk.yellow('pluginboilerplate') + ' ' + chalk.green('addPostType') + ' subgenerator!'
 		));
-		
+
 		var prompts = [
 			{
 				type: 'input',
@@ -52,7 +52,7 @@ module.exports = Generator.extend({
 					if ( slugg( str.trim(), '_' ).length >= 20 ) return chalk.yellow('That\'s to long!');
 					return true;
 				}
-				
+
 			},
 			{
 				type: 'list',
@@ -62,7 +62,7 @@ module.exports = Generator.extend({
 					{
 						value: false,
 						name: 'No, like posts'
-					},					
+					},
 					{
 						value: true,
 						name: 'Yes, like pages'
@@ -139,14 +139,14 @@ module.exports = Generator.extend({
 				message: chalk.green('can_export') + ': Can this post_type be exported?',
 				choices: this._promptsChoicesBool(),
 			},
-			
+
 			{
 				type: 'list',
 				name: 'show_in_rest',
 				message: 'Whether to expose this post type in the ' + chalk.green('REST API') + '?',
 				choices: this._promptsChoicesBool(),
-			},	
-			
+			},
+
 			{
 				type: 'list',
 				name: 'capability_type',
@@ -155,11 +155,11 @@ module.exports = Generator.extend({
 					{
 						value: 'post',
 						name: 'post'
-					},					
+					},
 					{
 						value: 'page',
 						name: 'page'
-					},					
+					},
 					{
 						value: 'custom',
 						name: 'custom'	// ???
@@ -167,7 +167,6 @@ module.exports = Generator.extend({
 
 				]
 			},
-			
 			{
 				when: function( answers ){
 					return answers.capability_type === 'custom';
@@ -179,15 +178,15 @@ module.exports = Generator.extend({
 					{
 						value: 'administrator',
 						name: 'administrator'
-					},					
+					},
 					{
 						value: 'editor',
 						name: 'editor'
-					},					
+					},
 					{
 						value: 'author',
 						name: 'author'
-					},					
+					},
 					{
 						value: 'contributor',
 						name: 'contributor'
@@ -201,20 +200,17 @@ module.exports = Generator.extend({
 				validate: function(arr) {
 					return arr.length > 0 ? true : 'Come on, just choose anything!';
 				}
-			},				
-			
-			
-			
+			},
 		];
-		
+
 		return this.prompt(prompts).then(function (props) {
 			// To access props later use this.props.someAnswer;
 			this.props = props;
 		}.bind(this));
-	},
-	
-	writing: function () {
-		
+	}
+
+	writing() {
+
 		// prepare data
 		var data = this.props;
 		var packageJson = this._readPackageJson();
@@ -236,8 +232,8 @@ module.exports = Generator.extend({
 			data.show_in_menu = false;
 			data.show_in_admin_bar = false;
 		}
-		data.supportsPhpArr = 'array(\'' + data.supports.join('\',\'') + '\')';		
-		
+		data.supportsPhpArr = 'array(\'' + data.supports.join('\',\'') + '\')';
+
 		// copy templates
 		this.fs.copyTpl(
 			this.templatePath('_add_post_type.php'),
@@ -245,17 +241,18 @@ module.exports = Generator.extend({
 			data
 		);
 		if ( data.capability_type === 'custom' ) {
-			data.addCapToRolePhpArr = 'array(\'' + data.addCapToRole.join('\',\'') + '\')';		
+			data.addCapToRolePhpArr = 'array(\'' + data.addCapToRole.join('\',\'') + '\')';
 			this.fs.copyTpl(
 				this.templatePath('_add_caps_to_roles.php'),
 				this.destinationPath('src/inc/roles_capabilities/autoload/' + data.funcPrefix + '_add_' + data.key + '_caps_to_roles.php'),
 				data
-			);		
+			);
 		}
-		
-	},
-	
-	install: function () {
+
+	}
+
+	install() {
 		this.log('ok, I\'m done.');
 	}
-});
+
+};
