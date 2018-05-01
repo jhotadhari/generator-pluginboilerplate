@@ -71,7 +71,7 @@ module.exports = class extends Generator {
 			}
 			catch (err) {
 				// dir does not exist
-				console.log(chalk.yellow('   create dir: ') + dir);
+				this.log(chalk.yellow('   create dir: ') + dir);
 				fs.mkdirSync(dir);
 			}
 		}
@@ -193,7 +193,7 @@ module.exports = class extends Generator {
 			}
 			catch (err) {
 				// file does not exist
-				console.log('Some error reading generator package.json: ', err);
+				this.log('Some error reading generator package.json: ', err);
 				this.props.generatorVersion = '';
 			}
 
@@ -308,34 +308,39 @@ module.exports = class extends Generator {
 		}).then( () => {
 			let cmd = '';
 
-			cmd = 'grunt build';
-			// cmd = 'grunt build --composer=false';
-			console.log('');
-			console.log(chalk.green('running ') + chalk.yellow(cmd));
-			console.log('');
+
+			// grunt build
+			cmd = this.options.composer && ( this.options.composer === 'false' ) ? 'grunt build --composer=false' : 'grunt build' ;
+			this.log('');
+			this.log(chalk.green('running ') + chalk.yellow(cmd));
+			this.log('');
 			childProcess.execSync( cmd, { stdio:'inherit' } );
 
-			cmd = 'git init';
-			console.log('');
-			console.log(chalk.green('running ') + chalk.yellow(cmd));
-			console.log('');
-			childProcess.execSync( cmd, { stdio:'inherit' } );
+			// init git repo, add all and commit
+			if ( this.options.git && ( this.options.git !== 'false' ) ) {
+				cmd = 'git init';
+				this.log('');
+				this.log(chalk.green('running ') + chalk.yellow(cmd));
+				this.log('');
+				childProcess.execSync( cmd, { stdio:'inherit' } );
 
-			cmd = 'git add .';
-			console.log('');
-			console.log(chalk.green('running ') + chalk.yellow(cmd));
-			console.log('');
-			childProcess.execSync( cmd, { stdio:'inherit' } );
+				cmd = 'git add .';
+				this.log('');
+				this.log(chalk.green('running ') + chalk.yellow(cmd));
+				this.log('');
+				childProcess.execSync( cmd, { stdio:'inherit' } );
 
-			cmd = 'git commit -m "Hurray, just generated a new plugin!"';
-			console.log('');
-			console.log(chalk.green('running ') + chalk.yellow(cmd));
-			console.log('');
-			childProcess.execSync( cmd, { stdio:'inherit' } );
+				cmd = 'git commit -m "Hurray, just generated a new plugin!"';
+				this.log('');
+				this.log(chalk.green('running ') + chalk.yellow(cmd));
+				this.log('');
+				childProcess.execSync( cmd, { stdio:'inherit' } );
+			}
 
-			console.log('');
-			console.log('Everything is ready!');
-			console.log('');
+			this.log('');
+			this.log('Everything is ready!');
+			this.log('');
+
 		});
 
 	}

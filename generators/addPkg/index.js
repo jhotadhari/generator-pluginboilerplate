@@ -175,9 +175,9 @@ module.exports = class extends Generator {
 
 			// composer update
 			var cmd = 'composer update';
-			console.log('');
-			console.log(chalk.green('running ') + chalk.yellow(cmd));
-			console.log('');
+			this.log('');
+			this.log(chalk.green('running ') + chalk.yellow(cmd));
+			this.log('');
 			childProcess.execSync( cmd, { stdio:'inherit' } );
 		}
 

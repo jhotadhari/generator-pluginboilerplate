@@ -4,16 +4,28 @@ module.exports = function(grunt){
 			grunt.warn("Version increment must be specified\n['major','minor','patch']\nlike: " + this.name + ":patch\n");
 		}
 
-		// run tasks
-		grunt.task.run([
-			// version bump
-				'bump-only:' + vInc,
-			// run other dist tasks ... needs to be seperated for bumb versioning
-				'_updateChangelog:dist',
-				'string-replace:inc_update_src',	// will replace string and update file in source
-				'_setPaths:dist',
-				'_dist_git_tasks'
+		let tasks = [];
+
+		tasks = tasks.concat([
+			'bump-only:' + vInc,				// version bump
 		]);
-		
+
+		tasks = tasks.concat([
+			'_updateChangelog:dist',
+			'string-replace:inc_update_src',	// will replace string and update file in source
+		]);
+
+		tasks = tasks.concat([
+			'_setPaths:dist',					// build tasks
+		]);
+
+		if ( grunt.option('git') != false ) {	// git tasks
+			tasks = tasks.concat([
+				'_dist_git_tasks'
+			]);
+		}
+
+		grunt.task.run( tasks );				// run tasks
+
 	});
 };
