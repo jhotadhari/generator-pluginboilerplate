@@ -162,7 +162,7 @@ module.exports = class extends Generator {
 					},
 					{
 						value: 'custom',
-						name: 'custom'	// ???
+						name: 'custom'
 					}
 
 				]
@@ -240,11 +240,17 @@ module.exports = class extends Generator {
 			this.destinationPath('src/inc/post_types_taxs/autoload/' + data.funcPrefix + '_add_post_type_' + data.key + '.php'),
 			data
 		);
+
 		if ( data.capability_type === 'custom' ) {
 			data.addCapToRolePhpArr = 'array(\'' + data.addCapToRole.join('\',\'') + '\')';
 			this.fs.copyTpl(
 				this.templatePath('_add_caps_to_roles.php'),
 				this.destinationPath('src/inc/roles_capabilities/autoload/' + data.funcPrefix + '_add_' + data.key + '_caps_to_roles.php'),
+				data
+			);
+			this.fs.copyTpl(
+				this.templatePath('_remove_caps_from_roles.php'),
+				this.destinationPath('src/inc/roles_capabilities/autoload/' + data.funcPrefix + '_remove_' + data.key + '_caps_from_roles.php'),
 				data
 			);
 		}

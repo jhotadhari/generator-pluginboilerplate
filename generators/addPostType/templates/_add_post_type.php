@@ -5,7 +5,6 @@ if ( ! defined( 'WPINC' ) ) {
 	die;
 }
 
-
 /**
  * Register a <%= key %> post type.
  *
@@ -13,6 +12,7 @@ if ( ! defined( 'WPINC' ) ) {
  */
 function <%= funcPrefix %>_add_post_type_<%= key %>() {
 
+	$post_type = '<%= key %>';
 	$labels = array(
 		'name'                  => _x( '<%= singular_name %>s', 'Post Type General Name', '<%= textDomain %>' ),
 		'singular_name'         => _x( '<%= singular_name %>', 'Post Type Singular Name', '<%= textDomain %>' ),
@@ -42,17 +42,7 @@ function <%= funcPrefix %>_add_post_type_<%= key %>() {
 		'items_list_navigation' => __( '<%= singular_name %>s list navigation', '<%= textDomain %>' ),
 		'filter_items_list'     => __( 'Filter <%= singular_name %>s list', '<%= textDomain %>' ),
 	);
-	<%if ( capability_type === 'custom' ) { %>
-	$capabilities = array(
-		'edit_post'             => 'edit_<%= key %>',
-		'read_post'             => 'read_<%= key %>',
-		'delete_post'           => 'delete_<%= key %>',
-		'edit_posts'            => 'edit_<%= key %>s',
-		'edit_others_posts'     => 'edit_others_<%= key %>s',
-		'publish_posts'         => 'publish_<%= key %>s',
-		'read_private_posts'    => 'read_private_<%= key %>s',
-	);
-	<% } %>
+
 	$args = array(
 		'label'                 => __( '<%= singular_name %>', '<%= textDomain %>' ),
 		'description'           => __( '<%= singular_name %> description', '<%= textDomain %>' ),
@@ -66,15 +56,16 @@ function <%= funcPrefix %>_add_post_type_<%= key %>() {
 		'show_in_admin_bar'     => <%= show_in_admin_bar %>,
 		'show_in_nav_menus'     => <%= show_in_nav_menus %>,
 		'can_export'            => <%= can_export %>,
-		'has_archive'           => <%= has_archive %>,		
+		'has_archive'           => <%= has_archive %>,
 		'exclude_from_search'   => <%= exclude_from_search %>,
 		'publicly_queryable'    => <%= publicly_queryable %>,
-		'show_in_rest'          => <%= show_in_rest %>,
 		'menu_icon'             => null,	// https://developer.wordpress.org/resource/dashicons/#admin-page
-		<%if ( capability_type === 'custom' ) { %>'capabilities'          => $capabilities,
-		<% } else { %>'capability_type'       => '<%= capability_type %>',<% } %>
+		'show_in_rest'          => <%= show_in_rest %>,
+		<% if ( show_in_rest ) { %>'rest_base'          	=> $post_type . 's', <% } %>
+		<% if ( capability_type === 'custom' ) { %>'capability_type'		=> array( $post_type, $post_type . 's' ),
+		'map_meta_cap'		=> true, <% } else { %>'capability_type'		=> '<%= capability_type %>',<% } %>
 	);
-	register_post_type( '<%= key %>', $args );
+	register_post_type( $post_type, $args );
 
 }
 add_action( 'init', '<%= funcPrefix %>_add_post_type_<%= key %>' );

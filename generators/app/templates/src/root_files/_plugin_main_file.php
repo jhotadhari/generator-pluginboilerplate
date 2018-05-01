@@ -107,6 +107,8 @@ class <%= pluginClass %> {
 	}
 
 	public function on_deactivate() {
+		$this->add_roles_and_capabilities();
+		do_action('<%= funcPrefix %>_on_deactivate_before_flush');
 		flush_rewrite_rules();
 		do_action('<%= funcPrefix %>_plugin_deactivated');
 	}

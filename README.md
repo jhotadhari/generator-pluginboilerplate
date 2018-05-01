@@ -174,7 +174,7 @@ Most tasks are just sub tasks and will be used by the following main tasks:
   * ```pluginboilerplate:addPkg``` Helps to add some often used packages to the plugin. E.g.: CMB2
   * ```pluginboilerplate:addOptionsPage``` Adds a boilerplate Options/Settings Page. Requires the CMB2 package. You can make changes to the Settings Page in the generated file.
   * ```pluginboilerplate:addPostType``` Adds a Custom Post Type
-  * ```pluginboilerplate:addScript``` Will add a new script to the js folder and a file to enqueue the script. Will add a localize class to send data to the script.
+  * ```pluginboilerplate:addScript``` Will add a new script to the js or commonJS folder and a file to enqueue and localize the script.
   * ```pluginboilerplate:addStyle``` Adds a new scss file and a file to enqueue the style
 
 
