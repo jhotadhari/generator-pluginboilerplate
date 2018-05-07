@@ -317,7 +317,7 @@ module.exports = class extends Generator {
 			childProcess.execSync( cmd, { stdio:'inherit' } );
 
 			// init git repo, add all and commit
-			if ( this.options.git && ( this.options.git !== 'false' ) ) {
+			if ( this.options.git !== 'false' ) {
 				cmd = 'git init';
 				this.log('');
 				this.log(chalk.green('running ') + chalk.yellow(cmd));
