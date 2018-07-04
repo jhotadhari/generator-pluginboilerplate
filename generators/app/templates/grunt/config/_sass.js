@@ -4,7 +4,10 @@ module.exports = {
 		// 	'susy',
 		// 	'breakpoint'
 		// ],
-		// loadPath: require('node-bourbon').includePaths,
+		// loadPath: [
+		// 	require('node-bourbon').includePaths,
+		// 	'node_modules/bootstrap-sass/assets/stylesheets',
+		// ]
 	},
 
 	dist: {

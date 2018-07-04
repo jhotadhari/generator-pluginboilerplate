@@ -1,4 +1,4 @@
-// import _ from  '_';
+// import _ from  'underscore';
 import $ from 'jquery';
 // import Backbone from 'backbone';
 // Backbone.$ = $;
@@ -13,5 +13,4 @@ export {
 	// Backbone,
 	// Marionette,
 	// Radio,
-	// queryString
 };

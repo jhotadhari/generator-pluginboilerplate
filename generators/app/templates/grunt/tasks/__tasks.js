@@ -25,6 +25,8 @@ module.exports = function(grunt){
 		// add readme task and copy/str_replace tasks for php files and imgs/fonts ...
 		tasks = tasks.concat( [
 			'concat:readme',					// readme
+			'concat:readmeMd',					// readme.md
+			'wp_readme_to_markdown:readmeMd',
 			'string-replace:plugin_main_file',	// copies plugin_main_file to destination
 			'concat:plugin_main_file',			// add banner plugin_main_file
 			'string-replace:inc_to_dest',		// copies inc to destination
@@ -34,16 +36,17 @@ module.exports = function(grunt){
 		// add sass and js tasks
 		if ( process === 'build' ) {
 			tasks = tasks.concat([
-				'jshint',
+				'eslint',
 				'uglify:debug',
 				'browserify:debug',
 				'sass:debug',
 			] );
 		} else {
 			tasks = tasks.concat([
-				'jshint',
+				'eslint',
 				'uglify:dist',
 				'browserify:dist',
+				'uglify:distCommonJs',
 				'sass:dist',
 			] );
 		}

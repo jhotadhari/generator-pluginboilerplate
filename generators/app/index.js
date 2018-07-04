@@ -216,15 +216,8 @@ module.exports = class extends Generator {
 			this.props
 		);
 		this._bulkCopyTpl(
-			this.templatePath('grunt/config/'),
-			this.destinationPath('grunt/config/'),
-			this.props, {
-				prependFunctionPrefix: false
-			}
-		);
-		this._bulkCopyTpl(
-			this.templatePath('grunt/tasks/'),
-			this.destinationPath('grunt/tasks/'),
+			this.templatePath('grunt/'),
+			this.destinationPath('grunt/'),
 			this.props, {
 				prependFunctionPrefix: false
 			}
@@ -251,6 +244,11 @@ module.exports = class extends Generator {
 		this.fs.copy(
 			this.templatePath('gitignore'),
 			this.destinationPath('.gitignore')
+		);
+		// eslintrc.json
+		this.fs.copy(
+			this.templatePath('eslintrc.json'),
+			this.destinationPath('.eslintrc.json')
 		);
 		// composer.json
 		this.fs.copyTpl(
