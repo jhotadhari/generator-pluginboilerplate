@@ -20,11 +20,19 @@ Requires:
 * grunt
 * composer
 * git
-* sass
 
 ## Introduction
 
-Develop a Plugin locally and synchronize it automatically with a local WordPress installation.
+> Develop a Plugin locally and synchronize it automatically with a local WordPress installation.
+
+* Generates an development environment based on Grunt. Structured in source, build and distribution. Distribution directory is structured to match the WP plugin svn repository.
+* Grunt watches file changes in source and performs the required tasks to update the build directory and optionally syncs it to another folder on your system (eg. the plugin directory of your local WordPress installation)
+* Inits a git repository for your plugin (by default)
+* Everything is ready to write js with node, commonJs and es6. Supports *.jst templates and React's *.jsx
+* Uses Scss to build the stylesheets
+* Subgenerators to easily add option-pages (based on cmb2), custom-post-types, gutenberg-blocks, styles, scripts ...
+* Easy to add plugin dependencies (check the code of a generated plugin main file in .src/root_files/)
+* Includes a composer Project Setup to include packages and repositories (check out the example plugins)
 
 Generate your new project:
 
@@ -129,11 +137,12 @@ will output a project like this:
   	* They will be linted and mangled by Grunt
 
   * ```./src/commonJS```
-  	* Contains all the commonJS and e6 source.
+  	* Contains all the node, commonJS and e6 source. Setup is ready to support *.jst templates and React's *.jsx
   	* Scripts will be linted by Grunt
-  	* Scripts (not including subfolders) will be browserifyed, using some transforms. See ./grunt/config/_browserify.js
+  	* Scripts (not including subfolders) will be browserified, using some transforms. See ./grunt/config/_browserify.js
   	* Use a single js file as an entry point to your app and require/import files in subfolders
-  	* configure  ```./src/commonJS/vendor/vendor.js``` and the "browserify-shim" property in your ```./package.json```
+  	* Configure the "browserify-shim" property in your ```./package.json``` to make window variables accessable in your bundles scope
+  	* Check the ```pluginboilerplate:addGbBlock``` subgenerator
 
   * ```./src/languages```
   	* The pot file gets updated by Grunt tasks
@@ -169,8 +178,13 @@ Most tasks are just sub tasks and will be used by the following main tasks:
   * Will build the plugin into ```./dist/trunk``` and ```./dist/tag/VERSION```
   * Will add all to git and commit it (using the new version as commit message and all entries in ```./changelog.json 'next' ```)
 
+### Skip tasks
+You can pass options to skip the composer or git tasks. Eg.:
+```grunt build --composer=false```
+```grunt dist --git=false```
 
 ## Subgenerators:
+  * ```pluginboilerplate:addGbBlock``` Generates a new Gutenberg Block. Options to include some basic es6 examples.
   * ```pluginboilerplate:addPkg``` Helps to add some often used packages to the plugin. E.g.: CMB2
   * ```pluginboilerplate:addOptionsPage``` Adds a boilerplate Options/Settings Page. Requires the CMB2 package. You can make changes to the Settings Page in the generated file.
   * ```pluginboilerplate:addPostType``` Adds a Custom Post Type
@@ -178,17 +192,22 @@ Most tasks are just sub tasks and will be used by the following main tasks:
   * ```pluginboilerplate:addStyle``` Adds a new scss file and a file to enqueue the style
 
 
+
 ## Example Plugins
-These plugins are based on that generator:
-* https://github.com/jhotadhari/export2word
-
-
-## Thanks for beautiful ressoucres:
-* This Yeoman generator is generated with the Yeoman generator generator (https://github.com/yeoman/generator-generator)
-* CMB2 (https://github.com/WebDevStudios/CMB2)
-* Integration CMB2-qTranslate (https://github.com/jmarceli/integration-cmb2-qtranslate)
-* CMB2 Taxonomy (https://github.com/jcchavezs/cmb2-taxonomy)
-
+* [Geo Masala](https://github.com/jhotadhari/geo-masala) Add interactive Leaflet Maps to your blog
+  * Gutenberg Block that renders a Leaflet Map
+  * Custom-post-type with some (serialized) meta exposed api and cutom ui (all crud actions a done within the block)
+  * Based on v1.2.0
+* [Rain Effect](https://github.com/jhotadhari/rain-effect) Apply a rain effect to images using webGL
+  * With customizer options. Can apply rain to header images (and other images), depending on the theme.
+  * The rain effect is based on [Lucas Bebbers](http://gardenestudio.com.br/) script on [Codrops](https://tympanus.net/codrops/2015/11/04/rain-water-effect-experiments/).
+  * Based on v1.0.3
+* [export2word](https://github.com/jhotadhari/export2word) Export a website as a docx document
+  * includes some packages and repositories with composer
+  * Custom-post-types
+  * Menu pages based on cmb2 with custom fields
+  * Custom list tables
+  * Based on v1.0.0 ... as far as I remember :)
 
 ## License
 

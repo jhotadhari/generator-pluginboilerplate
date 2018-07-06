@@ -10,6 +10,8 @@ const fs = require('fs');
 const dirTree = require('directory-tree');
 const iterator = require('object-recursive-iterator');
 
+const mkDir = require('../mkDir');
+
 module.exports = class extends Generator {
 
 	// https://gist.github.com/codeitagile/19e7be070b6ef46c21d2
@@ -56,25 +58,12 @@ module.exports = class extends Generator {
 	}
 
 	_mkdirRec() {
-
-		var tree = [];
-		iterator.forAll(dirTree(this.templatePath(), {type:'directory'}), function (path, key, obj) {
-			if ( obj.type === 'directory' && tree.indexOf(obj.path) === -1 ){
-				tree.push(obj.path);
-			}
-		});
-		for (var i = 0; i < tree.length; i++) {
-			var dir = tree[i].replace(this.templatePath(), this.destinationPath());
-			try {
-				// dir exists
-				fs.statSync(dir).isDirectory();
-			}
-			catch (err) {
-				// dir does not exist
-				this.log(chalk.yellow('   create dir: ') + dir);
-				fs.mkdirSync(dir);
-			}
-		}
+		const tree = [];
+		iterator.forAll(
+			dirTree(this.templatePath(), {type:'directory'}),
+			(path, key, obj) => obj.type === 'directory' && tree.indexOf(obj.path) === -1 ? tree.push(obj.path) : null
+		);
+		tree.map( (node) => mkDir( node.replace( this.templatePath(), this.destinationPath() ), {log:this.log} ) );
 	}
 
 	prompting() {
@@ -202,8 +191,6 @@ module.exports = class extends Generator {
 
 
 	writing() {
-		let files, destination;
-
 		/*
 			setup, config, grunt ...
 		*/
@@ -305,7 +292,6 @@ module.exports = class extends Generator {
 			npm: true,
 		}).then( () => {
 			let cmd = '';
-
 
 			// grunt build
 			cmd = this.options.composer && ( this.options.composer === 'false' ) ? 'grunt build --composer=false' : 'grunt build' ;

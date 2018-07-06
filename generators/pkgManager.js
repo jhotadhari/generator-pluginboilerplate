@@ -4,7 +4,7 @@ var chalk = require('chalk');
 var fs = require('fs');
 
 var PkgManager = {
-	
+
 	init: function ( sourceRoot, destinationRoot) {
 		// define paths
 		this.sourceRoot = sourceRoot;
@@ -17,7 +17,7 @@ var PkgManager = {
 		// get array of installed pks
 		this.getInstalled();
 	},
-	
+
 	readComposerJson: function() {
 		try {
 			// file exists
@@ -29,16 +29,16 @@ var PkgManager = {
 			console.log('Some error reading composer.json: ', err);
 			console.log('... but I don\'t care');
 			this.composerJson = {};
-		}		
+		}
 	},
-	
+
 	writeComposerJson: function() {
-		fs.writeFileSync( this.composerJsonPath, JSON.stringify( this.composerJson, null, 2 ) ); 
+		fs.writeFileSync( this.composerJsonPath, JSON.stringify( this.composerJson, null, 2 ) );
 	},
-	
-	
-	
-	
+
+
+
+
 	getInstalled: function () {
 		this.installed = [];
 		for ( var key in this.composerJson.require) {
@@ -46,7 +46,7 @@ var PkgManager = {
 		}
 		return this.installed;
 	},
-	
+
 	getUnInstalled: function () {
 		this.unInstalled = [];
 		for (var i = 0; i < this.available.length; i++) {
@@ -57,7 +57,7 @@ var PkgManager = {
 		}
 		return this.unInstalled;
 	},
-	
+
 	getAvailableChoices: function () {
 		if ( this.unInstalled == null ){
 			this.getUnInstalled();
@@ -73,9 +73,9 @@ var PkgManager = {
 		}
 		return this.availableChoices;
 	},
-	
 
-	
+
+
 };
 
 module.exports = PkgManager;

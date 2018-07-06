@@ -1,0 +1,7 @@
+
+/*--------------------------------------------------------------
+# style <%= blockName %> Editor
+# enqueued in admin only
+--------------------------------------------------------------*/
+
+<% if( examples.length > 0 ) { %>@import "./<%= funcPrefix %>_block_<%= blockSlug %>/label";<% } %>

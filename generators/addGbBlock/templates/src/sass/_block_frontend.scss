@@ -1,0 +1,38 @@
+
+/*--------------------------------------------------------------
+# style <%= blockName %> Frontend
+# enqueued in frontend only
+--------------------------------------------------------------*/
+<% if( examples.length > 0 ) { %>@import "./<%= funcPrefix %>_block_<%= blockSlug %>/label";<% } %>
+
+.wp-block-<%= funcPrefix %>-<%= blockSlugUri %> {
+    <%
+    var props = 0;
+    if( examples.length > 0 ) { %>.<%= funcPrefix %>-<%= blockSlugUri %> { <% for (var i = 0; i < examples.length; i++) {
+			var example = examples[i];
+            switch( example ){
+                case 'TreeSelect':
+                    %>
+        &.tree-select-example<% if( i < ( examples.length - 1 ) ) {%>,<%}
+                    props++;
+                    break;
+                case 'serializedNameInput':
+                    %>
+        &.serialized-value-example<% if( i < ( examples.length - 1 ) ) {%>,<%}
+                    props++;
+                    break;
+            }
+		}
+
+		if (props > 0){ %>{
+            span {
+                margin-left: 0.5em;
+                &:first-of-type{
+                    margin-left: 0;
+                }
+            }
+        }
+        <%}%>
+    }
+    <% } %>
+}
