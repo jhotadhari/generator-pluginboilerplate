@@ -116,8 +116,8 @@ class <%= funcPrefixUpperCase %>_Script_<%= scriptSlugUpperCase %> {
 	 *
 	 */
 	public function print_script(){
-		if ( empty( $this->loc_data ) )
-			return;
+		// if ( empty( $this->loc_data ) )
+		// 	return;
 		wp_localize_script( $this->handle, '<%= funcPrefix %>_<%= scriptSlug %>_data', $this->loc_data );
 		wp_print_scripts( $this->handle );
 	}

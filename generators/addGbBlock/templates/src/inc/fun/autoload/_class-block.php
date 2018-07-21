@@ -35,14 +35,15 @@ class <%= funcPrefixUpperCase %>_Block_<%= blockSlugUpperCase %> {
 	}
 
 	public function register_block() {
-		register_block_type( $this->namspace, array(
-			'editor_script' => $this->get_handle( 'editor' ),
-			'editor_style' => $this->get_handle( 'editor' ),
-			// 'style' => '<%= funcPrefix %>_block_<%= blockSlug %>',		// dont set a style here. use hook instead and check if post_has_block
-			// 'script' => '<%= funcPrefix %>_block_<%= blockSlug %>',	// dont set a style here. use hook instead and check if post_has_block
-			'render_callback' => array( $this, 'render' ),
-		) );
-
+		if ( function_exists( 'register_block_type' ) ) {
+			register_block_type( $this->namspace, array(
+				'editor_script' => $this->get_handle( 'editor' ),
+				'editor_style' => $this->get_handle( 'editor' ),
+				// 'style' => '<%= funcPrefix %>_block_<%= blockSlug %>',		// dont set a style here. use hook instead and check if post_has_block
+				// 'script' => '<%= funcPrefix %>_block_<%= blockSlug %>',	// dont set a style here. use hook instead and check if post_has_block
+				'render_callback' => array( $this, 'render' ),
+			) );
+		}
 	}
 
 	protected function get_handle( $key ){

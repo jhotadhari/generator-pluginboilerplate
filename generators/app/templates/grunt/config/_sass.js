@@ -1,3 +1,12 @@
+'use strict';
+
+const files = [{
+	expand: true,
+	cwd: 'src/sass',
+	src: ['*.scss'],
+	dest: '<%%= dest_path %>/css',
+	ext: '.min.css'
+}];
 module.exports = {
 	options: {
 		// require: [
@@ -15,13 +24,7 @@ module.exports = {
 			sourcemap: 'none',
 			style: 'compressed'
 		},
-		files: [{
-			expand: true,
-			cwd: 'src/sass',
-			src: ['*.scss'],
-			dest: '<%%= dest_path %>/css',
-			ext: '.min.css'
-		}]
+		files,
 	},
 
 	debug: {
@@ -30,13 +33,7 @@ module.exports = {
 			style: 'expanded',
 			lineNumbers: true,
 		},
-		files: [{
-			expand: true,
-			cwd: 'src/sass',
-			src: ['*.scss'],
-			dest: '<%%= dest_path %>/css',
-			ext: '.min.css'
-		}]
+		files,
 	}
 
 };

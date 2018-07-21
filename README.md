@@ -136,12 +136,12 @@ will output a project like this:
 
   * ```./src/js/```
   	* Contains all the JavaScript source.
-  	* They will be linted and mangled by Grunt
+  	* Files will be linted and beautified (for development), or mangled and compressed (for distribution)
 
   * ```./src/commonJS/```
   	* Contains all the node, commonJS and e6 source. Setup is ready to support *.jst templates and React's *.jsx
-  	* Scripts will be linted by Grunt
-  	* Scripts (not including subfolders) will be browserified, using some transforms. See ./grunt/config/_browserify.js
+  	* Files will be linted by Grunt
+  	* Files (not including subfolders) will be browserified, using some transforms. See ```./grunt/config/_browserify.js```.<br/>Files will contain debug info and source maps (for development), or mangled and compressed (for distribution)
   	* Use a single js file as an entry point to your app and require/import files in subfolders
   	* Configure the "browserify-shim" property in your ```./package.json``` to make window variables accessable in your bundles scope
   	* Check the ```pluginboilerplate:addGbBlock``` subgenerator
@@ -159,30 +159,42 @@ will output a project like this:
   	* The Plugin main file will init the Plugin if no required dependencies is missing and will include other plugin files. The ```$deps``` property contains an array with all dependencies. Usually no other changes to that file have to be done.
 
   * ```./src/sass/```
-  	* Contains all scss files. They will be compiled and minified by grunt
+  	* Contains all scss files.
+  	* Files will be expanded and contain source maps (for development), or compressed (for distribution)
 
 
 ## Grunt tasks:
 Most tasks are just sub tasks and will be used by the following main tasks:
 
-* ```build``` will build the plugin into ```./test/```
+* ```build``` is for development. It will build the plugin into ```./test/```
+  * On default all JavaScript and scss will be beautified and contains debug info and source maps.
+  * Options:
+    * ```compress```, boolean, default false. If ```grunt build --compress=true```, JavaScript/scss will be compressed/mangled.
+    * ```composer```, boolean, default true. If ```grunt build --composer=false```, composer update will be skipped.
 
 * ```watch_sync``` will watch file changes and build changes into ```./test/```
-  * ```watch_sync:example``` will synchronize after build to the "example" installation specified in ```./wp_installs.json```
+  * ```watch_sync:example``` will synchronize (deletes/overwrites files) after build to the "example" installation specified in ```./wp_installs.json```
+  * no more Options
 
-* ```local_sync``` must be specified like this ```local_sync:example``` to sync it to the "example" installation specified in ```./wp_installs.json```
-  * by default it will sync the ```./test/``` folder. Use ```local_sync:example:0.0.1``` to push a specific version to the local wp.
+* ```local_sync``` must be specified like this ```local_sync:example``` to synchronize (deletes/overwrites files) it to the "example" installation specified in ```./wp_installs.json```
+  * by default it will synchronize, using the ```./test/``` folder as source. Use ```local_sync:example:0.0.1``` to push a specific version to the local wp.
+  * no more Options
 
 * ```dist``` will do all the tasks for distribution
   * Version increment must be specified ```major|minor|patch```. for example ```dist:patch```
   * will update the version (in package.json, in readme ... ).
   * Will create the Plugin readme.
   * Will build the plugin into ```./dist/trunk/``` and ```./dist/tag/VERSION/```
+  * On default all JavaScript and scss will be compressed/mangled.
   * Will add all to git and commit it (using the new version as commit message and all entries in ```./changelog.json 'next' ```)
+  * Options:
+    * ```compress```, boolean, default true. If ```grunt build --compress=false```, JavaScript/scss will be beautified and contains debug info and source maps.
+    * ```composer```, boolean, default true. If ```grunt build --composer=false```, composer update will be skipped.
+    * ```git```, boolean, default true. If ```grunt build --git=false```, all git tasks will be skipped.
 
 ### Skip tasks
-You can pass options to skip the composer or git tasks. Eg.:
-* ```grunt build --composer=false```
+You can pass options to skip the composer or git tasks (depending on task). Eg.:
+* ```grunt build --composer=false```. This option can already be used on generating ```yo pluginboilerplate --composer=false```
 * ```grunt dist --git=false```
 
 ## Subgenerators:

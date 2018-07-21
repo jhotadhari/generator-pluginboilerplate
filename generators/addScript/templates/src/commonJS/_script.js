@@ -1,6 +1,8 @@
 import {$} from './vendor/vendor';
 // import App from './<%= funcPrefix %>_<%= scriptSlug %>/App';
 
+// <%= funcPrefix %>_<%= scriptSlug %>_data;		// access the localized data
+
 document.addEventListener('DOMContentLoaded', () => {
 	/*
 	wp.api.loadPromise.done( function() {
@@ -14,6 +16,6 @@ document.addEventListener('DOMContentLoaded', () => {
 	});
 	*/
 
-	console.log( '<%= funcPrefix %>_<%= scriptSlug %> script loaded' );
+	console.log( '<%= funcPrefix %>_<%= scriptSlug %> script loaded', <%= funcPrefix %>_<%= scriptSlug %>_data );
 
 });
