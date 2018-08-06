@@ -211,7 +211,7 @@ You can pass options to skip the composer or git tasks (depending on task). Eg.:
 * [Geo Masala](https://github.com/jhotadhari/geo-masala) Add interactive Leaflet Maps to your blog
   * Gutenberg Block that renders a Leaflet Map
   * Custom-post-type with some (serialized) meta exposed api and custom ui (all crud actions a done within the block)
-  * Based on v1.2.0
+  * Based on v1.2.3
 * [Posts 2 Posts API](https://github.com/jhotadhari/posts-2-posts-api) REST API extension for Posts 2 Posts plugin
   * Custom REST controllers to provide API routes and endpoints for Connection-Types and Connections registered by [Posts 2 Posts](https://github.com/scribu/wp-posts-to-posts) Plugin.
   * Based on v1.2.0

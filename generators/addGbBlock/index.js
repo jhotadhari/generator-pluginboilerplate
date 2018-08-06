@@ -56,6 +56,21 @@ module.exports = class extends Generator {
 					},
 				],
 			},
+			{
+				type: 'list',
+				name: 'enqueueFrontend',
+				message: chalk.green('Enqueue Frontend Assets'),
+				choices: [
+					{
+						value: 'occasionally',
+						name: ' ' + chalk.yellow('Occasionally') + ' Only when global post has that block? Will not be enqueued on archives so.'
+					},
+					{
+						value: 'always',
+						name: ' ' + chalk.yellow('Always') + ' Enqueue frontend assets always'
+					},
+				],
+			},
 		];
 
 		return this.prompt(prompts).then(function (props) {

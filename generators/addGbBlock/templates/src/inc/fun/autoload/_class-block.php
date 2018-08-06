@@ -53,11 +53,11 @@ class <%= funcPrefixUpperCase %>_Block_<%= blockSlugUpperCase %> {
 		}
 
 	}
-
+	<% if( enqueueFrontend === 'occasionally' ) { %>
 	protected function post_has_block(){
 		global $post;
 
-		if ( strlen( $post->post_content ) === 0 )
+		if ( !( $post instanceof WP_Post ) || ( strlen( $post->post_content ) === 0 ) )
 			return false;
 
 		$block_pattern = (
@@ -69,7 +69,7 @@ class <%= funcPrefixUpperCase %>_Block_<%= blockSlugUpperCase %> {
 			);
 		return preg_match( $block_pattern, $post->post_content, $block_matches ) === 1;
 	}
-
+	<% } %>
 	protected function get_localize_data(){
 		// global $post;
 		// $current_user = wp_get_current_user();
@@ -85,14 +85,15 @@ class <%= funcPrefixUpperCase %>_Block_<%= blockSlugUpperCase %> {
 		return array();
 	}
 
-
 	// hooked on enqueue_block_assets. So function will run in admin and frontend.
 	// But we will use it only on frontend if the post has this block
 	public function enqueue_frontend_assets() {
 
-		// check if we are on frontend and the post has a block
+		<% if( enqueueFrontend === 'occasionally' ) { %>// check if we are on frontend and the post has a block
 		if ( is_admin() || ! $this->post_has_block() )
-			return;
+		<% }  else  { %>// check if we are on frontend
+		if ( is_admin() )
+		<% } %>	return;
 
 		$handle = $this->get_handle( 'frontend' );
 
