@@ -14,18 +14,16 @@ const files = [{
 }];
 
 const transform = [
+	[ 'browserify-shim', {global: true}],
 	[ 'babelify', {
 		plugins: [
-			'transform-object-rest-spread',
-			'babel-plugin-transform-class-properties',
 		],
 		presets: [
-			'es2015',
-			'react',
-		]
+			'@babel/preset-env',
+			'@babel/preset-react',
+		],
 	}],
 	[ 'jstify' ],
-	[ 'browserify-shim', {global: true}],
 	[ 'uglifyify' ]
 ];
 
