@@ -294,7 +294,7 @@ module.exports = class extends Generator {
 			let cmd = '';
 
 			// grunt build
-			cmd = this.options.composer && ( this.options.composer === 'false' ) ? 'grunt build --composer=false' : 'grunt build' ;
+			cmd = this.options.composer && ( this.options.composer === 'true' || this.options.composer === true ) ? 'grunt build --composer=true' : 'grunt build' ;
 			this.log('');
 			this.log(chalk.green('running ') + chalk.yellow(cmd));
 			this.log('');

@@ -16,7 +16,7 @@ module.exports = function(grunt){
 		]);
 
 		// add composer task
-		if ( grunt.option('composer') != false ) {
+		if ( grunt.option('composer') === true ) {
 			tasks = tasks.concat([
 				'composer:update',
 			]);
