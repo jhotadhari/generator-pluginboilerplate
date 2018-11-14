@@ -32,7 +32,7 @@ Requires:
 * Uses Scss to build the stylesheets
 * Subgenerators to easily add option-pages (based on cmb2), custom-post-types, gutenberg-blocks, styles, scripts ...
 * Easy to add plugin dependencies (check the code of a generated plugin main file in .src/root_files/)
-* Includes a composer Project Setup to include packages and repositories (check out the example plugins)
+* Includes a composer Project Setup to include packages and repositories (check out the example plugins). Since v1.2.4 use option --composer=true.
 
 ## Example Usage
 
@@ -170,7 +170,7 @@ Most tasks are just sub tasks and will be used by the following main tasks:
   * On default all JavaScript and scss will be beautified and contains debug info and source maps.
   * Options:
     * ```compress```, boolean, default false. If ```grunt build --compress=true```, JavaScript/scss will be compressed/mangled.
-    * ```composer```, boolean, default true. If ```grunt build --composer=false```, composer update will be skipped.
+    * ```composer```, boolean, default false. If ```grunt build --composer=true```, composer will update.
 
 * ```watch_sync``` will watch file changes and build changes into ```./test/```
   * ```watch_sync:example``` will synchronize (deletes/overwrites files) after build to the "example" installation specified in ```./wp_installs.json```
@@ -189,12 +189,12 @@ Most tasks are just sub tasks and will be used by the following main tasks:
   * Will add all to git and commit it (using the new version as commit message and all entries in ```./changelog.json 'next' ```)
   * Options:
     * ```compress```, boolean, default true. If ```grunt build --compress=false```, JavaScript/scss will be beautified and contains debug info and source maps.
-    * ```composer```, boolean, default true. If ```grunt build --composer=false```, composer update will be skipped.
+    * ```composer```, boolean, default false. If ```grunt build --composer=true```, composer will update.
     * ```git```, boolean, default true. If ```grunt build --git=false```, all git tasks will be skipped.
 
 ### Skip tasks
 You can pass options to skip the composer or git tasks (depending on task). Eg.:
-* ```grunt build --composer=false```. This option can already be used on generating ```yo pluginboilerplate --composer=false```
+* ```grunt build --composer=true```. This option can already be used on generating ```yo pluginboilerplate --composer=true```
 * ```grunt dist --git=false```
 
 ## Subgenerators:
