@@ -1,7 +1,10 @@
 # generator-pluginboilerplate [![NPM version][npm-image]][npm-url]
 > Yeoman generator for scaffolding a WordPress Plugin Boilerplate and a Grunt based build system
 
-[![Build Status][travis-image]][travis-url] [![Dependency Status][daviddm-image]][daviddm-url]
+
+> ## Deprecated
+> This project is no longer active and not recommended for use. It is left here for reference.
+> Try [generator-wp-dev-env](https://github.com/croox/generator-wp-dev-env) instead.
 
 
 ## Installation
