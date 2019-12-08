@@ -28,7 +28,9 @@ module.exports = function(grunt){
 			'concat:readmeMd',					// readme.md
 			'wp_readme_to_markdown:readmeMd',
 			'string-replace:plugin_main_file',	// copies plugin_main_file to destination
+			'_create_dummy_plugin_main_file',
 			'concat:plugin_main_file',			// add banner plugin_main_file
+			'concat:dummy_plugin_main_file',	// add banner dummy plugin_main_file
 			'string-replace:inc_to_dest',		// copies inc to destination
 			'copy',
 		] );
@@ -58,10 +60,15 @@ module.exports = function(grunt){
 		}
 
 		// add language tasks
-		tasks = tasks.concat([
-			'pot',			// language
-			'_potomo',		// language
-		] );
+		tasks = [
+			...tasks,
+			'pot',
+		];
+		tasks = grunt.file.expand( { cwd: 'src/languages/' }, ['*.po'] ).length ? tasks = [
+			...tasks,
+			'potomo',
+			'po2json',
+		] : tasks;
 
 		// run tasks
 		grunt.task.run( tasks );

@@ -142,6 +142,12 @@ module.exports = class extends Generator {
 			},
 			{
 				type: 'input',
+				name: 'repositoryUri',
+				message: chalk.green('Git repository url') + '\nLink to Plugins repository on GitHub/GitLab/Bitbucket/... . This field is required if the Plugin should be possible to update via "GitHub Uploader Plugin".',
+				default: 'https://github.com/example-user-name/example-repository-name',
+			},
+			{
+				type: 'input',
 				name: 'wpRequiresAtLeast',
 				message: chalk.green('Requires at least WP version ...?'),
 				store: true,
@@ -228,9 +234,10 @@ module.exports = class extends Generator {
 			this.props
 		);
 		// gitignore
-		this.fs.copy(
-			this.templatePath('gitignore'),
-			this.destinationPath('.gitignore')
+		this.fs.copyTpl(
+			this.templatePath('_gitignore'),
+			this.destinationPath('.gitignore'),
+			this.props
 		);
 		// eslintrc.json
 		this.fs.copy(
@@ -241,6 +248,12 @@ module.exports = class extends Generator {
 		this.fs.copyTpl(
 			this.templatePath('_composer.json'),
 			this.destinationPath('composer.json'),
+			this.props
+		);
+		// readme.md
+		this.fs.copyTpl(
+			this.templatePath('_readme.md'),
+			this.destinationPath('readme.md'),
 			this.props
 		);
 
@@ -302,23 +315,18 @@ module.exports = class extends Generator {
 
 			// init git repo, add all and commit
 			if ( this.options.git !== 'false' ) {
-				cmd = 'git init';
-				this.log('');
-				this.log(chalk.green('running ') + chalk.yellow(cmd));
-				this.log('');
-				childProcess.execSync( cmd, { stdio:'inherit' } );
 
-				cmd = 'git add .';
-				this.log('');
-				this.log(chalk.green('running ') + chalk.yellow(cmd));
-				this.log('');
-				childProcess.execSync( cmd, { stdio:'inherit' } );
+				[
+					'git init',
+					'git add .',
+					'git commit -m "Hurray, just generated a new plugin!"',
 
-				cmd = 'git commit -m "Hurray, just generated a new plugin!"';
-				this.log('');
-				this.log(chalk.green('running ') + chalk.yellow(cmd));
-				this.log('');
-				childProcess.execSync( cmd, { stdio:'inherit' } );
+				].map( cmd => {
+					this.log('');
+					this.log(chalk.green('running ') + chalk.yellow(cmd));
+					this.log('');
+					childProcess.execSync( cmd, { stdio:'inherit' } );
+				} );
 			}
 
 			this.log('');

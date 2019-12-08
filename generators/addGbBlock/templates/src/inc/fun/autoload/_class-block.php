@@ -117,13 +117,14 @@ class <%= funcPrefixUpperCase %>_Block_<%= blockSlugUpperCase %> {
 
 		wp_localize_script( $handle, '<%= funcPrefix %>Data', $this->get_localize_data() );
 
+		wp_set_script_translations( $handle, '<%= textDomain %>', <%= pluginClass %>::plugin_dir_path() . 'languages' );
+
 		wp_enqueue_script( $handle );
 	}
 
 	// hooked on enqueue_block_editor_assets. So function will only run in admin
 	public function enqueue_editor_assets() {
 		$handle = $this->get_handle( 'editor' );
-
 
 		wp_register_script(
 			$handle,
@@ -137,6 +138,8 @@ class <%= funcPrefixUpperCase %>_Block_<%= blockSlugUpperCase %> {
 		);
 
 		wp_localize_script( $handle, '<%= funcPrefix %>Data', $this->get_localize_data() );
+
+		wp_set_script_translations( $handle, '<%= textDomain %>', <%= pluginClass %>::plugin_dir_path() . 'languages' );
 
 		wp_enqueue_script( $handle );
 

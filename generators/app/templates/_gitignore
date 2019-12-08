@@ -3,7 +3,6 @@
 */**/*
 /*
 
-
 # include some root files
 !.gitignore
 !Gruntfile.js
@@ -15,6 +14,7 @@
 !composer.lock
 !changelog.json
 !readme.md
+!<%= pluginSlug %>.php
 
 # include dir grunt
 !/grunt

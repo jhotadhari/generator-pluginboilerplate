@@ -8,10 +8,10 @@ module.exports = {
 		options: {
 			m: 'v<%%= global["pkg"].version %>\n\n<%%= commit_msg %>'
 		}
-	},	
+	},
 	tag: {
 		options: {
-			a: ['v<%%= global["pkg"].version %>'],
+			a: ['<%%= global["pkg"].version %>'],
 			m: ['<%%= commit_msg %>']
 		}
 	},

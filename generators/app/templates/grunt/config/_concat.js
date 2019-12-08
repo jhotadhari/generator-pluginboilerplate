@@ -1,35 +1,83 @@
+
+const configReadme = {
+	options: {
+		banner: [
+			'=== <%%= global["pkg"].fullName %> ===',
+			'Tags: <%%= global["pkg"].tags %>',
+			'Donate link: <%%= global["pkg"].donateLink %>',
+			'Contributors: <%%= global["pkg"].contributors %>',
+			'Tested up to: <%%= global["pkg"].wpVersionTested %>',
+			'Requires at least: <%%= global["pkg"].wpRequiresAtLeast%>',
+			'Requires PHP: <%%= global["pkg"].phpRequiresAtLeast%>',
+			'Stable tag: trunk\nLicense: <%%= global["pkg"].license %>',
+			'License: <%%= global["pkg"].license %>',
+			'License URI: <%%= global["pkg"].licenseUri %>',
+			'',
+			'<%%= global["pkg"].description %>',
+			'',
+			'',
+			'',
+		].join( '\n' ),
+		footer: [
+			'',
+			'',
+			'== Changelog ==',
+			'',
+			'',
+			'<%%= changelog %>',
+		].join( '\n' ),
+	},
+	src: [
+		'src/readme/readme.txt',
+	],
+};
+
+const configPlugin_main_file = {
+	options: {
+		banner: [
+			'<?php',
+			'/*',
+			'Plugin Name: <%%= global["pkg"].fullName %>',
+			'Plugin URI: <%%= global["pkg"].uri %>',
+			'Description: <%%= global["pkg"].description %>',
+			'Version: <%%= global["pkg"].version %>',
+			'Author: <%%= global["pkg"].author %>',
+			'Author URI: <%%= global["pkg"].authorUri %>',
+			'License: <%%= global["pkg"].license %>',
+			'License URI: <%%= global["pkg"].licenseUri %>',
+			'Text Domain: <%%= global["pkg"].textDomain %>',
+			'Domain Path: <%%= global["pkg"].domainPath %>',
+			'Tags: <%%= global["pkg"].tags %>',
+			'GitHub Plugin URI: <%%= global["pkg"].gitHubPluginURI %>',
+			'Release Asset: true',
+			'*/',
+			'?>',
+		].join( '\n' ),
+	},
+};
+
 module.exports = {
 
 	readme: {
-		options: {
-			banner: '=== <%%= global["pkg"].fullName %> ===\nTags: <%%= global["pkg"].tags %>\nDonate link: <%%= global["pkg"].donateLink %>\nContributors: <%%= global["pkg"].contributors %>\nTested up to: <%%= global["pkg"].wpVersionTested %>\nRequires at least: <%%= global["pkg"].wpRequiresAtLeast%>\nRequires PHP: <%%= global["pkg"].phpRequiresAtLeast%>\nStable tag: trunk\nLicense: <%%= global["pkg"].license %>\nLicense URI: <%%= global["pkg"].licenseUri %>\n\n<%%= global["pkg"].description %>\n\n\n',
-			footer: '\n\n== Changelog ==\n\n<%%= changelog %>'
-		},
-		src: [
-			'src/readme/readme.txt'
-		],
-		dest: '<%%= dest_path %>/readme.txt'
+		...configReadme,
+		dest: '<%%= dest_path %>/readme.txt',
 	},
 
 	readmeMd: {
-		options: {
-			banner: '=== <%%= global["pkg"].fullName %> ===\nTags: <%%= global["pkg"].tags %>\nDonate link: <%%= global["pkg"].donateLink %>\nContributors: <%%= global["pkg"].contributors %>\nTested up to: <%%= global["pkg"].wpVersionTested %>\nRequires at least: <%%= global["pkg"].wpRequiresAtLeast%>\nRequires PHP: <%%= global["pkg"].phpRequiresAtLeast%>\nStable tag: trunk\nLicense: <%%= global["pkg"].license %>\nLicense URI: <%%= global["pkg"].licenseUri %>\n\n<%%= global["pkg"].description %>\n\n\n',
-			footer: '\n\n== Changelog ==\n\n<%%= changelog %>'
-		},
-		src: [
-			'src/readme/readme.txt'
-		],
-		dest: '<%%= dest_path %>/README.md'
+		...configReadme,
+		dest: '<%%= dest_path %>/README.md',
 	},
 
 	plugin_main_file: {
-		options: {
-			banner: '<?php \n/*\nPlugin Name: <%%= global["pkg"].fullName %>\nPlugin URI: <%%= global["pkg"].uri %>\nDescription: <%%= global["pkg"].description %>\nVersion: <%%= global["pkg"].version %>\nAuthor: <%%= global["pkg"].author %>\nAuthor URI: <%%= global["pkg"].authorUri %>\nLicense: <%%= global["pkg"].license %>\nLicense URI: <%%= global["pkg"].licenseUri %>\nText Domain: <%%= global["pkg"].textDomain %>\nDomain Path: <%%= global["pkg"].domainPath %>\nTags: <%%= global["pkg"].tags %>\n*/\n\n?>'
-		},
-		src: [
-			'<%%= dest_path %>/<%%= global["pkg"].name %>.php'
-		],
-		dest: '<%%= dest_path %>/<%%= global["pkg"].name %>.php'
-	}
+		...configPlugin_main_file,
+		src: ['<%%= dest_path %>/<%%= global["pkg"].name %>.php' ],
+		dest: '<%%= dest_path %>/<%%= global["pkg"].name %>.php',
+	},
+
+	dummy_plugin_main_file: {
+		...configPlugin_main_file,
+		src: ['<%%= global["pkg"].name %>.php' ],
+		dest: '<%%= global["pkg"].name %>.php',
+	},
 
 };

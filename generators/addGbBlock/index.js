@@ -84,6 +84,7 @@ module.exports = class extends Generator {
 		var packageJson = this._readPackageJson();
 		var data = this.props;
 		data.funcPrefix = packageJson.funcPrefix;
+		data.textDomain = packageJson.textDomain;
 		data.pluginSlug = packageJson.name;
 		data.pluginSlugLoDash = data.pluginSlug.replace('-', '_');
 		data.funcPrefixUpperCase = data.funcPrefix[0].toUpperCase() + data.funcPrefix.substring(1);

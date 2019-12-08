@@ -138,7 +138,8 @@ module.exports = {
 			'<%%= pattern.global_exclude %>',
 		],
 		tasks: [
-			'potomo:main',
+			'potomo',
+			'po2json',
 			'local_sync:<%%= local_sync.wp_install %>'
 		]
 	}

@@ -4,3 +4,6 @@ coverage
 */**/*~
 #*#
 */**/#*#
+
+/assets/*
+/assets/*/**

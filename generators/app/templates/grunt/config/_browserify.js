@@ -24,7 +24,6 @@ const transform = [
 		],
 	}],
 	[ 'jstify' ],
-	[ 'uglifyify' ]
 ];
 
 module.exports = {
