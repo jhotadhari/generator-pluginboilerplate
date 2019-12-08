@@ -4,7 +4,7 @@
 
 > ## Deprecated
 > This project is no longer active and not recommended for use. It is left here for reference.
-> Try [generator-wp-dev-env](https://github.com/croox/) instead.
+> Try [generator-wp-dev-env](https://github.com/croox/generator-wp-dev-env) instead.
 
 
 ## Installation
