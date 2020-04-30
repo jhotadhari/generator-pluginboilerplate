@@ -28,7 +28,8 @@
     "slugg": "^1.2.1",
     "yeoman-generator": "^2.0.1",
     "chalk": "^2.1.0",
-    "yosay": "^2.0.1"
+    "yosay": "^2.0.1",
+    "snyk": "^1.316.1"
   },
   "devDependencies": {
     "eslint": "^4.19.1",
@@ -53,7 +54,9 @@
     "prepublishOnly": "nsp check",
     "pretest": "eslint .",
     "precommit": "lint-staged",
-    "test": "jest"
+    "test": "jest",
+    "snyk-protect": "snyk protect",
+    "prepare": "npm run snyk-protect"
   },
   "lint-staged": {
     "*.js": [
@@ -88,5 +91,6 @@
     ]
   },
   "repository": "jhotadhari/generator-pluginboilerplate",
-  "license": "GPL-3.0"
+  "license": "GPL-3.0",
+  "snyk": true
 }
