@@ -26,9 +26,9 @@
     "directory-tree": "^2.1.0",
     "object-recursive-iterator": "^1.0.2",
     "slugg": "^1.2.1",
-    "yeoman-generator": "^2.0.1",
+    "yeoman-generator": "^5.0.0",
     "chalk": "^2.1.0",
-    "yosay": "^2.0.1"
+    "yosay": "^3.0.0"
   },
   "devDependencies": {
     "eslint": "^4.19.1",
